@@ -51,6 +51,7 @@
       overflow-x: hidden;
       font-size: 15px;
       line-height: 1.5;
+      padding-bottom: 80px; /* Space for mobile bottom nav */
     }
 
     body::before {
@@ -179,6 +180,58 @@
     .close-portal:hover {
       background: #dc2626;
       transform: translateY(-1px);
+    }
+
+    /* Mobile Bottom Navigation */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
+      z-index: 1000;
+      padding: 10px 0;
+    }
+
+    .mobile-bottom-nav.active {
+      display: flex;
+    }
+
+    .mobile-nav-items {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
+
+    .mobile-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--gray-lighter);
+      text-decoration: none;
+      padding: 8px;
+      border-radius: var(--border-radius-sm);
+      transition: var(--transition);
+      min-width: 60px;
+    }
+
+    .mobile-nav-item:hover,
+    .mobile-nav-item.active {
+      color: var(--primary);
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    .mobile-nav-item i {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .mobile-nav-item span {
+      font-size: 11px;
+      font-weight: 500;
     }
 
     /* Launch Screen */
@@ -354,7 +407,7 @@
       color: var(--gray-lighter);
     }
 
-    /* Form Elements */
+    /* Form Elements - FIXED DROPDOWN */
     .form-group {
       margin-bottom: 20px;
       position: relative;
@@ -389,7 +442,8 @@
       font-family: inherit;
     }
 
-    select {
+    /* FIX: Make dropdown options visible */
+    .form-group select {
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
@@ -399,6 +453,14 @@
       background-size: 16px;
       padding-right: 40px;
       cursor: pointer;
+      color: var(--light) !important;
+    }
+
+    .form-group select option {
+      background-color: var(--darker);
+      color: var(--light);
+      padding: 10px;
+      font-size: 15px;
     }
 
     .form-group input:focus,
@@ -690,9 +752,10 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
+    /* ENHANCED: Larger Profile Picture */
     .user-profile-img {
-      width: 50px;
-      height: 50px;
+      width: 80px; /* Increased from 50px */
+      height: 80px; /* Increased from 50px */
       border-radius: 50%;
       border: 3px solid var(--primary);
       object-fit: cover;
@@ -701,9 +764,10 @@
       justify-content: center;
       color: white;
       font-weight: bold;
-      font-size: 18px;
+      font-size: 24px; /* Increased from 18px */
       overflow: hidden;
       background: var(--primary-light);
+      flex-shrink: 0;
     }
 
     .user-profile-img img {
@@ -720,11 +784,12 @@
     .user-details span {
       font-weight: 600;
       color: var(--light);
+      font-size: 16px;
     }
 
     .user-details small {
       color: var(--gray-light);
-      font-size: 12px;
+      font-size: 13px;
     }
 
     .role-badge {
@@ -969,7 +1034,7 @@
       font-size: 13px;
     }
 
-    /* File Upload */
+    /* File Upload - FIXED */
     .file-upload-container {
       margin-bottom: 30px;
     }
@@ -982,6 +1047,7 @@
       cursor: pointer;
       transition: var(--transition);
       background: rgba(255, 255, 255, 0.02);
+      position: relative;
     }
 
     .file-upload:hover {
@@ -1013,7 +1079,14 @@
     }
 
     .file-input {
-      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 10;
     }
 
     /* Image Upload */
@@ -1225,7 +1298,7 @@
       color: var(--primary);
     }
 
-    /* Enhanced Report Card */
+    /* Enhanced Report Card - MATCHING SAMPLE */
     .enhanced-report-card {
       background: white;
       color: #333;
@@ -1236,6 +1309,7 @@
       border: 2px solid var(--primary);
       position: relative;
       overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .enhanced-report-card::before {
@@ -1261,6 +1335,7 @@
       color: #4361ee;
       margin-bottom: 5px;
       text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     .product-info {
@@ -1275,6 +1350,7 @@
       margin: 15px 0;
       text-transform: uppercase;
       letter-spacing: 1px;
+      color: #333;
     }
 
     .student-info {
@@ -1283,6 +1359,10 @@
       margin-bottom: 25px;
       flex-wrap: wrap;
       gap: 20px;
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
     }
 
     .student-details {
@@ -1293,6 +1373,12 @@
     .student-details div {
       margin-bottom: 8px;
       font-size: 14px;
+    }
+
+    .student-details strong {
+      color: #334155;
+      min-width: 150px;
+      display: inline-block;
     }
 
     .subject-table {
@@ -1369,9 +1455,9 @@
 
     .signature-line {
       border-top: 1px solid #333;
-      margin-top: 25px;
+      margin-top: 5px;
       padding-top: 5px;
-      height: 25px;
+      height: 40px;
     }
 
     .next-term-info {
@@ -1385,12 +1471,100 @@
       margin-top: 40px;
       flex-wrap: wrap;
       gap: 20px;
+      border-top: 2px solid #4361ee;
+      padding-top: 20px;
     }
 
     .signature-box {
       text-align: center;
       flex: 1;
       min-width: 150px;
+    }
+
+    .signature-box div {
+      margin-top: 40px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    /* Subject Analytics (for teachers) */
+    .subject-analytics-container {
+      background: var(--darker);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .analytics-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .analytics-header h3 {
+      font-size: 20px;
+      color: var(--light);
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .analytics-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--border-radius-sm);
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .analytics-card h4 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: var(--light);
+    }
+
+    .analytics-card p {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .grade-distribution {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .grade-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 6px;
+    }
+
+    .grade-item span:first-child {
+      font-weight: 600;
+      color: var(--light);
+    }
+
+    .grade-item span:last-child {
+      background: var(--primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
     }
 
     /* Empty State */
@@ -1558,6 +1732,10 @@
       .list-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
       }
+      
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 768px) {
@@ -1588,7 +1766,7 @@
       }
       
       .management-tabs {
-        flex-wrap: wrap;
+        display: none; /* Hide desktop tabs on mobile */
       }
       
       .tab {
@@ -1615,10 +1793,29 @@
       }
       
       .portal-exit-btn {
-        bottom: 10px;
+        bottom: 80px; /* Above mobile bottom nav */
         right: 10px;
         padding: 10px 20px;
         font-size: 14px;
+      }
+      
+      /* Show mobile bottom nav */
+      .mobile-bottom-nav.active {
+        display: flex;
+      }
+      
+      .management-tabs.desktop-only {
+        display: none;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-bottom-nav {
+        display: none !important;
+      }
+      
+      .management-tabs {
+        display: flex;
       }
     }
 
@@ -1633,7 +1830,8 @@
       
       .list-container,
       .marks-container,
-      .reports-container {
+      .reports-container,
+      .subject-analytics-container {
         padding: 20px;
       }
       
@@ -1653,6 +1851,12 @@
       .subject-table td {
         padding: 10px;
         font-size: 12px;
+      }
+      
+      .user-profile-img {
+        width: 60px;
+        height: 60px;
+        font-size: 20px;
       }
     }
 
@@ -1712,6 +1916,10 @@
     .w-100 {
       width: 100%;
     }
+    
+    .required {
+      color: var(--error);
+    }
   </style>
 </head>
 <body>
@@ -1742,6 +1950,36 @@
       </a>
     </div>
   </nav>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <div class="mobile-bottom-nav" id="mobileBottomNav">
+    <div class="mobile-nav-items">
+      <a href="#" class="mobile-nav-item" data-tab="classes">
+        <i class="fas fa-chalkboard"></i>
+        <span>Classes</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-tab="students">
+        <i class="fas fa-users"></i>
+        <span>Students</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-tab="subjects">
+        <i class="fas fa-book"></i>
+        <span>Subjects</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-tab="teachers">
+        <i class="fas fa-chalkboard-teacher"></i>
+        <span>Teachers</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-tab="marks">
+        <i class="fas fa-edit"></i>
+        <span>Marks</span>
+      </a>
+      <a href="#" class="mobile-nav-item" data-tab="reports">
+        <i class="fas fa-chart-bar"></i>
+        <span id="reportsTabLabel">Reports</span>
+      </a>
+    </div>
+  </div>
 
   <!-- PORTAL EXIT BUTTON -->
   <button class="portal-exit-btn d-none" id="portalExitBtn">
@@ -1825,36 +2063,33 @@
         <form id="registerForm">
           <div class="form-group">
             <label for="regName">
-              <i class="fas fa-user"></i> Full Name
+              <i class="fas fa-user"></i> Full Name <span class="required">*</span>
             </label>
             <input type="text" id="regName" placeholder="John Doe" required>
           </div>
 
           <div class="form-group">
             <label for="regEmail">
-              <i class="fas fa-envelope"></i> Email Address
+              <i class="fas fa-envelope"></i> Email Address <span class="required">*</span>
             </label>
             <input type="email" id="regEmail" placeholder="john@school.edu" required>
           </div>
 
           <div class="form-group">
             <label for="regSubject">
-              <i class="fas fa-book"></i> Primary Teaching Subject
+              <i class="fas fa-book"></i> Primary Teaching Subject <span class="required">*</span>
             </label>
             <input type="text" id="regSubject" placeholder="Mathematics" required>
           </div>
 
           <div class="image-upload" id="profileUploadArea">
             <i class="fas fa-user-circle"></i>
-            <p>Upload Profile Picture</p>
-            <span>Click the button below to upload</span>
+            <p>Upload Profile Picture <span class="required">*</span></p>
+            <span>Click to upload (Required)</span>
             <div class="image-preview profile-preview" id="profilePreview">
               <img id="profilePreviewImg" src="" alt="Profile Preview">
             </div>
-            <input type="file" class="file-input" id="profileFile" accept="image/*" style="display: none;">
-            <button type="button" class="btn btn-secondary upload-btn" id="uploadProfileBtn">
-              <i class="fas fa-upload"></i> Choose Profile Picture
-            </button>
+            <input type="file" class="file-input" id="profileFile" accept="image/*" required>
             <input type="hidden" id="profileUrl">
             <div class="loading d-none" id="profileUploadLoading">
               <div class="spinner"></div>
@@ -1864,7 +2099,7 @@
 
           <div class="form-group">
             <label for="regPassword">
-              <i class="fas fa-lock"></i> Password
+              <i class="fas fa-lock"></i> Password <span class="required">*</span>
             </label>
             <input type="password" id="regPassword" placeholder="Minimum 6 characters" required minlength="6">
             <button type="button" class="password-toggle" id="registerToggle">
@@ -1874,7 +2109,7 @@
 
           <div class="form-group">
             <label for="confirmPassword">
-              <i class="fas fa-lock"></i> Confirm Password
+              <i class="fas fa-lock"></i> Confirm Password <span class="required">*</span>
             </label>
             <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
             <button type="button" class="password-toggle" id="confirmToggle">
@@ -1971,7 +2206,8 @@
           <img id="managementSchoolLogo" class="school-logo" src="" alt="School Logo" style="display:none;">
         </div>
 
-        <div class="management-tabs" id="managementTabs">
+        <!-- Desktop Tabs -->
+        <div class="management-tabs desktop-only" id="managementTabs">
           <button class="tab active" data-tab="classes">
             <i class="fas fa-chalkboard"></i> Classes
           </button>
@@ -1987,8 +2223,8 @@
           <button class="tab" data-tab="marks">
             <i class="fas fa-edit"></i> Enter Marks
           </button>
-          <button class="tab" data-tab="reports">
-            <i class="fas fa-chart-bar"></i> Reports
+          <button class="tab" data-tab="reports" id="desktopReportsTab">
+            <i class="fas fa-chart-bar"></i> <span id="desktopReportsLabel">Reports</span>
           </button>
         </div>
 
@@ -2179,83 +2415,105 @@
           </div>
         </div>
 
-        <!-- Reports Tab -->
+        <!-- Reports Tab (Admin) / Subject Analytics Tab (Teacher) -->
         <div class="tab-content" id="reportsTab">
-          <div class="reports-container">
-            <div class="list-header">
-              <h3>Reports & Analytics</h3>
-              <div id="reportPermissionNote" class="alert info d-none">
-                <i class="fas fa-info-circle"></i> You have read-only access to reports.
+          <!-- Admin Reports Section -->
+          <div id="adminReportsSection" style="display: none;">
+            <div class="reports-container">
+              <div class="list-header">
+                <h3>Reports & Analytics</h3>
               </div>
-            </div>
 
-            <div class="report-filters">
-              <h4 class="mb-20">Generate Report</h4>
-              <div class="filter-grid">
-                <div class="form-group">
-                  <label><i class="fas fa-chalkboard"></i> Class</label>
-                  <select id="reportClassSelect" class="w-100">
-                    <option value="">All Classes</option>
-                  </select>
+              <div class="report-filters">
+                <h4 class="mb-20">Generate Report</h4>
+                <div class="filter-grid">
+                  <div class="form-group">
+                    <label><i class="fas fa-chalkboard"></i> Class</label>
+                    <select id="reportClassSelect" class="w-100">
+                      <option value="">All Classes</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label><i class="fas fa-user-graduate"></i> Student</label>
+                    <select id="reportStudentSelect" class="w-100" disabled>
+                      <option value="">All Students</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label><i class="fas fa-calendar-alt"></i> Term</label>
+                    <select id="reportTermSelect" class="w-100">
+                      <option value="beginning">Beginning of Term</option>
+                      <option value="mid">Mid Term</option>
+                      <option value="end">End of Term</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label><i class="fas fa-user-graduate"></i> Student</label>
-                  <select id="reportStudentSelect" class="w-100" disabled>
-                    <option value="">All Students</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label><i class="fas fa-calendar-alt"></i> Term</label>
-                  <select id="reportTermSelect" class="w-100">
-                    <option value="beginning">Beginning of Term</option>
-                    <option value="mid">Mid Term</option>
-                    <option value="end">End of Term</option>
-                  </select>
+                <div class="report-actions">
+                  <button class="btn btn-primary" id="generateReportBtn">
+                    <i class="fas fa-chart-bar"></i> Generate Report
+                  </button>
+                  <button class="btn btn-success d-none" id="exportPDFBtn">
+                    <i class="fas fa-file-pdf"></i> Export Report Card
+                  </button>
+                  <button class="btn btn-warning d-none" id="exportExcelBtn">
+                    <i class="fas fa-file-excel"></i> Export Class Analysis
+                  </button>
                 </div>
               </div>
-              <div class="report-actions">
-                <button class="btn btn-primary" id="generateReportBtn">
-                  <i class="fas fa-chart-bar"></i> Generate Report
-                </button>
-                <button class="btn btn-success d-none" id="exportPDFBtn">
-                  <i class="fas fa-file-pdf"></i> Export Report Card
-                </button>
-                <button class="btn btn-warning d-none" id="exportExcelBtn">
-                  <i class="fas fa-file-excel"></i> Export Class Analysis
-                </button>
+
+              <div class="stats-grid d-none" id="statsGrid">
+                <div class="stat-card">
+                  <h4>Total Students</h4>
+                  <p id="statTotalStudents">0</p>
+                </div>
+                <div class="stat-card">
+                  <h4>Average Score</h4>
+                  <p id="statAvgScore">0</p>
+                </div>
+                <div class="stat-card">
+                  <h4>Highest Score</h4>
+                  <p id="statHighScore">0</p>
+                </div>
+                <div class="stat-card">
+                  <h4>Lowest Score</h4>
+                  <p id="statLowScore">0</p>
+                </div>
+              </div>
+
+              <div id="reportPreview" class="d-none">
+                <h4 class="mb-20">Report Preview</h4>
+                <div id="enhancedReportCard" class="enhanced-report-card">
+                  <!-- Report card content will be generated here -->
+                </div>
+              </div>
+
+              <div class="empty-state" id="reportsEmptyState">
+                <i class="fas fa-chart-line"></i>
+                <h3>No Data Available</h3>
+                <p>Generate a report to see student performance analytics.</p>
               </div>
             </div>
+          </div>
 
-            <div class="stats-grid d-none" id="statsGrid">
-              <div class="stat-card">
-                <h4>Total Students</h4>
-                <p id="statTotalStudents">0</p>
+          <!-- Teacher Subject Analytics Section -->
+          <div id="teacherAnalyticsSection" style="display: none;">
+            <div class="subject-analytics-container">
+              <div class="analytics-header">
+                <h3>My Subject Analytics</h3>
+                <button class="btn btn-success" id="exportSubjectAnalyticsBtn">
+                  <i class="fas fa-file-excel"></i> Export Analytics
+                </button>
               </div>
-              <div class="stat-card">
-                <h4>Average Score</h4>
-                <p id="statAvgScore">0</p>
-              </div>
-              <div class="stat-card">
-                <h4>Highest Score</h4>
-                <p id="statHighScore">0</p>
-              </div>
-              <div class="stat-card">
-                <h4>Lowest Score</h4>
-                <p id="statLowScore">0</p>
-              </div>
-            </div>
 
-            <div id="reportPreview" class="d-none">
-              <h4 class="mb-20">Report Preview</h4>
-              <div id="enhancedReportCard" class="enhanced-report-card">
-                <!-- Report card content will be generated here -->
+              <div class="analytics-grid" id="analyticsGrid">
+                <!-- Analytics cards will be loaded here -->
               </div>
-            </div>
 
-            <div class="empty-state" id="reportsEmptyState">
-              <i class="fas fa-chart-line"></i>
-              <h3>No Data Available</h3>
-              <p>Generate a report to see student performance analytics.</p>
+              <div class="empty-state" id="analyticsEmptyState">
+                <i class="fas fa-chart-pie"></i>
+                <h3>No Analytics Data</h3>
+                <p>Enter marks for your subjects to see analytics.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -2320,19 +2578,19 @@
 
       <form id="registerSchoolFormFields">
         <div class="form-group">
-          <label><i class="fas fa-school"></i> School Name</label>
+          <label><i class="fas fa-school"></i> School Name <span class="required">*</span></label>
           <input type="text" id="registerSchoolName" placeholder="Enter school name" required>
         </div>
         <div class="form-group">
-          <label><i class="fas fa-map-marker-alt"></i> School Location</label>
+          <label><i class="fas fa-map-marker-alt"></i> School Location <span class="required">*</span></label>
           <input type="text" id="registerSchoolLocation" placeholder="City, Country" required>
         </div>
         <div class="form-group">
-          <label><i class="fas fa-phone"></i> School Phone</label>
+          <label><i class="fas fa-phone"></i> School Phone <span class="required">*</span></label>
           <input type="tel" id="registerSchoolPhone" placeholder="+1234567890" required>
         </div>
         <div class="form-group">
-          <label><i class="fas fa-graduation-cap"></i> School Level</label>
+          <label><i class="fas fa-graduation-cap"></i> School Level <span class="required">*</span></label>
           <select id="registerSchoolLevel" required>
             <option value="">Select School Level</option>
             <option value="primary">Primary School</option>
@@ -2342,15 +2600,12 @@
 
         <div class="image-upload" id="logoUploadArea">
           <i class="fas fa-image"></i>
-          <p>Upload School Logo</p>
-          <span>Click the button below to upload</span>
+          <p>Upload School Logo <span class="required">*</span></p>
+          <span>Click to upload (Required)</span>
           <div class="image-preview" id="logoPreview">
             <img id="logoPreviewImg" src="" alt="Logo Preview">
           </div>
-          <input type="file" class="file-input" id="logoFile" accept="image/*" style="display: none;">
-          <button type="button" class="btn btn-secondary upload-btn" id="uploadLogoBtn">
-            <i class="fas fa-upload"></i> Choose School Logo
-          </button>
+          <input type="file" class="file-input" id="logoFile" accept="image/*" required>
           <input type="hidden" id="logoUrl">
           <div class="loading d-none" id="logoUploadLoading">
             <div class="spinner"></div>
@@ -2580,6 +2835,7 @@
   let schoolLogoUrl = null;
   let userProfileUrl = null;
   let isSchoolPortalOpen = false;
+  let isMobileView = window.innerWidth <= 768;
 
   // Firebase Configuration
   const firebaseConfig = {
@@ -2644,6 +2900,7 @@
   const containers = {
     launchScreen: document.getElementById('launchScreen'),
     navbar: document.getElementById('navbar'),
+    mobileBottomNav: document.getElementById('mobileBottomNav'),
     loginSection: document.getElementById('loginSection'),
     registerSection: document.getElementById('registerSection'),
     dashboardSection: document.getElementById('dashboardSection'),
@@ -2660,6 +2917,10 @@
 
   // Initialize the application
   document.addEventListener('DOMContentLoaded', async () => {
+    // Check if mobile view
+    checkMobileView();
+    window.addEventListener('resize', checkMobileView);
+    
     // Show launch screen
     containers.launchScreen.style.display = 'flex';
     
@@ -2701,6 +2962,11 @@
       }
     }, 2000);
   });
+
+  // Check mobile view
+  function checkMobileView() {
+    isMobileView = window.innerWidth <= 768;
+  }
 
   // Load user data from Firestore
   async function loadUserData(userId) {
@@ -2865,12 +3131,12 @@
     document.getElementById('closeAssignSubjectsModal').addEventListener('click', () => containers.assignSubjectsModal.classList.remove('active'));
     
     // File upload buttons
-    document.getElementById('uploadProfileBtn').addEventListener('click', () => document.getElementById('profileFile').click());
-    document.getElementById('uploadLogoBtn').addEventListener('click', () => document.getElementById('logoFile').click());
+    document.getElementById('studentUploadArea').addEventListener('click', () => document.getElementById('studentFile').click());
     
     // File change events
     document.getElementById('profileFile').addEventListener('change', (e) => handleImageUpload(e, 'profile'));
     document.getElementById('logoFile').addEventListener('change', (e) => handleImageUpload(e, 'logo'));
+    document.getElementById('studentFile').addEventListener('change', handleStudentFileUpload);
     
     // Form submissions
     document.getElementById('loginForm').addEventListener('submit', handleLogin);
@@ -2886,6 +3152,9 @@
     
     // Tab switching
     setupTabs();
+    
+    // Mobile tab switching
+    setupMobileTabs();
     
     // Password toggles
     setupPasswordToggles();
@@ -2903,6 +3172,7 @@
     document.getElementById('generateReportBtn').addEventListener('click', generateReport);
     document.getElementById('exportPDFBtn').addEventListener('click', exportReportCard);
     document.getElementById('exportExcelBtn').addEventListener('click', exportClassAnalysis);
+    document.getElementById('exportSubjectAnalyticsBtn').addEventListener('click', exportSubjectAnalytics);
     document.getElementById('reportClassSelect').addEventListener('change', updateReportStudentSelect);
     
     // Add buttons
@@ -2978,43 +3248,131 @@
     reader.readAsDataURL(file);
   }
 
+  // Handle student file upload
+  async function handleStudentFileUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Check file type
+    if (!file.name.match(/\.(xlsx|xls)$/)) {
+      alert('Please upload an Excel file (.xlsx or .xls)');
+      return;
+    }
+    
+    try {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        
+        // Process data (assuming first column has student names)
+        let addedCount = 0;
+        const classId = document.getElementById('studentClassSelect').value;
+        
+        if (!classId) {
+          alert('Please select a class first');
+          return;
+        }
+        
+        for (let i = 0; i < jsonData.length; i++) {
+          const studentName = jsonData[i][0];
+          if (studentName && typeof studentName === 'string' && studentName.trim()) {
+            try {
+              await window.firebase.addDoc(
+                window.firebase.collection(window.firebase.db, 'students'),
+                {
+                  name: studentName.trim(),
+                  classId: classId,
+                  schoolId: currentSchool.id,
+                  createdAt: new Date(),
+                  createdBy: currentUser.uid
+                }
+              );
+              addedCount++;
+            } catch (error) {
+              console.error('Error adding student:', error);
+            }
+          }
+        }
+        
+        alert(`Successfully added ${addedCount} students from the file.`);
+        loadStudents();
+      };
+      
+      reader.readAsArrayBuffer(file);
+      
+    } catch (error) {
+      console.error('Error processing Excel file:', error);
+      alert('Error processing Excel file. Please check the format and try again.');
+    }
+  }
+
   // Setup tabs
   function setupTabs() {
-    const tabs = document.querySelectorAll('.tab');
+    const tabs = document.querySelectorAll('.desktop-only .tab');
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         const tabId = tab.dataset.tab;
-        
-        // Update active tab
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
-        tab.classList.add('active');
-        document.getElementById(`${tabId}Tab`).classList.add('active');
-        
-        // Load data for the active tab
-        switch(tabId) {
-          case 'classes':
-            loadClasses();
-            break;
-          case 'students':
-            loadStudents();
-            break;
-          case 'subjects':
-            loadSubjects();
-            break;
-          case 'teachers':
-            loadTeachers();
-            break;
-          case 'marks':
-            setupMarksTab();
-            break;
-          case 'reports':
-            setupReportsTab();
-            break;
-        }
+        switchTab(tabId);
       });
     });
+  }
+
+  // Setup mobile tabs
+  function setupMobileTabs() {
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+    mobileNavItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = item.dataset.tab;
+        
+        // Update active state
+        mobileNavItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        
+        switchTab(tabId);
+      });
+    });
+  }
+
+  // Switch tab
+  function switchTab(tabId) {
+    // Update active tab
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
+    
+    // Activate selected tab
+    const selectedTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+    const selectedMobileTab = document.querySelector(`.mobile-nav-item[data-tab="${tabId}"]`);
+    if (selectedTab) selectedTab.classList.add('active');
+    if (selectedMobileTab) selectedMobileTab.classList.add('active');
+    
+    document.getElementById(`${tabId}Tab`).classList.add('active');
+    
+    // Load data for the active tab
+    switch(tabId) {
+      case 'classes':
+        loadClasses();
+        break;
+      case 'students':
+        loadStudents();
+        break;
+      case 'subjects':
+        loadSubjects();
+        break;
+      case 'teachers':
+        loadTeachers();
+        break;
+      case 'marks':
+        setupMarksTab();
+        break;
+      case 'reports':
+        setupReportsTab();
+        break;
+    }
   }
 
   // Setup password toggles
@@ -3089,6 +3447,11 @@
     const profileUrl = document.getElementById('profileUrl').value;
     
     // Validation
+    if (!profileUrl) {
+      showAlert('registerError', 'Profile picture is required', 'error');
+      return;
+    }
+    
     if (password !== confirmPassword) {
       showAlert('registerError', 'Passwords do not match', 'error');
       return;
@@ -3247,6 +3610,11 @@
     const schoolPhone = document.getElementById('registerSchoolPhone').value.trim();
     const schoolLevel = document.getElementById('registerSchoolLevel').value;
     const logoUrl = document.getElementById('logoUrl').value;
+    
+    if (!logoUrl) {
+      showAlert('registerSchoolError', 'School logo is required', 'error');
+      return;
+    }
     
     if (!schoolLevel) {
       showAlert('registerSchoolError', 'Please select school level', 'error');
@@ -4213,13 +4581,313 @@
 
   // Setup reports tab
   function setupReportsTab() {
-    updateClassSelectors();
-    
-    // Show/hide export buttons based on permissions
     const isAdmin = currentUserData.role === 'admin';
+    
     if (isAdmin) {
+      // Show admin reports
+      document.getElementById('adminReportsSection').style.display = 'block';
+      document.getElementById('teacherAnalyticsSection').style.display = 'none';
+      
+      // Update tab labels
+      document.getElementById('desktopReportsLabel').textContent = 'Reports';
+      document.getElementById('reportsTabLabel').textContent = 'Reports';
+      
+      updateClassSelectors();
+      
+      // Show/hide export buttons
       document.getElementById('exportPDFBtn').classList.remove('d-none');
       document.getElementById('exportExcelBtn').classList.remove('d-none');
+    } else {
+      // Show teacher analytics
+      document.getElementById('adminReportsSection').style.display = 'none';
+      document.getElementById('teacherAnalyticsSection').style.display = 'block';
+      
+      // Update tab labels
+      document.getElementById('desktopReportsLabel').textContent = 'Analytics';
+      document.getElementById('reportsTabLabel').textContent = 'Analytics';
+      
+      loadSubjectAnalytics();
+    }
+  }
+
+  // Load subject analytics for teachers
+  async function loadSubjectAnalytics() {
+    const analyticsGrid = document.getElementById('analyticsGrid');
+    analyticsGrid.innerHTML = '';
+    
+    // Get teacher's assigned subjects
+    const assignedSubjects = currentUserData.assignedSubjects || [currentUserData.subject].filter(Boolean);
+    
+    if (assignedSubjects.length === 0) {
+      document.getElementById('analyticsEmptyState').classList.remove('d-none');
+      return;
+    }
+    
+    try {
+      // Get all marks for current term
+      const term = 'end'; // Default to end of term
+      const marksQuery = window.firebase.query(
+        window.firebase.collection(window.firebase.db, 'marks'),
+        window.firebase.where('schoolId', '==', currentSchool.id),
+        window.firebase.where('term', '==', term)
+      );
+      
+      const marksSnapshot = await window.firebase.getDocs(marksQuery);
+      const marksData = [];
+      
+      marksSnapshot.forEach(doc => {
+        marksData.push({ id: doc.id, ...doc.data() });
+      });
+      
+      // Calculate analytics for each subject
+      let hasData = false;
+      
+      for (const subjectName of assignedSubjects) {
+        const subject = currentSubjects.find(s => s.name === subjectName);
+        if (!subject) continue;
+        
+        // Collect scores for this subject
+        const scores = [];
+        marksData.forEach(mark => {
+          if (mark[subject.id] !== undefined) {
+            scores.push(mark[subject.id]);
+          }
+        });
+        
+        if (scores.length > 0) {
+          hasData = true;
+          
+          // Calculate statistics
+          const total = scores.reduce((a, b) => a + b, 0);
+          const average = Math.round(total / scores.length);
+          const highest = Math.max(...scores);
+          const lowest = Math.min(...scores);
+          
+          // Calculate grade distribution
+          const gradeDistribution = calculateGradeDistribution(scores, currentSchool.level);
+          
+          // Create analytics card
+          const analyticsCard = document.createElement('div');
+          analyticsCard.className = 'analytics-card';
+          analyticsCard.innerHTML = `
+            <h4>${subjectName}</h4>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+              <div>
+                <p style="font-size: 14px; color: var(--gray-lighter); margin-bottom: 5px;">Average</p>
+                <p style="font-size: 28px; font-weight: 800; color: var(--primary);">${average}</p>
+              </div>
+              <div>
+                <p style="font-size: 14px; color: var(--gray-lighter); margin-bottom: 5px;">Students</p>
+                <p style="font-size: 28px; font-weight: 800; color: var(--primary);">${scores.length}</p>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+              <div>
+                <p style="font-size: 14px; color: var(--gray-lighter); margin-bottom: 5px;">Highest</p>
+                <p style="font-size: 20px; font-weight: 600; color: var(--success);">${highest}</p>
+              </div>
+              <div>
+                <p style="font-size: 14px; color: var(--gray-lighter); margin-bottom: 5px;">Lowest</p>
+                <p style="font-size: 20px; font-weight: 600; color: var(--error);">${lowest}</p>
+              </div>
+            </div>
+            <h5 style="font-size: 14px; color: var(--gray-lighter); margin-bottom: 10px;">Grade Distribution</h5>
+            <div class="grade-distribution">
+              ${Object.entries(gradeDistribution).map(([grade, count]) => `
+                <div class="grade-item">
+                  <span>${grade}</span>
+                  <span>${count}</span>
+                </div>
+              `).join('')}
+            </div>
+          `;
+          
+          analyticsGrid.appendChild(analyticsCard);
+        }
+      }
+      
+      if (hasData) {
+        document.getElementById('analyticsEmptyState').classList.add('d-none');
+      } else {
+        document.getElementById('analyticsEmptyState').classList.remove('d-none');
+      }
+      
+    } catch (error) {
+      console.error('Error loading subject analytics:', error);
+      document.getElementById('analyticsEmptyState').classList.remove('d-none');
+    }
+  }
+
+  // Calculate grade distribution
+  function calculateGradeDistribution(scores, level) {
+    const distribution = {};
+    
+    // Initialize grade counts
+    const grades = level === 'primary' 
+      ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
+      : ['A', 'B', 'C', 'D', 'E', 'F'];
+    
+    grades.forEach(grade => {
+      distribution[grade] = 0;
+    });
+    
+    // Count grades
+    scores.forEach(score => {
+      const grade = calculateGrade(score, level);
+      if (distribution[grade] !== undefined) {
+        distribution[grade]++;
+      }
+    });
+    
+    return distribution;
+  }
+
+  // Export subject analytics
+  async function exportSubjectAnalytics() {
+    try {
+      // Get teacher's assigned subjects
+      const assignedSubjects = currentUserData.assignedSubjects || [currentUserData.subject].filter(Boolean);
+      
+      // Get all marks for current term
+      const term = 'end';
+      const marksQuery = window.firebase.query(
+        window.firebase.collection(window.firebase.db, 'marks'),
+        window.firebase.where('schoolId', '==', currentSchool.id),
+        window.firebase.where('term', '==', term)
+      );
+      
+      const marksSnapshot = await window.firebase.getDocs(marksQuery);
+      const marksData = [];
+      
+      marksSnapshot.forEach(doc => {
+        marksData.push({ id: doc.id, ...doc.data() });
+      });
+      
+      // Create workbook
+      const wb = XLSX.utils.book_new();
+      
+      // Create sheet for each subject
+      for (const subjectName of assignedSubjects) {
+        const subject = currentSubjects.find(s => s.name === subjectName);
+        if (!subject) continue;
+        
+        // Collect data for this subject
+        const subjectData = [];
+        
+        // Add header
+        subjectData.push(['Student Name', 'Class', 'Score', 'Grade']);
+        
+        // Add student data
+        for (const mark of marksData) {
+          if (mark[subject.id] !== undefined) {
+            const student = currentStudents.find(s => s.id === mark.studentId);
+            if (student) {
+              const classObj = currentClasses.find(c => c.id === student.classId);
+              const grade = calculateGrade(mark[subject.id], currentSchool.level);
+              subjectData.push([
+                student.name,
+                classObj ? classObj.name : 'N/A',
+                mark[subject.id],
+                grade
+              ]);
+            }
+          }
+        }
+        
+        // Create worksheet
+        if (subjectData.length > 1) { // More than just header
+          const ws = XLSX.utils.aoa_to_sheet(subjectData);
+          XLSX.utils.book_append_sheet(wb, ws, subjectName.substring(0, 31)); // Sheet names limited to 31 chars
+        }
+      }
+      
+      // Create summary sheet
+      const summaryData = [
+        ['Subject Analytics Summary'],
+        ['Generated:', new Date().toLocaleDateString()],
+        ['Teacher:', currentUserData.name],
+        ['School:', currentSchool.name],
+        [],
+        ['Subject', 'Students', 'Average', 'Highest', 'Lowest']
+      ];
+      
+      for (const subjectName of assignedSubjects) {
+        const subject = currentSubjects.find(s => s.name === subjectName);
+        if (!subject) continue;
+        
+        // Calculate statistics
+        const scores = [];
+        marksData.forEach(mark => {
+          if (mark[subject.id] !== undefined) {
+            scores.push(mark[subject.id]);
+          }
+        });
+        
+        if (scores.length > 0) {
+          const total = scores.reduce((a, b) => a + b, 0);
+          const average = Math.round(total / scores.length);
+          const highest = Math.max(...scores);
+          const lowest = Math.min(...scores);
+          
+          summaryData.push([
+            subjectName,
+            scores.length,
+            average,
+            highest,
+            lowest
+          ]);
+        }
+      }
+      
+      const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
+      XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');
+      
+      // Create grade distribution sheet
+      const gradeData = [
+        ['Grade Distribution by Subject'],
+        [],
+        ['Subject', ...(currentSchool.level === 'primary' 
+          ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
+          : ['A', 'B', 'C', 'D', 'E', 'F'])]
+      ];
+      
+      for (const subjectName of assignedSubjects) {
+        const subject = currentSubjects.find(s => s.name === subjectName);
+        if (!subject) continue;
+        
+        // Calculate grade distribution
+        const scores = [];
+        marksData.forEach(mark => {
+          if (mark[subject.id] !== undefined) {
+            scores.push(mark[subject.id]);
+          }
+        });
+        
+        if (scores.length > 0) {
+          const distribution = calculateGradeDistribution(scores, currentSchool.level);
+          const row = [subjectName];
+          
+          const grades = currentSchool.level === 'primary' 
+            ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
+            : ['A', 'B', 'C', 'D', 'E', 'F'];
+          
+          grades.forEach(grade => {
+            row.push(distribution[grade] || 0);
+          });
+          
+          gradeData.push(row);
+        }
+      }
+      
+      const gradeWs = XLSX.utils.aoa_to_sheet(gradeData);
+      XLSX.utils.book_append_sheet(wb, gradeWs, 'Grade Distribution');
+      
+      // Save the file
+      XLSX.writeFile(wb, `Subject_Analytics_${currentUserData.name}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+      
+    } catch (error) {
+      console.error('Error exporting subject analytics:', error);
+      alert('Error exporting analytics. Please try again.');
     }
   }
 
@@ -4372,7 +5040,7 @@
     const aggregate = calculateAggregate(marks);
     const division = calculateDivision(average, aggregate);
     
-    // Generate report card HTML - Only show subjects with marks
+    // Generate report card HTML - MATCHING THE SAMPLE
     const enhancedReportCard = document.getElementById('enhancedReportCard');
     enhancedReportCard.innerHTML = `
       <div class="header-section">
@@ -4389,6 +5057,7 @@
         </div>
         <div class="student-details">
           <div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div>
+          <div><strong>School Level:</strong> ${currentSchool.level === 'primary' ? 'Primary' : 'Secondary'}</div>
         </div>
       </div>
       
@@ -4449,12 +5118,15 @@
       
       <div class="signature-lines">
         <div class="signature-box">
+          <div class="signature-line" style="width: 80%; margin: 0 auto;"></div>
           <div>Class Teacher Signature</div>
         </div>
         <div class="signature-box">
+          <div class="signature-line" style="width: 80%; margin: 0 auto;"></div>
           <div>Head Teacher Signature</div>
         </div>
         <div class="signature-box">
+          <div style="width: 80px; height: 80px; border: 2px dashed #666; margin: 0 auto;"></div>
           <div>School Stamp</div>
         </div>
       </div>
@@ -4470,6 +5142,7 @@
     document.getElementById('reportsEmptyState').classList.add('d-none');
     document.getElementById('reportPreview').classList.remove('d-none');
     document.getElementById('statsGrid').classList.remove('d-none');
+    document.getElementById('exportPDFBtn').classList.remove('d-none');
   }
 
   // Display class report
@@ -4573,6 +5246,7 @@
     document.getElementById('reportsEmptyState').classList.add('d-none');
     document.getElementById('reportPreview').classList.remove('d-none');
     document.getElementById('statsGrid').classList.remove('d-none');
+    document.getElementById('exportPDFBtn').classList.add('d-none');
   }
 
   // Display school report
@@ -4713,6 +5387,7 @@
     document.getElementById('reportsEmptyState').classList.add('d-none');
     document.getElementById('reportPreview').classList.remove('d-none');
     document.getElementById('statsGrid').classList.remove('d-none');
+    document.getElementById('exportPDFBtn').classList.add('d-none');
   }
 
   // Export report card as PDF
@@ -4733,35 +5408,80 @@
     doc.setTextColor(0, 0, 0);
     doc.text(currentSchool.name, 105, 30, { align: 'center' });
     
-    // Get current date
-    const date = new Date().toLocaleDateString();
+    // Get report title
+    const term = document.getElementById('reportTermSelect').value;
+    const currentTerm = getCurrentTerm();
+    const reportTitle = getReportTitle(currentTerm, term);
+    doc.setFontSize(14);
+    doc.text(reportTitle, 105, 40, { align: 'center' });
+    
+    // Get student info
+    const studentId = document.getElementById('reportStudentSelect').value;
+    const student = currentStudents.find(s => s.id === studentId);
+    const classObj = currentClasses.find(c => c.id === student.classId);
+    
     doc.setFontSize(12);
-    doc.text(`Date: ${date}`, 20, 45);
+    doc.text(`Student Name: ${student.name}`, 20, 55);
+    doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 62);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 69);
     
-    // Get report content
-    const reportContent = document.getElementById('enhancedReportCard');
+    // Get marks data
+    const marksDoc = await window.firebase.getDoc(
+      window.firebase.doc(window.firebase.db, 'marks', `${studentId}_${term}`)
+    );
     
-    // Simple table for demonstration
-    const tableData = [];
-    const rows = reportContent.querySelectorAll('tbody tr');
-    rows.forEach(row => {
-      const cols = row.querySelectorAll('td');
-      if (cols.length >= 2) {
-        tableData.push([cols[0].textContent, cols[1].textContent, cols[2]?.textContent || '']);
-      }
-    });
-    
-    if (tableData.length > 0) {
-      doc.autoTable({
-        startY: 55,
-        head: [['Subject', 'Score', 'Grade']],
-        body: tableData,
-        theme: 'grid'
+    if (marksDoc.exists()) {
+      const marks = marksDoc.data();
+      
+      // Prepare table data
+      const tableData = [];
+      let totalMarks = 0;
+      let subjectCount = 0;
+      
+      currentSubjects.forEach(subject => {
+        const score = marks[subject.id];
+        if (score !== undefined && score > 0) {
+          const grade = calculateGrade(score, currentSchool.level);
+          tableData.push([subject.name, score.toString(), grade]);
+          totalMarks += score;
+          subjectCount++;
+        }
       });
+      
+      if (tableData.length > 0) {
+        doc.autoTable({
+          startY: 75,
+          head: [['SUBJECT', 'SCORE', 'GRADE']],
+          body: tableData,
+          theme: 'grid',
+          headStyles: { fillColor: [67, 97, 238] }
+        });
+        
+        const finalY = doc.lastAutoTable.finalY + 10;
+        
+        // Calculate statistics
+        const average = Math.round(totalMarks / subjectCount);
+        const aggregate = calculateAggregate(marks);
+        const division = calculateDivision(average, aggregate);
+        
+        // Add summary table
+        const summaryData = [
+          ['TOTAL MARKS', 'AVERAGE MARK', 'AGGREGATES', 'FINAL GRADE/DIVISION'],
+          [totalMarks.toString(), average.toString(), aggregate.toString(), division]
+        ];
+        
+        doc.autoTable({
+          startY: finalY,
+          head: [summaryData[0]],
+          body: [summaryData[1]],
+          theme: 'grid',
+          headStyles: { fillColor: [67, 97, 238] }
+        });
+      }
     }
     
     // Save the PDF
-    doc.save(`Report_Card_${currentSchool.name}_${new Date().toISOString().slice(0, 10)}.pdf`);
+    doc.save(`Report_Card_${student.name}_${new Date().toISOString().slice(0, 10)}.pdf`);
   }
 
   // Export class analysis as Excel
@@ -4915,6 +5635,11 @@
     // Show navbar
     containers.navbar.classList.add('active');
     
+    // Show mobile bottom nav on mobile
+    if (isMobileView) {
+      containers.mobileBottomNav.classList.add('active');
+    }
+    
     // Show portal exit button
     document.getElementById('portalExitBtn').classList.remove('d-none');
     
@@ -4934,6 +5659,9 @@
     
     // Hide navbar
     containers.navbar.classList.remove('active');
+    
+    // Hide mobile bottom nav
+    containers.mobileBottomNav.classList.remove('active');
     
     // Hide portal exit button
     document.getElementById('portalExitBtn').classList.add('d-none');
@@ -5008,22 +5736,26 @@ ADMIN PRIVILEGES:
 
 TEACHER PRIVILEGES:
 • View assigned classes
-• Enter marks for assigned subjects (both default and assigned ones)
+• Enter marks for assigned subjects
 • View student information (read-only)
-• View reports (read-only)
+• View subject analytics and export Excel reports
+• Profile pictures are required for all users
+• School logos are required for all schools
 
-PROFILE PICTURES:
-• Upload profile pictures during registration
-• Profile pictures appear in dashboard and teacher lists
-• Admins can see all teachers' profile pictures
+MOBILE FEATURES:
+• Bottom navigation bar for easy access on mobile
+• Responsive design for all screen sizes
+• Optimized touch controls for mobile devices
 
 KEY IMPROVEMENTS:
-✓ Fixed profile picture and name display
-✓ Fixed join school functionality
-✓ Fixed register school functionality
-✓ Added portal exit button inside school portal
-✓ Proper error handling and logging
-✓ Fixed school data loading issues
+✓ Fixed dropdown visibility issues
+✓ Fixed student file upload functionality
+✓ Added mobile bottom navigation
+✓ Enhanced report card to match sample
+✓ Larger profile pictures (80x80px)
+✓ Teachers see "My Subject Analytics" instead of reports
+✓ Required profile pictures and school logos
+✓ Professional report card design
 
 SUPPORT:
 For assistance, contact your school administrator.`);
@@ -5038,6 +5770,7 @@ For assistance, contact your school administrator.`);
       currentSchool = null;
       isSchoolPortalOpen = false;
       containers.navbar.classList.remove('active');
+      containers.mobileBottomNav.classList.remove('active');
       document.getElementById('portalExitBtn').classList.add('d-none');
       showContainer('loginSection');
     } catch (error) {
