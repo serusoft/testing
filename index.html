@@ -191,7 +191,7 @@
       background: rgba(15, 23, 42, 0.98);
       backdrop-filter: blur(10px);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: none;
+      display: flex;
       z-index: 1000;
       padding: 10px 0;
     }
@@ -216,6 +216,7 @@
       border-radius: var(--border-radius-sm);
       transition: var(--transition);
       min-width: 60px;
+      font-size: 12px;
     }
 
     .mobile-nav-item:hover,
@@ -225,13 +226,14 @@
     }
 
     .mobile-nav-item i {
-      font-size: 20px;
+      font-size: 18px;
       margin-bottom: 4px;
     }
 
     .mobile-nav-item span {
       font-size: 11px;
       font-weight: 500;
+      text-align: center;
     }
 
     /* Launch Screen */
@@ -386,9 +388,35 @@
       background: var(--gradient);
     }
 
+    /* Close button for auth forms */
+    .close-auth-form {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: var(--gray-light);
+      font-size: 20px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      z-index: 10;
+    }
+
+    .close-auth-form:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--error);
+    }
+
     .header {
       text-align: center;
       margin-bottom: 30px;
+      padding-right: 30px;
     }
 
     .header h1 {
@@ -754,8 +782,8 @@
 
     /* ENHANCED: Larger Profile Picture */
     .user-profile-img {
-      width: 80px; /* Increased from 50px */
-      height: 80px; /* Increased from 50px */
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       border: 3px solid var(--primary);
       object-fit: cover;
@@ -764,7 +792,7 @@
       justify-content: center;
       color: white;
       font-weight: bold;
-      font-size: 24px; /* Increased from 18px */
+      font-size: 24px;
       overflow: hidden;
       background: var(--primary-light);
       flex-shrink: 0;
@@ -833,7 +861,7 @@
       transform: translateY(-1px);
     }
 
-    /* Dashboard Cards */
+    /* Dashboard Cards - RESPONSIVE */
     .dashboard-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -851,6 +879,17 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .card {
+        padding: 20px;
+      }
     }
 
     .card:hover {
@@ -991,10 +1030,24 @@
       color: var(--light);
     }
 
+    /* RESPONSIVE LIST GRID - Smaller cards on mobile */
     .list-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .list-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .list-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .list-item {
@@ -1027,6 +1080,7 @@
       display: flex;
       gap: 10px;
       margin-top: 15px;
+      flex-wrap: wrap;
     }
 
     .item-actions button {
@@ -1212,6 +1266,12 @@
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 20px;
       margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .marks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
     }
 
     .mark-input {
@@ -1701,7 +1761,7 @@
     /* Portal Exit Button */
     .portal-exit-btn {
       position: fixed;
-      bottom: 20px;
+      bottom: 90px; /* Adjusted for mobile bottom nav */
       right: 20px;
       background: var(--error);
       color: white;
@@ -1765,7 +1825,7 @@
         align-items: flex-start;
       }
       
-      .management-tabs {
+      .management-tabs.desktop-only {
         display: none; /* Hide desktop tabs on mobile */
       }
       
@@ -1793,19 +1853,20 @@
       }
       
       .portal-exit-btn {
-        bottom: 80px; /* Above mobile bottom nav */
+        bottom: 90px; /* Above mobile bottom nav */
         right: 10px;
         padding: 10px 20px;
         font-size: 14px;
       }
       
-      /* Show mobile bottom nav */
-      .mobile-bottom-nav.active {
+      /* Mobile bottom nav always visible on mobile when in portal */
+      .mobile-bottom-nav {
         display: flex;
       }
       
-      .management-tabs.desktop-only {
-        display: none;
+      /* Show mobile specific elements */
+      .mobile-only {
+        display: block !important;
       }
     }
 
@@ -1814,7 +1875,7 @@
         display: none !important;
       }
       
-      .management-tabs {
+      .management-tabs.desktop-only {
         display: flex;
       }
     }
@@ -1825,7 +1886,7 @@
       }
       
       .card {
-        padding: 25px;
+        padding: 20px;
       }
       
       .list-container,
@@ -1857,6 +1918,15 @@
         width: 60px;
         height: 60px;
         font-size: 20px;
+      }
+      
+      .mobile-nav-item {
+        min-width: 50px;
+        font-size: 10px;
+      }
+      
+      .mobile-nav-item i {
+        font-size: 16px;
       }
     }
 
@@ -1919,6 +1989,11 @@
     
     .required {
       color: var(--error);
+    }
+    
+    /* Mobile specific classes */
+    .mobile-only {
+      display: none;
     }
   </style>
 </head>
@@ -1992,6 +2067,9 @@
     <!-- LOGIN SECTION -->
     <div class="container" id="loginSection">
       <div class="auth-container">
+        <button class="close-auth-form" id="closeLoginForm">
+          <i class="fas fa-times"></i>
+        </button>
         <div class="header">
           <h1>Welcome Back</h1>
           <p>Sign in to your account</p>
@@ -2033,7 +2111,7 @@
         <div class="footer-links">
           <p>
             Don't have an account? 
-            <button id="goRegister">Create Account</button>
+            <button id="goRegister">Create User Account</button>
           </p>
           <p>
             <button id="forgotPassword">Forgot Password?</button>
@@ -2045,8 +2123,11 @@
     <!-- REGISTER SECTION -->
     <div class="container" id="registerSection">
       <div class="auth-container">
+        <button class="close-auth-form" id="closeRegisterForm">
+          <i class="fas fa-times"></i>
+        </button>
         <div class="header">
-          <h1>Create Account</h1>
+          <h1>Create User Account</h1>
           <p>Join Skore Point today</p>
         </div>
 
@@ -2118,7 +2199,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">
-            <i class="fas fa-user-plus"></i> Create Account
+            <i class="fas fa-user-plus"></i> Create User Account
           </button>
 
           <div class="loading d-none" id="registerLoading">
@@ -2529,6 +2610,9 @@
       <i class="fas fa-times"></i>
     </button>
     <div class="auth-container">
+      <button class="close-auth-form" id="closeJoinSchoolForm">
+        <i class="fas fa-times"></i>
+      </button>
       <div class="header">
         <h2>Join a School</h2>
         <p>Enter school details to join</p>
@@ -2561,6 +2645,9 @@
       <i class="fas fa-times"></i>
     </button>
     <div class="auth-container">
+      <button class="close-auth-form" id="closeRegisterSchoolForm">
+        <i class="fas fa-times"></i>
+      </button>
       <div class="header">
         <h2>Register a School</h2>
         <p>Create a new school on Skore Point</p>
@@ -3120,7 +3207,28 @@
     // Portal exit button
     document.getElementById('portalExitBtn').addEventListener('click', closeSchoolPortal);
     
-    // Close buttons
+    // Close buttons for auth forms
+    document.getElementById('closeLoginForm').addEventListener('click', () => {
+      if (currentUser) {
+        showContainer('dashboardSection');
+      } else {
+        showContainer('loginSection');
+      }
+    });
+    
+    document.getElementById('closeRegisterForm').addEventListener('click', () => {
+      showContainer('loginSection');
+    });
+    
+    document.getElementById('closeJoinSchoolForm').addEventListener('click', () => {
+      containers.joinSchoolForm.classList.remove('active');
+    });
+    
+    document.getElementById('closeRegisterSchoolForm').addEventListener('click', () => {
+      containers.registerSchoolForm.classList.remove('active');
+    });
+    
+    // Other close buttons
     document.getElementById('closeJoinForm').addEventListener('click', () => containers.joinSchoolForm.classList.remove('active'));
     document.getElementById('closeRegisterForm').addEventListener('click', () => containers.registerSchoolForm.classList.remove('active'));
     document.getElementById('closeAddClassModal').addEventListener('click', () => containers.addClassModal.classList.remove('active'));
@@ -5635,10 +5743,9 @@
     // Show navbar
     containers.navbar.classList.add('active');
     
-    // Show mobile bottom nav on mobile
-    if (isMobileView) {
-      containers.mobileBottomNav.classList.add('active');
-    }
+    // Show mobile bottom nav on mobile - ALWAYS VISIBLE NOW
+    containers.mobileBottomNav.style.display = 'flex';
+    containers.mobileBottomNav.classList.add('active');
     
     // Show portal exit button
     document.getElementById('portalExitBtn').classList.remove('d-none');
@@ -5651,6 +5758,12 @@
     
     // Load initial tab data
     loadClasses();
+    
+    // Set first tab as active for mobile
+    if (isMobileView) {
+      document.querySelectorAll('.mobile-nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelector('.mobile-nav-item[data-tab="classes"]').classList.add('active');
+    }
   }
 
   // Close school portal
@@ -5661,6 +5774,7 @@
     containers.navbar.classList.remove('active');
     
     // Hide mobile bottom nav
+    containers.mobileBottomNav.style.display = 'none';
     containers.mobileBottomNav.classList.remove('active');
     
     // Hide portal exit button
@@ -5719,6 +5833,12 @@
         }
       });
     }
+    
+    // Update mobile bottom nav visibility for admin
+    if (isMobileView && isAdmin) {
+      containers.mobileBottomNav.style.display = 'flex';
+      containers.mobileBottomNav.classList.add('active');
+    }
   }
 
   // Show user guide
@@ -5750,12 +5870,14 @@ MOBILE FEATURES:
 KEY IMPROVEMENTS:
 ✓ Fixed dropdown visibility issues
 ✓ Fixed student file upload functionality
-✓ Added mobile bottom navigation
+✓ Mobile bottom navigation always visible on mobile
 ✓ Enhanced report card to match sample
 ✓ Larger profile pictures (80x80px)
 ✓ Teachers see "My Subject Analytics" instead of reports
 ✓ Required profile pictures and school logos
 ✓ Professional report card design
+✓ Close buttons (X) for all authentication forms
+✓ Changed "Create Account" to "Create User Account"
 
 SUPPORT:
 For assistance, contact your school administrator.`);
@@ -5770,6 +5892,7 @@ For assistance, contact your school administrator.`);
       currentSchool = null;
       isSchoolPortalOpen = false;
       containers.navbar.classList.remove('active');
+      containers.mobileBottomNav.style.display = 'none';
       containers.mobileBottomNav.classList.remove('active');
       document.getElementById('portalExitBtn').classList.add('d-none');
       showContainer('loginSection');
