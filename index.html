@@ -51,7 +51,6 @@
       overflow-x: hidden;
       font-size: 15px;
       line-height: 1.5;
-      padding-bottom: 80px; /* Space for mobile bottom nav */
     }
 
     body::before {
@@ -101,7 +100,7 @@
       to { opacity: 1; }
     }
 
-    /* Navigation Bar */
+    /* Fixed Navigation Bar */
     .navbar {
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(10px);
@@ -114,11 +113,6 @@
       top: 0;
       width: 100%;
       z-index: 1000;
-      display: none;
-    }
-
-    .navbar.active {
-      display: flex;
     }
 
     .navbar-brand {
@@ -182,7 +176,7 @@
       transform: translateY(-1px);
     }
 
-    /* Mobile Bottom Navigation */
+    /* Mobile Bottom Navigation - Only visible in portal */
     .mobile-bottom-nav {
       position: fixed;
       bottom: 0;
@@ -191,7 +185,7 @@
       background: rgba(15, 23, 42, 0.98);
       backdrop-filter: blur(10px);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
+      display: none;
       z-index: 1000;
       padding: 10px 0;
     }
@@ -435,7 +429,7 @@
       color: var(--gray-lighter);
     }
 
-    /* Form Elements - FIXED DROPDOWN */
+    /* Form Elements */
     .form-group {
       margin-bottom: 20px;
       position: relative;
@@ -470,7 +464,6 @@
       font-family: inherit;
     }
 
-    /* FIX: Make dropdown options visible */
     .form-group select {
       -webkit-appearance: none;
       -moz-appearance: none;
@@ -861,12 +854,24 @@
       transform: translateY(-1px);
     }
 
-    /* Dashboard Cards - RESPONSIVE */
+    /* Dashboard Cards - RESPONSIVE with SMALLER MOBILE CARDS */
     .dashboard-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 25px;
       margin-bottom: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+      
+      .card {
+        padding: 20px !important;
+        margin: 0 10px !important;
+      }
     }
 
     .card {
@@ -879,17 +884,6 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
-    }
-
-    @media (max-width: 768px) {
-      .dashboard-cards {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-      
-      .card {
-        padding: 20px;
-      }
     }
 
     .card:hover {
@@ -1088,7 +1082,7 @@
       font-size: 13px;
     }
 
-    /* File Upload - FIXED */
+    /* File Upload */
     .file-upload-container {
       margin-bottom: 30px;
     }
@@ -1761,7 +1755,7 @@
     /* Portal Exit Button */
     .portal-exit-btn {
       position: fixed;
-      bottom: 90px; /* Adjusted for mobile bottom nav */
+      bottom: 20px;
       right: 20px;
       background: var(--error);
       color: white;
@@ -1801,13 +1795,6 @@
     @media (max-width: 768px) {
       .navbar {
         padding: 15px 20px;
-        flex-direction: column;
-        gap: 15px;
-      }
-      
-      .navbar-nav {
-        width: 100%;
-        justify-content: space-between;
       }
       
       .dashboard-header {
@@ -1826,7 +1813,7 @@
       }
       
       .management-tabs.desktop-only {
-        display: none; /* Hide desktop tabs on mobile */
+        display: none;
       }
       
       .tab {
@@ -1853,20 +1840,10 @@
       }
       
       .portal-exit-btn {
-        bottom: 90px; /* Above mobile bottom nav */
+        bottom: 90px;
         right: 10px;
         padding: 10px 20px;
         font-size: 14px;
-      }
-      
-      /* Mobile bottom nav always visible on mobile when in portal */
-      .mobile-bottom-nav {
-        display: flex;
-      }
-      
-      /* Show mobile specific elements */
-      .mobile-only {
-        display: block !important;
       }
     }
 
@@ -1883,10 +1860,6 @@
     @media (max-width: 480px) {
       .auth-container {
         padding: 30px 20px;
-      }
-      
-      .card {
-        padding: 20px;
       }
       
       .list-container,
@@ -2011,22 +1984,22 @@
     </div>
   </div>
 
-  <!-- NAVIGATION BAR -->
+  <!-- FIXED NAVIGATION BAR -->
   <nav class="navbar" id="navbar">
     <div class="navbar-brand">
       <i class="fas fa-graduation-cap"></i> Skore Point
     </div>
     <div class="navbar-nav">
-      <button class="close-portal" id="closePortalBtn">
-        <i class="fas fa-arrow-left"></i> Back to Dashboard
-      </button>
       <a href="#" class="nav-link" id="userGuideBtn">
-        <i class="fas fa-question-circle"></i> Help
+        <i class="fas fa-question-circle"></i> Learn How to Use Skore Point
       </a>
+      <button class="logout-btn" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
     </div>
   </nav>
 
-  <!-- MOBILE BOTTOM NAVIGATION -->
+  <!-- MOBILE BOTTOM NAVIGATION - Only visible in portal -->
   <div class="mobile-bottom-nav" id="mobileBottomNav">
     <div class="mobile-nav-items">
       <a href="#" class="mobile-nav-item" data-tab="classes">
@@ -2229,9 +2202,6 @@
               <small id="userEmail">user@email.com</small>
               <span id="userRoleBadge" class="role-badge d-none"></span>
             </div>
-            <button class="logout-btn" id="logoutBtn">
-              <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
           </div>
         </div>
 
@@ -3022,12 +2992,10 @@
             currentUser = user;
             await loadUserData(user.uid);
             showContainer('dashboardSection');
-            containers.navbar.classList.add('active');
             hideLaunchScreen();
           } else {
             hideLaunchScreen();
             showContainer('loginSection');
-            containers.navbar.classList.remove('active');
           }
         });
       }
@@ -3199,7 +3167,6 @@
     document.getElementById('joinSchoolBtn').addEventListener('click', () => containers.joinSchoolForm.classList.add('active'));
     document.getElementById('registerSchoolBtn').addEventListener('click', () => containers.registerSchoolForm.classList.add('active'));
     document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-    document.getElementById('closePortalBtn').addEventListener('click', closeSchoolPortal);
     document.getElementById('userGuideBtn').addEventListener('click', showUserGuide);
     document.getElementById('forgotPassword').addEventListener('click', () => containers.forgotPasswordModal.classList.add('active'));
     document.getElementById('openSchoolPortalBtn').addEventListener('click', openSchoolPortal);
@@ -3609,7 +3576,6 @@
       // Redirect to dashboard after delay
       setTimeout(() => {
         showContainer('dashboardSection');
-        containers.navbar.classList.add('active');
       }, 2000);
       
     } catch (error) {
@@ -4850,7 +4816,7 @@
     return distribution;
   }
 
-  // Export subject analytics
+  // Export subject analytics with structured workbook
   async function exportSubjectAnalytics() {
     try {
       // Get teacher's assigned subjects
@@ -4874,124 +4840,155 @@
       // Create workbook
       const wb = XLSX.utils.book_new();
       
-      // Create sheet for each subject
-      for (const subjectName of assignedSubjects) {
-        const subject = currentSubjects.find(s => s.name === subjectName);
-        if (!subject) continue;
-        
-        // Collect data for this subject
-        const subjectData = [];
-        
-        // Add header
-        subjectData.push(['Student Name', 'Class', 'Score', 'Grade']);
-        
-        // Add student data
-        for (const mark of marksData) {
-          if (mark[subject.id] !== undefined) {
-            const student = currentStudents.find(s => s.id === mark.studentId);
-            if (student) {
-              const classObj = currentClasses.find(c => c.id === student.classId);
-              const grade = calculateGrade(mark[subject.id], currentSchool.level);
-              subjectData.push([
-                student.name,
-                classObj ? classObj.name : 'N/A',
-                mark[subject.id],
-                grade
-              ]);
+      // Get teacher's class assignments
+      let teacherClasses = [];
+      try {
+        // Try to find which classes the teacher teaches
+        currentClasses.forEach(classObj => {
+          // Check if any students in this class have marks for teacher's subjects
+          const classStudents = currentStudents.filter(s => s.classId === classObj.id);
+          let hasTeacherMarks = false;
+          
+          for (const student of classStudents) {
+            const studentMarks = marksData.find(m => m.studentId === student.id);
+            if (studentMarks) {
+              // Check if this student has marks in teacher's subjects
+              for (const subjectName of assignedSubjects) {
+                const subject = currentSubjects.find(s => s.name === subjectName);
+                if (subject && studentMarks[subject.id] !== undefined) {
+                  hasTeacherMarks = true;
+                  break;
+                }
+              }
             }
+            if (hasTeacherMarks) break;
           }
-        }
-        
-        // Create worksheet
-        if (subjectData.length > 1) { // More than just header
-          const ws = XLSX.utils.aoa_to_sheet(subjectData);
-          XLSX.utils.book_append_sheet(wb, ws, subjectName.substring(0, 31)); // Sheet names limited to 31 chars
-        }
+          
+          if (hasTeacherMarks) {
+            teacherClasses.push(classObj.name);
+          }
+        });
+      } catch (error) {
+        console.error('Error determining teacher classes:', error);
       }
       
-      // Create summary sheet
-      const summaryData = [
-        ['Subject Analytics Summary'],
+      // Sheet 1: Overview
+      const overviewData = [
+        ['Subject Analytics Overview'],
         ['Generated:', new Date().toLocaleDateString()],
         ['Teacher:', currentUserData.name],
         ['School:', currentSchool.name],
-        [],
-        ['Subject', 'Students', 'Average', 'Highest', 'Lowest']
+        ['Term:', 'End of Term'],
+        [''],
+        ['SUMMARY'],
+        ['Subject', 'Total Students', 'Highest Mark', 'Lowest Mark', 'Class Average', 'Pass Rate (%)']
       ];
       
+      // Sheet 2: Raw Scores
+      const rawScoresData = [
+        ['RAW SCORES'],
+        ['Subject', 'Student Name', 'Class', 'Score', 'Grade']
+      ];
+      
+      // Sheet 3: Grade Analysis
+      const gradeAnalysisData = [
+        ['GRADE ANALYSIS'],
+        ['Grade', 'Count', 'Percentage']
+      ];
+      
+      // Process each subject
       for (const subjectName of assignedSubjects) {
         const subject = currentSubjects.find(s => s.name === subjectName);
         if (!subject) continue;
         
-        // Calculate statistics
+        // Collect scores for this subject
         const scores = [];
+        const studentScores = [];
+        
         marksData.forEach(mark => {
           if (mark[subject.id] !== undefined) {
-            scores.push(mark[subject.id]);
+            const score = mark[subject.id];
+            scores.push(score);
+            
+            // Find student info
+            const student = currentStudents.find(s => s.id === mark.studentId);
+            if (student) {
+              const classObj = currentClasses.find(c => c.id === student.classId);
+              const grade = calculateGrade(score, currentSchool.level);
+              
+              // Add to raw scores
+              rawScoresData.push([
+                subjectName,
+                student.name,
+                classObj ? classObj.name : 'N/A',
+                score,
+                grade
+              ]);
+              
+              studentScores.push({
+                student: student.name,
+                class: classObj ? classObj.name : 'N/A',
+                score: score,
+                grade: grade
+              });
+            }
           }
         });
         
         if (scores.length > 0) {
+          // Calculate statistics for overview
           const total = scores.reduce((a, b) => a + b, 0);
           const average = Math.round(total / scores.length);
           const highest = Math.max(...scores);
           const lowest = Math.min(...scores);
           
-          summaryData.push([
+          // Calculate pass rate (assuming 40+ is pass)
+          const passCount = scores.filter(score => score >= 40).length;
+          const passRate = Math.round((passCount / scores.length) * 100);
+          
+          // Add to overview
+          overviewData.push([
             subjectName,
             scores.length,
-            average,
             highest,
-            lowest
+            lowest,
+            average,
+            `${passRate}%`
           ]);
-        }
-      }
-      
-      const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
-      XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');
-      
-      // Create grade distribution sheet
-      const gradeData = [
-        ['Grade Distribution by Subject'],
-        [],
-        ['Subject', ...(currentSchool.level === 'primary' 
-          ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
-          : ['A', 'B', 'C', 'D', 'E', 'F'])]
-      ];
-      
-      for (const subjectName of assignedSubjects) {
-        const subject = currentSubjects.find(s => s.name === subjectName);
-        if (!subject) continue;
-        
-        // Calculate grade distribution
-        const scores = [];
-        marksData.forEach(mark => {
-          if (mark[subject.id] !== undefined) {
-            scores.push(mark[subject.id]);
-          }
-        });
-        
-        if (scores.length > 0) {
-          const distribution = calculateGradeDistribution(scores, currentSchool.level);
-          const row = [subjectName];
           
+          // Calculate grade distribution for this subject
+          const gradeDistribution = calculateGradeDistribution(scores, currentSchool.level);
           const grades = currentSchool.level === 'primary' 
             ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
             : ['A', 'B', 'C', 'D', 'E', 'F'];
           
+          // Add grade analysis
           grades.forEach(grade => {
-            row.push(distribution[grade] || 0);
+            const count = gradeDistribution[grade] || 0;
+            const percentage = scores.length > 0 ? Math.round((count / scores.length) * 100) : 0;
+            gradeAnalysisData.push([grade, count, `${percentage}%`]);
           });
           
-          gradeData.push(row);
+          // Add separator between subjects
+          gradeAnalysisData.push(['', '', '']);
         }
       }
       
-      const gradeWs = XLSX.utils.aoa_to_sheet(gradeData);
-      XLSX.utils.book_append_sheet(wb, gradeWs, 'Grade Distribution');
+      // Create worksheets
+      const overviewWs = XLSX.utils.aoa_to_sheet(overviewData);
+      const rawScoresWs = XLSX.utils.aoa_to_sheet(rawScoresData);
+      const gradeAnalysisWs = XLSX.utils.aoa_to_sheet(gradeAnalysisData);
+      
+      // Add worksheets to workbook
+      XLSX.utils.book_append_sheet(wb, overviewWs, 'Overview');
+      XLSX.utils.book_append_sheet(wb, rawScoresWs, 'Raw Scores');
+      XLSX.utils.book_append_sheet(wb, gradeAnalysisWs, 'Grade Analysis');
       
       // Save the file
-      XLSX.writeFile(wb, `Subject_Analytics_${currentUserData.name}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+      const fileName = `Subject_Analytics_${currentUserData.name.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      
+      alert(`Analytics exported successfully as ${fileName}`);
       
     } catch (error) {
       console.error('Error exporting subject analytics:', error);
@@ -5740,12 +5737,11 @@
       managementLogo.style.display = 'block';
     }
     
-    // Show navbar
-    containers.navbar.classList.add('active');
-    
-    // Show mobile bottom nav on mobile - ALWAYS VISIBLE NOW
-    containers.mobileBottomNav.style.display = 'flex';
-    containers.mobileBottomNav.classList.add('active');
+    // Show mobile bottom nav on mobile - ONLY IN PORTAL
+    if (isMobileView) {
+      containers.mobileBottomNav.style.display = 'flex';
+      containers.mobileBottomNav.classList.add('active');
+    }
     
     // Show portal exit button
     document.getElementById('portalExitBtn').classList.remove('d-none');
@@ -5769,9 +5765,6 @@
   // Close school portal
   function closeSchoolPortal() {
     isSchoolPortalOpen = false;
-    
-    // Hide navbar
-    containers.navbar.classList.remove('active');
     
     // Hide mobile bottom nav
     containers.mobileBottomNav.style.display = 'none';
@@ -5821,8 +5814,15 @@
     const managementTabs = document.getElementById('managementTabs');
     if (isAdmin) {
       managementTabs.classList.remove('d-none');
+      
+      // Update mobile bottom nav for admin (all tabs visible)
+      if (isMobileView) {
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+          item.style.display = 'flex';
+        });
+      }
     } else {
-      // Teachers only see marks and reports tabs
+      // Teachers only see marks and reports tabs on desktop
       const tabs = managementTabs.querySelectorAll('.tab');
       tabs.forEach(tab => {
         const tabId = tab.dataset.tab;
@@ -5832,18 +5832,32 @@
           tab.style.display = 'none';
         }
       });
-    }
-    
-    // Update mobile bottom nav visibility for admin
-    if (isMobileView && isAdmin) {
-      containers.mobileBottomNav.style.display = 'flex';
-      containers.mobileBottomNav.classList.add('active');
+      
+      // Teachers on mobile only see marks and analytics tabs
+      if (isMobileView) {
+        document.querySelectorAll('.mobile-nav-item').forEach(item => {
+          const tabId = item.dataset.tab;
+          if (tabId === 'marks' || tabId === 'reports') {
+            item.style.display = 'flex';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+        
+        // Update reports tab label for teachers
+        document.getElementById('reportsTabLabel').textContent = 'Analytics';
+      }
     }
   }
 
   // Show user guide
   function showUserGuide() {
     alert(`Skore Point User Guide
+
+GETTING STARTED:
+1. Create a user account with your profile picture
+2. Join an existing school or register a new one
+3. Access the school portal to manage your data
 
 ADMIN PRIVILEGES:
 • Create and manage school
@@ -5859,28 +5873,31 @@ TEACHER PRIVILEGES:
 • Enter marks for assigned subjects
 • View student information (read-only)
 • View subject analytics and export Excel reports
-• Profile pictures are required for all users
-• School logos are required for all schools
 
 MOBILE FEATURES:
-• Bottom navigation bar for easy access on mobile
+• Bottom navigation bar only visible in school portal
+• Professional mobile interface with optimized cards
 • Responsive design for all screen sizes
-• Optimized touch controls for mobile devices
+• Touch-friendly controls
 
 KEY IMPROVEMENTS:
-✓ Fixed dropdown visibility issues
-✓ Fixed student file upload functionality
-✓ Mobile bottom navigation always visible on mobile
-✓ Enhanced report card to match sample
-✓ Larger profile pictures (80x80px)
-✓ Teachers see "My Subject Analytics" instead of reports
-✓ Required profile pictures and school logos
-✓ Professional report card design
-✓ Close buttons (X) for all authentication forms
-✓ Changed "Create Account" to "Create User Account"
+✓ Fixed top navigation bar always visible
+✓ Removed "Back to Dashboard" button
+✓ Added "Learn How to Use Skore Point" button
+✓ Mobile bottom nav only shows in portal
+✓ Teachers don't see admin options on mobile
+✓ Enhanced subject analytics export with 3 structured sheets
+✓ Smaller, professional mobile dashboard cards
+✓ Clean, professional mobile interface
+
+ANALYTICS EXPORT:
+Teachers can export subject analytics with 3 sheets:
+1. Overview - Summary statistics
+2. Raw Scores - Detailed student marks
+3. Grade Analysis - Grade distribution with percentages
 
 SUPPORT:
-For assistance, contact your school administrator.`);
+For assistance, contact your school administrator or visit the help section.`);
   }
 
   // Handle logout
@@ -5891,7 +5908,6 @@ For assistance, contact your school administrator.`);
       currentUserData = null;
       currentSchool = null;
       isSchoolPortalOpen = false;
-      containers.navbar.classList.remove('active');
       containers.mobileBottomNav.style.display = 'none';
       containers.mobileBottomNav.classList.remove('active');
       document.getElementById('portalExitBtn').classList.add('d-none');
