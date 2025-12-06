@@ -9,8 +9,8 @@
   <meta name="theme-color" content="#4361ee">
   <meta name="description" content="Professional School Report Card Generator by SERUSOFT">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="icon.png" type="image/png">
-  <link rel="apple-touch-icon" href="icon-192x192.png">
+  <link rel="icon" href="skore-icon.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="skore-icon.jpg">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -137,9 +137,13 @@
       background: var(--primary-dark);
     }
 
-    /* Smooth scrolling */
-    html {
-      scroll-behavior: smooth;
+    /* Smooth scrolling for mobile tabs */
+    .tab-content {
+      scroll-margin-top: 120px;
+    }
+
+    #marksEntrySection {
+      scroll-margin-top: 80px;
     }
 
     /* Container Management */
@@ -306,7 +310,7 @@
 
     /* Mobile Portal Exit Button */
     .mobile-exit-btn {
-      position: absolute;
+      position: fixed;
       bottom: 80px;
       right: 20px;
       background: var(--error);
@@ -1052,7 +1056,6 @@
       padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
-      scroll-margin-top: 80px;
     }
 
     .management-header {
@@ -1125,16 +1128,10 @@
     .tab-content {
       display: none;
       animation: fadeIn 0.3s ease-out;
-      scroll-margin-top: 80px;
     }
 
     .tab-content.active {
       display: block;
-    }
-
-    /* Marks Entry Section - Special scroll target */
-    #marksEntrySection {
-      scroll-margin-top: 80px;
     }
 
     /* Lists */
@@ -3890,13 +3887,16 @@
     const mobileNavHeight = 70;
     const tabTop = tabContent.offsetTop - navbarHeight;
     
-    // Smooth scroll to the tab
-    window.scrollTo({
-      top: tabTop,
-      behavior: 'smooth'
-    });
+    // For reports/analytics tab, scroll to the top of that section
+    if (tabId === 'reports') {
+      window.scrollTo({
+        top: tabTop,
+        behavior: 'smooth'
+      });
+      return;
+    }
     
-    // For marks tab, scroll further to the marks entry section
+    // For marks tab, scroll to the marks entry section
     if (tabId === 'marks') {
       setTimeout(() => {
         const marksEntrySection = document.getElementById('marksEntrySection');
@@ -3907,8 +3907,15 @@
             behavior: 'smooth'
           });
         }
-      }, 500);
+      }, 300);
+      return;
     }
+    
+    // For other tabs, scroll to the tab content
+    window.scrollTo({
+      top: tabTop,
+      behavior: 'smooth'
+    });
   }
 
   // Switch tab
