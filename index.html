@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Skore Point | Professional School Report Card Generator</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="theme-color" content="#4361ee">
+  <meta name="description" content="Professional School Report Card Generator by SERUSOFT">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="icon-192x192.png">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -52,6 +60,8 @@
       overflow-x: hidden;
       font-size: 15px;
       line-height: 1.5;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     body::before {
@@ -64,6 +74,47 @@
       background: var(--gradient);
       opacity: 0.03;
       z-index: -1;
+    }
+
+    /* PWA Install Prompt */
+    .pwa-install-prompt {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: var(--darker);
+      border: 2px solid var(--primary);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      z-index: 9999;
+      box-shadow: var(--shadow);
+      max-width: 320px;
+      animation: slideInUp 0.5s ease-out;
+      display: none;
+    }
+
+    @keyframes slideInUp {
+      from {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .pwa-install-prompt h4 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pwa-install-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
     }
 
     /* Custom Scrollbar */
@@ -86,6 +137,11 @@
       background: var(--primary-dark);
     }
 
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
     /* Container Management */
     .container {
       display: none;
@@ -101,7 +157,7 @@
       to { opacity: 1; }
     }
 
-    /* Fixed Navigation Bar - IMPROVED FOR MOBILE */
+    /* Fixed Navigation Bar */
     .navbar {
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(10px);
@@ -191,7 +247,7 @@
       transform: translateY(-1px);
     }
 
-    /* Mobile Bottom Navigation - Only visible in portal */
+    /* Mobile Bottom Navigation */
     .mobile-bottom-nav {
       position: fixed;
       bottom: 0;
@@ -248,7 +304,7 @@
       text-align: center;
     }
 
-    /* Mobile Portal Exit Button - In bottom nav */
+    /* Mobile Portal Exit Button */
     .mobile-exit-btn {
       position: absolute;
       bottom: 80px;
@@ -644,6 +700,8 @@
       justify-content: center;
       gap: 8px;
       text-decoration: none;
+      touch-action: manipulation;
+      user-select: none;
     }
 
     .btn-block {
@@ -776,6 +834,7 @@
       font-weight: 600;
       transition: var(--transition);
       padding: 0 5px;
+      touch-action: manipulation;
     }
 
     .footer-links button:hover {
@@ -821,7 +880,6 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Mobile user info adjustments */
     @media (max-width: 768px) {
       .user-info {
         width: 100%;
@@ -914,6 +972,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      touch-action: manipulation;
     }
 
     .logout-btn:hover {
@@ -921,7 +980,7 @@
       transform: translateY(-1px);
     }
 
-    /* Dashboard Cards - RESPONSIVE with SMALLER MOBILE CARDS */
+    /* Dashboard Cards */
     .dashboard-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -993,6 +1052,7 @@
       padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
+      scroll-margin-top: 80px;
     }
 
     .management-header {
@@ -1036,6 +1096,7 @@
       padding: 10px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .tab {
@@ -1049,6 +1110,7 @@
       border: none;
       background: transparent;
       font-size: 15px;
+      touch-action: manipulation;
     }
 
     .tab.active {
@@ -1063,10 +1125,16 @@
     .tab-content {
       display: none;
       animation: fadeIn 0.3s ease-out;
+      scroll-margin-top: 80px;
     }
 
     .tab-content.active {
       display: block;
+    }
+
+    /* Marks Entry Section - Special scroll target */
+    #marksEntrySection {
+      scroll-margin-top: 80px;
     }
 
     /* Lists */
@@ -1091,7 +1159,7 @@
       color: var(--light);
     }
 
-    /* RESPONSIVE LIST GRID - Smaller cards on mobile */
+    /* RESPONSIVE LIST GRID */
     .list-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1291,6 +1359,7 @@
       z-index: 100;
       display: none;
       box-shadow: var(--shadow);
+      -webkit-overflow-scrolling: touch;
     }
 
     .student-suggestion {
@@ -1299,6 +1368,7 @@
       transition: var(--transition);
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       color: var(--light);
+      touch-action: manipulation;
     }
 
     .student-suggestion:hover {
@@ -1359,6 +1429,7 @@
       border: 1px solid var(--gray);
       color: var(--light);
       border-radius: 6px;
+      touch-action: manipulation;
     }
 
     /* Reports */
@@ -1419,7 +1490,7 @@
       color: var(--primary);
     }
 
-    /* Enhanced Report Card - MATCHING SAMPLE */
+    /* Enhanced Report Card */
     .enhanced-report-card {
       background: white;
       color: #333;
@@ -1608,7 +1679,7 @@
       color: #334155;
     }
 
-    /* Enhanced Subject Analytics (for teachers) */
+    /* Enhanced Subject Analytics */
     .subject-analytics-container {
       background: var(--darker);
       border-radius: var(--border-radius);
@@ -1722,6 +1793,7 @@
       background: rgba(255, 255, 255, 0.02);
       border-radius: var(--border-radius-sm);
       border: 1px solid rgba(255, 255, 255, 0.05);
+      -webkit-overflow-scrolling: touch;
     }
 
     .subject-checkbox {
@@ -1805,6 +1877,7 @@
       box-shadow: var(--shadow);
       border: 1px solid rgba(255, 255, 255, 0.1);
       position: relative;
+      -webkit-overflow-scrolling: touch;
     }
 
     .modal-header {
@@ -1832,6 +1905,7 @@
       cursor: pointer;
       font-size: 14px;
       transition: var(--transition);
+      touch-action: manipulation;
     }
 
     .close-modal:hover {
@@ -1851,6 +1925,7 @@
       overflow-y: auto;
       padding: 40px 20px;
       display: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     .full-screen-form.active {
@@ -1874,6 +1949,7 @@
       font-size: 18px;
       z-index: 1001;
       transition: var(--transition);
+      touch-action: manipulation;
     }
 
     .close-fullscreen:hover {
@@ -2119,9 +2195,59 @@
         display: none;
       }
     }
+
+    /* Offline Indicator */
+    .offline-indicator {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      background: var(--warning);
+      color: var(--dark);
+      text-align: center;
+      padding: 10px;
+      font-weight: 600;
+      z-index: 999;
+      display: none;
+    }
+
+    .offline-indicator.show {
+      display: block;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- PWA Install Prompt -->
+  <div class="pwa-install-prompt" id="pwaInstallPrompt">
+    <h4><i class="fas fa-download"></i> Install Skore Point</h4>
+    <p>Install this app on your device for quick access and offline use.</p>
+    <div class="pwa-install-buttons">
+      <button class="btn btn-primary" id="installPWA">
+        <i class="fas fa-plus"></i> Install
+      </button>
+      <button class="btn btn-light" id="dismissInstall">
+        <i class="fas fa-times"></i> Dismiss
+      </button>
+    </div>
+  </div>
+
+  <!-- Offline Indicator -->
+  <div class="offline-indicator" id="offlineIndicator">
+    <i class="fas fa-wifi-slash"></i> You are currently offline
+  </div>
+
   <!-- LAUNCH SCREEN -->
   <div class="launch-screen" id="launchScreen">
     <div class="launch-container">
@@ -2155,7 +2281,7 @@
     <i class="fas fa-door-open"></i> Exit Portal
   </button>
 
-  <!-- MOBILE BOTTOM NAVIGATION - Only visible in portal -->
+  <!-- MOBILE BOTTOM NAVIGATION -->
   <div class="mobile-bottom-nav" id="mobileBottomNav">
     <div class="mobile-nav-items">
       <button class="mobile-nav-item" data-tab="classes">
@@ -2366,7 +2492,7 @@
         </div>
 
         <div class="dashboard-cards">
-          <!-- School Portal Card - Only shown if user has a school -->
+          <!-- School Portal Card -->
           <div class="card" id="manageSchoolCard" style="display: none;">
             <i class="fas fa-school"></i>
             <h3>School Portal</h3>
@@ -2556,7 +2682,7 @@
           </div>
         </div>
 
-        <!-- Marks Tab - ENHANCED FOR TEACHERS -->
+        <!-- Marks Tab -->
         <div class="tab-content" id="marksTab">
           <div class="marks-container">
             <div class="list-header">
@@ -2566,35 +2692,34 @@
               </div>
             </div>
 
-            <div class="marks-filters">
-              <div class="form-group">
-                <label><i class="fas fa-chalkboard"></i> Select Class</label>
-                <select id="marksClassSelect" class="w-100">
-                  <option value="">Select a class</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label><i class="fas fa-calendar-alt"></i> Select Term</label>
-                <select id="termSelect" class="w-100">
-                  <option value="">Select Term</option>
-                  <option value="beginning">Beginning of Term</option>
-                  <option value="mid">Mid Term</option>
-                  <option value="end">End of Term</option>
-                </select>
-              </div>
-
-              <!-- Subject Filter for Teachers -->
-              <div class="form-group" id="marksSubjectFilter" style="display: none;">
-                <label><i class="fas fa-book"></i> Select Subject</label>
-                <select id="marksSubjectSelect" class="w-100">
-                  <option value="">All Assigned Subjects</option>
-                </select>
-              </div>
-            </div>
-
+            <!-- Marks Entry Section - Main target for mobile scrolling -->
             <div id="marksEntrySection">
-              <!-- Professional Student Search Input -->
+              <div class="marks-filters">
+                <div class="form-group">
+                  <label><i class="fas fa-chalkboard"></i> Select Class</label>
+                  <select id="marksClassSelect" class="w-100">
+                    <option value="">Select a class</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label><i class="fas fa-calendar-alt"></i> Select Term</label>
+                  <select id="termSelect" class="w-100">
+                    <option value="">Select Term</option>
+                    <option value="beginning">Beginning of Term</option>
+                    <option value="mid">Mid Term</option>
+                    <option value="end">End of Term</option>
+                  </select>
+                </div>
+
+                <div class="form-group" id="marksSubjectFilter" style="display: none;">
+                  <label><i class="fas fa-book"></i> Select Subject</label>
+                  <select id="marksSubjectSelect" class="w-100">
+                    <option value="">All Assigned Subjects</option>
+                  </select>
+                </div>
+              </div>
+
               <div class="student-search-container mb-30">
                 <label><i class="fas fa-user-graduate"></i> Find Student</label>
                 <div class="student-search-wrapper">
@@ -2634,7 +2759,7 @@
           </div>
         </div>
 
-        <!-- Reports Tab (Admin) / Subject Analytics Tab (Teacher) - ENHANCED -->
+        <!-- Reports Tab -->
         <div class="tab-content" id="reportsTab">
           <!-- Admin Reports Section -->
           <div id="adminReportsSection" style="display: none;">
@@ -2714,7 +2839,7 @@
             </div>
           </div>
 
-          <!-- Teacher Subject Analytics Section - ENHANCED -->
+          <!-- Teacher Subject Analytics Section -->
           <div id="teacherAnalyticsSection" style="display: none;">
             <div class="subject-analytics-container">
               <div class="analytics-header">
@@ -2724,7 +2849,6 @@
                 </button>
               </div>
 
-              <!-- Enhanced Analytics Filters -->
               <div class="analytics-filters">
                 <div class="form-group">
                   <label><i class="fas fa-chalkboard"></i> Select Class</label>
@@ -2766,7 +2890,6 @@
                 <!-- Analytics cards will be loaded here -->
               </div>
 
-              <!-- Grade Distribution Bar Chart -->
               <div id="gradeChartContainer" class="d-none">
                 <h4 class="mb-20">Grade Distribution</h4>
                 <div style="background: var(--darker); border-radius: var(--border-radius-sm); padding: 20px; border: 1px solid rgba(255,255,255,0.1);">
@@ -3070,6 +3193,14 @@
   </div>
 
 <script>
+  // PWA Configuration
+  const PWA_CONFIG = {
+    appName: 'Skore Point',
+    shortName: 'SkorePoint',
+    themeColor: '#4361ee',
+    backgroundColor: '#0f172a'
+  };
+
   // App Configuration
   const APP_CONFIG = {
     defaultSubjects: {
@@ -3108,6 +3239,8 @@
   let isSchoolPortalOpen = false;
   let isMobileView = window.innerWidth <= 768;
   let gradeChart = null;
+  let deferredPrompt = null;
+  let isAppInstalled = false;
 
   // Firebase Configuration
   const firebaseConfig = {
@@ -3185,7 +3318,9 @@
     addTeacherModal: document.getElementById('addTeacherModal'),
     addStudentModal: document.getElementById('addStudentModal'),
     forgotPasswordModal: document.getElementById('forgotPasswordModal'),
-    assignSubjectsModal: document.getElementById('assignSubjectsModal')
+    assignSubjectsModal: document.getElementById('assignSubjectsModal'),
+    pwaInstallPrompt: document.getElementById('pwaInstallPrompt'),
+    offlineIndicator: document.getElementById('offlineIndicator')
   };
 
   // Initialize the application
@@ -3225,6 +3360,9 @@
     // Setup event listeners
     setupEventListeners();
     
+    // Setup PWA
+    setupPWA();
+    
     // Hide launch screen after 2 seconds if still showing
     setTimeout(() => {
       hideLaunchScreen();
@@ -3233,6 +3371,72 @@
       }
     }, 2000);
   });
+
+  // Setup PWA functionality
+  function setupPWA() {
+    // Check if app is installed
+    if (window.matchMedia('(display-mode: standalone)').matches || 
+        window.navigator.standalone === true) {
+      isAppInstalled = true;
+    }
+    
+    // Listen for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Show install prompt only if app is not already installed
+      if (!isAppInstalled) {
+        setTimeout(() => {
+          showPWAInstallPrompt();
+        }, 3000);
+      }
+    });
+    
+    // Listen for app installed event
+    window.addEventListener('appinstalled', () => {
+      isAppInstalled = true;
+      console.log('App installed successfully');
+      hidePWAInstallPrompt();
+    });
+    
+    // Check online/offline status
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+    
+    // Register service worker if supported
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('ServiceWorker registration successful');
+        }).catch(err => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  }
+
+  // Show PWA install prompt
+  function showPWAInstallPrompt() {
+    if (deferredPrompt && !isAppInstalled) {
+      containers.pwaInstallPrompt.style.display = 'block';
+    }
+  }
+
+  // Hide PWA install prompt
+  function hidePWAInstallPrompt() {
+    containers.pwaInstallPrompt.style.display = 'none';
+  }
+
+  // Update online/offline status
+  function updateOnlineStatus() {
+    if (navigator.onLine) {
+      containers.offlineIndicator.classList.remove('show');
+    } else {
+      containers.offlineIndicator.classList.add('show');
+    }
+  }
 
   // Check mobile view
   function checkMobileView() {
@@ -3285,7 +3489,6 @@
           await loadSchoolData(currentUserData.schoolId);
         } else {
           console.log('User has no school');
-          // Hide the "School Portal" card if no school
           document.getElementById('manageSchoolCard').style.display = 'none';
         }
       } else {
@@ -3405,6 +3608,10 @@
     document.getElementById('portalExitBtn').addEventListener('click', closeSchoolPortal);
     document.getElementById('mobileExitBtn').addEventListener('click', closeSchoolPortal);
     
+    // PWA Install buttons
+    document.getElementById('installPWA').addEventListener('click', installPWA);
+    document.getElementById('dismissInstall').addEventListener('click', hidePWAInstallPrompt);
+    
     // Close buttons for auth forms
     document.getElementById('closeLoginForm').addEventListener('click', () => {
       if (currentUser) {
@@ -3459,7 +3666,7 @@
     // Tab switching
     setupTabs();
     
-    // Mobile tab switching
+    // Mobile tab switching with smooth scroll
     setupMobileTabs();
     
     // Password toggles
@@ -3493,6 +3700,21 @@
     document.getElementById('addSubjectBtn').addEventListener('click', () => containers.addSubjectModal.classList.add('active'));
     document.getElementById('addTeacherBtn').addEventListener('click', () => containers.addTeacherModal.classList.add('active'));
     document.getElementById('addStudentBtn').addEventListener('click', () => containers.addStudentModal.classList.add('active'));
+  }
+
+  // Install PWA
+  async function installPWA() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null;
+      hidePWAInstallPrompt();
+    }
   }
 
   // Handle image upload
@@ -3580,7 +3802,7 @@
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
         
-        // Process data (assuming first column has student names)
+        // Process data
         let addedCount = 0;
         const classId = document.getElementById('studentClassSelect').value;
         
@@ -3633,7 +3855,7 @@
     });
   }
 
-  // Setup mobile tabs
+  // Setup mobile tabs with smooth scroll to relevant sections
   function setupMobileTabs() {
     const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
     mobileNavItems.forEach(item => {
@@ -3645,9 +3867,48 @@
         mobileNavItems.forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         
+        // Switch tab first
         switchTab(tabId);
+        
+        // Then scroll to the relevant section
+        setTimeout(() => {
+          scrollToRelevantSection(tabId);
+        }, 300);
       });
     });
+  }
+
+  // Scroll to relevant section based on tab
+  function scrollToRelevantSection(tabId) {
+    if (!isMobileView) return;
+    
+    const tabContent = document.getElementById(`${tabId}Tab`);
+    if (!tabContent) return;
+    
+    // Calculate position to scroll to
+    const navbarHeight = 70;
+    const mobileNavHeight = 70;
+    const tabTop = tabContent.offsetTop - navbarHeight;
+    
+    // Smooth scroll to the tab
+    window.scrollTo({
+      top: tabTop,
+      behavior: 'smooth'
+    });
+    
+    // For marks tab, scroll further to the marks entry section
+    if (tabId === 'marks') {
+      setTimeout(() => {
+        const marksEntrySection = document.getElementById('marksEntrySection');
+        if (marksEntrySection) {
+          const marksTop = marksEntrySection.offsetTop - navbarHeight;
+          window.scrollTo({
+            top: marksTop,
+            behavior: 'smooth'
+          });
+        }
+      }, 500);
+    }
   }
 
   // Switch tab
@@ -4617,7 +4878,7 @@
     return classObj ? classObj.name : 'Unknown Class';
   }
 
-  // Setup marks tab - ENHANCED
+  // Setup marks tab
   function setupMarksTab() {
     // Show/hide based on permissions
     const isAdmin = currentUserData.role === 'admin';
@@ -4781,7 +5042,7 @@
     document.getElementById('saveMarksBtn').disabled = true;
   }
 
-  // Generate mark inputs - ENHANCED FOR TEACHERS
+  // Generate mark inputs
   function generateMarkInputs() {
     const marksGrid = document.getElementById('marksGrid');
     marksGrid.innerHTML = '';
@@ -5289,7 +5550,7 @@
     });
   }
 
-  // Export subject analytics with enhanced workbook
+  // Export subject analytics
   async function exportSubjectAnalytics() {
     try {
       const classId = document.getElementById('analyticsClassSelect').value;
@@ -5492,13 +5753,13 @@
       
       // Set column widths
       const colWidths = [
-        { wch: 25 }, // Subject/Student Name
-        { wch: 20 }, // Class/Count
-        { wch: 15 }, // Score/Percentage
-        { wch: 15 }, // Grade/Cumulative %
-        { wch: 20 }, // Remarks/Performance Level
-        { wch: 20 }, // Pass Rate/Top Performer
-        { wch: 20 }  // Needs Attention
+        { wch: 25 },
+        { wch: 20 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 }
       ];
       
       summaryWs['!cols'] = colWidths;
@@ -5675,7 +5936,7 @@
     let subjectCount = 0;
     const subjectScores = [];
     
-    // Filter out subjects with no marks (only include subjects where score > 0)
+    // Filter out subjects with no marks
     currentSubjects.forEach(subject => {
       const score = marks[subject.id];
       if (score !== undefined && score > 0) {
@@ -6309,7 +6570,7 @@
       managementLogo.style.display = 'block';
     }
     
-    // Show mobile bottom nav on mobile - ONLY IN PORTAL
+    // Show mobile bottom nav on mobile
     if (isMobileView) {
       containers.mobileBottomNav.style.display = 'flex';
       containers.mobileBottomNav.classList.add('active');
@@ -6388,7 +6649,7 @@
     if (isAdmin) {
       managementTabs.classList.remove('d-none');
       
-      // Update mobile bottom nav for admin (all tabs visible)
+      // Update mobile bottom nav for admin
       if (isMobileView) {
         document.querySelectorAll('.mobile-nav-item').forEach(item => {
           item.style.display = 'flex';
@@ -6464,6 +6725,13 @@ MOBILE FEATURES:
 • Mobile exit button in bottom nav (teachers)
 • Professional mobile dashboard cards
 • Touch-friendly controls
+• Smooth scrolling to relevant sections
+
+PWA FEATURES:
+• Install as a native app
+• Offline functionality
+• Fast loading
+• Add to home screen
 
 KEY IMPROVEMENTS:
 ✓ Fixed top navigation bar for mobile
@@ -6474,6 +6742,8 @@ KEY IMPROVEMENTS:
 ✓ Improved Excel export with 4 structured sheets
 ✓ Teachers can filter analytics by class and term
 ✓ Clean, professional mobile interface
+✓ PWA support for offline use
+✓ Smooth scrolling to relevant sections on mobile
 
 SUPPORT:
 For assistance, contact your school administrator or visit the help section.`);
