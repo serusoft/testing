@@ -1,9 +1,9 @@
-// Service Worker for Skore Point
+// Service Worker for Skore Point (GitHub Pages version)
 const CACHE_NAME = 'skore-point-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  'skore-icon.jpg'
+  '/testing/',
+  '/testing/index.html',
+  '/testing/skore-icon.jpg'
 ];
 
 // Install event
@@ -19,11 +19,9 @@ self.addEventListener('install', event => {
 // Fetch event
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      })
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
 
