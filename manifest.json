@@ -2,20 +2,38 @@
   "name": "Skore Point",
   "short_name": "SkorePoint",
   "description": "Professional School Report Card Generator by SERUSOFT",
-  "start_url": "/testing/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#4361ee",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "/testing/skore-icon.jpg",
+      "src": "skore-icon.jpg",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
     },
     {
-      "src": "/testing/skore-icon.jpg",
+      "src": "skore-icon.jpg",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Enter Marks",
+      "short_name": "Marks",
+      "description": "Enter student marks",
+      "url": "./?marks"
+    },
+    {
+      "name": "Generate Reports",
+      "short_name": "Reports",
+      "description": "Generate report cards",
+      "url": "./?reports"
     }
   ]
 }
