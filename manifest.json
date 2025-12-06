@@ -2,18 +2,18 @@
   "name": "Skore Point",
   "short_name": "SkorePoint",
   "description": "Professional School Report Card Generator by SERUSOFT",
-  "start_url": "/",
+  "start_url": "/testing/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#4361ee",
   "icons": [
     {
-      "src": "skore-icon.jpg",
+      "src": "/testing/skore-icon.jpg",
       "sizes": "192x192",
       "type": "image/jpeg"
     },
     {
-      "src": "skore-icon.jpg",
+      "src": "/testing/skore-icon.jpg",
       "sizes": "512x512",
       "type": "image/jpeg"
     }
