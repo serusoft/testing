@@ -2,29 +2,24 @@
   "name": "Skore Point",
   "short_name": "SkorePoint",
   "description": "Professional School Report Card Generator by SERUSOFT",
-  "start_url": "/",
+  "start_url": "/testing/",
+  "scope": "/testing/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#4361ee",
-  "orientation": "any",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "/skore-icon.jpg",
+      "src": "/testing/skore-icon.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "/skore-icon.jpg",
+      "src": "/testing/skore-icon.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
-    },
-    {
-      "src": "/skore-icon.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "maskable"
     }
   ],
   "categories": ["education", "productivity"],
@@ -33,17 +28,16 @@
       "name": "Enter Marks",
       "short_name": "Marks",
       "description": "Enter student marks",
-      "url": "/?source=pwa&tab=marks",
-      "icons": [{ "src": "/skore-icon.jpg", "sizes": "192x192" }]
+      "url": "/testing/?marks",
+      "icons": [{ "src": "/testing/skore-icon.jpg", "sizes": "192x192" }]
     },
     {
       "name": "Generate Reports",
       "short_name": "Reports",
       "description": "Generate report cards",
-      "url": "/?source=pwa&tab=reports",
-      "icons": [{ "src": "/skore-icon.jpg", "sizes": "192x192" }]
+      "url": "/testing/?reports",
+      "icons": [{ "src": "/testing/skore-icon.jpg", "sizes": "192x192" }]
     }
   ],
-  "prefer_related_applications": false,
-  "related_applications": []
+  "prefer_related_applications": false
 }
