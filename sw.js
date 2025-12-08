@@ -1,5 +1,5 @@
 // Service Worker for Skore Point - GitHub Pages version
-const CACHE_NAME = 'skore-point-v3';
+const CACHE_NAME = 'skore-point-v4';
 const urlsToCache = [
   '/testing/',
   '/testing/index.html',
@@ -43,43 +43,69 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch event with network-first strategy
+// Fetch event with network-first strategy for Firebase, cache-first for static assets
 self.addEventListener('fetch', event => {
-  // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin)) {
+  const url = new URL(event.request.url);
+  
+  // Skip Firebase requests - always go to network
+  if (url.hostname.includes('firebase') || 
+      url.hostname.includes('googleapis') ||
+      url.hostname.includes('gstatic')) {
     return;
   }
   
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // Check if we received a valid response
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
-        }
-
-        // Clone the response
-        const responseToCache = response.clone();
-
-        caches.open(CACHE_NAME)
-          .then(cache => {
-            cache.put(event.request, responseToCache);
-          });
-
-        return response;
-      })
-      .catch(() => {
-        // If network fails, try cache
-        return caches.match(event.request)
-          .then(response => {
-            if (response) {
+  // For static assets, try cache first
+  if (url.pathname.includes('/testing/') && 
+      !url.pathname.includes('/testing/index.html')) {
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => {
+          if (response) {
+            return response;
+          }
+          return fetch(event.request)
+            .then(response => {
+              if (!response || response.status !== 200 || response.type !== 'basic') {
+                return response;
+              }
+              const responseToCache = response.clone();
+              caches.open(CACHE_NAME)
+                .then(cache => {
+                  cache.put(event.request, responseToCache);
+                });
               return response;
-            }
-            // Return offline page or fallback
-            return caches.match('/testing/index.html');
-          });
-      })
-  );
+            })
+            .catch(() => {
+              return caches.match('/testing/index.html');
+            });
+        })
+    );
+  } else {
+    // For HTML pages, network first
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            });
+          return response;
+        })
+        .catch(() => {
+          return caches.match(event.request)
+            .then(response => {
+              if (response) {
+                return response;
+              }
+              return caches.match('/testing/index.html');
+            });
+        })
+    );
+  }
 });
 
 // Handle messages from the app
