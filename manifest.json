@@ -28,23 +28,16 @@
       "name": "Enter Marks",
       "short_name": "Marks",
       "description": "Enter student marks",
-      "url": "/testing/#marks",
+      "url": "/testing/?marks",
       "icons": [{ "src": "/testing/skore-icon.jpg", "sizes": "192x192" }]
     },
     {
       "name": "Generate Reports",
       "short_name": "Reports",
       "description": "Generate report cards",
-      "url": "/testing/#reports",
+      "url": "/testing/?reports",
       "icons": [{ "src": "/testing/skore-icon.jpg", "sizes": "192x192" }]
     }
   ],
-  "prefer_related_applications": false,
-  "screenshots": [
-    {
-      "src": "/testing/screenshot1.png",
-      "sizes": "1280x720",
-      "type": "image/png"
-    }
-  ]
+  "prefer_related_applications": false
 }
