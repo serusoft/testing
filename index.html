@@ -76,10 +76,10 @@
       z-index: -1;
     }
 
-    /* PWA Install Prompt */
-    .pwa-install-prompt {
+    /* Desktop Install Prompt */
+    .desktop-install-prompt {
       position: fixed;
-      bottom: 90px;
+      top: 20px;
       right: 20px;
       background: var(--darker);
       border: 2px solid var(--primary);
@@ -87,23 +87,23 @@
       padding: 20px;
       z-index: 9999;
       box-shadow: var(--shadow);
-      max-width: 320px;
-      animation: slideInUp 0.5s ease-out;
+      max-width: 350px;
+      animation: slideInRight 0.5s ease-out;
       display: none;
     }
 
-    @keyframes slideInUp {
+    @keyframes slideInRight {
       from {
-        transform: translateY(100px);
+        transform: translateX(100px);
         opacity: 0;
       }
       to {
-        transform: translateY(0);
+        transform: translateX(0);
         opacity: 1;
       }
     }
 
-    .pwa-install-prompt h4 {
+    .desktop-install-prompt h4 {
       color: var(--primary);
       margin-bottom: 10px;
       display: flex;
@@ -111,7 +111,7 @@
       gap: 10px;
     }
 
-    .pwa-install-buttons {
+    .desktop-install-buttons {
       display: flex;
       gap: 10px;
       margin-top: 15px;
@@ -299,15 +299,15 @@
       text-align: center;
     }
 
-    /* Mobile Portal Exit Button */
-    .mobile-exit-btn {
+    /* Desktop Portal Exit Button */
+    .portal-exit-btn {
       position: fixed;
-      bottom: 80px;
+      bottom: 20px;
       right: 20px;
       background: var(--error);
       color: white;
       border: none;
-      padding: 12px 16px;
+      padding: 12px 24px;
       border-radius: var(--border-radius-sm);
       cursor: pointer;
       font-weight: 600;
@@ -315,16 +315,12 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      z-index: 1001;
+      z-index: 999;
       box-shadow: var(--shadow);
       display: none;
     }
 
-    .mobile-exit-btn.active {
-      display: flex;
-    }
-
-    .mobile-exit-btn:hover {
+    .portal-exit-btn:hover {
       background: #dc2626;
       transform: translateY(-2px);
     }
@@ -2049,36 +2045,6 @@
       transform: rotate(90deg);
     }
 
-    /* Desktop Portal Exit Button */
-    .portal-exit-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--error);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: var(--border-radius-sm);
-      cursor: pointer;
-      font-weight: 600;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 999;
-      box-shadow: var(--shadow);
-      display: none;
-    }
-
-    .portal-exit-btn.active {
-      display: flex;
-    }
-
-    .portal-exit-btn:hover {
-      background: #dc2626;
-      transform: translateY(-2px);
-    }
-
     /* Responsive Design */
     @media (max-width: 992px) {
       .dashboard-cards {
@@ -2144,10 +2110,6 @@
         display: none !important;
       }
       
-      .mobile-exit-btn {
-        display: flex;
-      }
-      
       .subject-checkboxes {
         grid-template-columns: 1fr;
       }
@@ -2160,10 +2122,6 @@
       
       .management-tabs.desktop-only {
         display: flex;
-      }
-      
-      .mobile-exit-btn {
-        display: none !important;
       }
     }
 
@@ -2310,15 +2268,15 @@
   </style>
 </head>
 <body>
-  <!-- PWA Install Prompt -->
-  <div class="pwa-install-prompt" id="pwaInstallPrompt">
-    <h4><i class="fas fa-download"></i> Install Skore Point</h4>
-    <p>Install this app on your device for quick access and offline use.</p>
-    <div class="pwa-install-buttons">
-      <button class="btn btn-primary" id="installPWA">
+  <!-- Desktop Install Prompt -->
+  <div class="desktop-install-prompt" id="desktopInstallPrompt">
+    <h4><i class="fas fa-download"></i> Install Skore Point on Desktop</h4>
+    <p>Install this app for quick access and offline use on your desktop.</p>
+    <div class="desktop-install-buttons">
+      <button class="btn btn-primary" id="installDesktopPWA">
         <i class="fas fa-plus"></i> Install
       </button>
-      <button class="btn btn-light" id="dismissInstall">
+      <button class="btn btn-light" id="dismissDesktopInstall">
         <i class="fas fa-times"></i> Dismiss
       </button>
     </div>
@@ -2356,11 +2314,6 @@
       </button>
     </div>
   </nav>
-
-  <!-- MOBILE PORTAL EXIT BUTTON -->
-  <button class="mobile-exit-btn" id="mobileExitBtn">
-    <i class="fas fa-door-open"></i> Exit Portal
-  </button>
 
   <!-- MOBILE BOTTOM NAVIGATION -->
   <div class="mobile-bottom-nav" id="mobileBottomNav">
@@ -2754,7 +2707,7 @@
           </div>
         </div>
 
-        <!-- Marks Tab -->
+        <!-- Marks Tab - FIXED: Always show dropdowns immediately -->
         <div class="tab-content" id="marksTab">
           <div class="marks-container">
             <div class="list-header">
@@ -2764,7 +2717,7 @@
               </div>
             </div>
 
-            <!-- Marks Entry Section -->
+            <!-- Marks Entry Section - FIXED: Always visible -->
             <div id="marksEntrySection">
               <div class="marks-filters">
                 <div class="form-group">
@@ -3378,7 +3331,6 @@
     launchScreen: document.getElementById('launchScreen'),
     navbar: document.getElementById('navbar'),
     mobileBottomNav: document.getElementById('mobileBottomNav'),
-    mobileExitBtn: document.getElementById('mobileExitBtn'),
     loginSection: document.getElementById('loginSection'),
     registerSection: document.getElementById('registerSection'),
     dashboardSection: document.getElementById('dashboardSection'),
@@ -3391,7 +3343,7 @@
     addStudentModal: document.getElementById('addStudentModal'),
     forgotPasswordModal: document.getElementById('forgotPasswordModal'),
     assignSubjectsModal: document.getElementById('assignSubjectsModal'),
-    pwaInstallPrompt: document.getElementById('pwaInstallPrompt'),
+    desktopInstallPrompt: document.getElementById('desktopInstallPrompt'),
     offlineIndicator: document.getElementById('offlineIndicator'),
     portalExitBtn: document.getElementById('portalExitBtn')
   };
@@ -3458,10 +3410,10 @@
       e.preventDefault();
       deferredPrompt = e;
       
-      // Show install prompt only if app is not already installed
-      if (!isAppInstalled) {
+      // Show desktop install prompt only for desktop users
+      if (!isAppInstalled && !isMobileView) {
         setTimeout(() => {
-          showPWAInstallPrompt();
+          showDesktopInstallPrompt();
         }, 3000);
       }
     });
@@ -3470,7 +3422,7 @@
     window.addEventListener('appinstalled', () => {
       isAppInstalled = true;
       console.log('App installed successfully');
-      hidePWAInstallPrompt();
+      hideDesktopInstallPrompt();
     });
     
     // Check online/offline status
@@ -3490,16 +3442,16 @@
     }
   }
 
-  // Show PWA install prompt
-  function showPWAInstallPrompt() {
-    if (deferredPrompt && !isAppInstalled) {
-      containers.pwaInstallPrompt.style.display = 'block';
+  // Show desktop install prompt
+  function showDesktopInstallPrompt() {
+    if (deferredPrompt && !isAppInstalled && !isMobileView) {
+      containers.desktopInstallPrompt.style.display = 'block';
     }
   }
 
-  // Hide PWA install prompt
-  function hidePWAInstallPrompt() {
-    containers.pwaInstallPrompt.style.display = 'none';
+  // Hide desktop install prompt
+  function hideDesktopInstallPrompt() {
+    containers.desktopInstallPrompt.style.display = 'none';
   }
 
   // Update online/offline status
@@ -3518,13 +3470,11 @@
       if (isMobileView) {
         containers.mobileBottomNav.style.display = 'flex';
         containers.mobileBottomNav.classList.add('active');
-        containers.mobileExitBtn.classList.add('active');
-        containers.portalExitBtn.classList.remove('active');
+        containers.portalExitBtn.style.display = 'none';
       } else {
         containers.mobileBottomNav.style.display = 'none';
         containers.mobileBottomNav.classList.remove('active');
-        containers.mobileExitBtn.classList.remove('active');
-        containers.portalExitBtn.classList.add('active');
+        containers.portalExitBtn.style.display = 'flex';
       }
     }
   }
@@ -3687,13 +3637,12 @@
     document.getElementById('forgotPassword').addEventListener('click', () => containers.forgotPasswordModal.classList.add('active'));
     document.getElementById('openSchoolPortalBtn').addEventListener('click', openSchoolPortal);
     
-    // Portal exit buttons
+    // Portal exit button
     containers.portalExitBtn.addEventListener('click', closeSchoolPortal);
-    containers.mobileExitBtn.addEventListener('click', closeSchoolPortal);
     
-    // PWA Install buttons
-    document.getElementById('installPWA').addEventListener('click', installPWA);
-    document.getElementById('dismissInstall').addEventListener('click', hidePWAInstallPrompt);
+    // Desktop PWA Install buttons
+    document.getElementById('installDesktopPWA').addEventListener('click', installPWA);
+    document.getElementById('dismissDesktopInstall').addEventListener('click', hideDesktopInstallPrompt);
     
     // Close buttons for auth forms
     document.getElementById('closeLoginForm').addEventListener('click', () => {
@@ -3759,7 +3708,7 @@
     document.getElementById('studentSearch').addEventListener('input', handleStudentSearch);
     document.getElementById('studentSearchClear').addEventListener('click', clearStudentSearch);
     
-    // Marks entry
+    // Marks entry - FIXED: Always show dropdowns
     document.getElementById('marksClassSelect').addEventListener('change', handleClassSelectForMarks);
     document.getElementById('termSelect').addEventListener('change', handleTermSelect);
     document.getElementById('marksSubjectSelect').addEventListener('change', handleSubjectSelectForMarks);
@@ -3796,11 +3745,11 @@
         console.log('User dismissed the install prompt');
       }
       deferredPrompt = null;
-      hidePWAInstallPrompt();
+      hideDesktopInstallPrompt();
     }
   }
 
-  // Handle image upload - FIXED VERSION
+  // Handle image upload
   function handleImageUpload(event, type) {
     const file = event.target.files[0];
     if (!file) return;
@@ -4054,7 +4003,7 @@
     }
   }
 
-  // Handle registration - FIXED VERSION
+  // Handle registration
   async function handleRegister(e) {
     e.preventDefault();
     
@@ -4800,7 +4749,7 @@
     }
   }
 
-  // Load teachers - ENHANCED VERSION with new layout
+  // Load teachers
   async function loadTeachers() {
     if (!currentSchool) return;
     
@@ -4913,7 +4862,7 @@
     return classObj ? classObj.name : 'Unknown Class';
   }
 
-  // Setup marks tab
+  // Setup marks tab - FIXED: Always show dropdowns
   function setupMarksTab() {
     // Show/hide based on permissions
     const isAdmin = currentUserData.role === 'admin';
@@ -4927,6 +4876,8 @@
     }
     
     document.getElementById('marksPermissionNote').classList.add('d-none');
+    document.getElementById('marksEmptyState').classList.add('d-none');
+    document.getElementById('marksEntrySection').classList.remove('d-none');
     
     // Update class selector
     updateClassSelectors();
@@ -4939,10 +4890,6 @@
     } else {
       marksSubjectFilter.style.display = 'none';
     }
-    
-    // Show empty state by default
-    document.getElementById('marksEmptyState').classList.remove('d-none');
-    document.getElementById('marksEntrySection').classList.add('d-none');
   }
 
   // Update marks subject selector for teachers
@@ -4967,18 +4914,16 @@
     });
   }
 
-  // Handle class select for marks - FIXED: Show dropdowns when Enter is clicked
+  // Handle class select for marks - FIXED: Show student search immediately
   function handleClassSelectForMarks() {
     const classId = document.getElementById('marksClassSelect').value;
     const term = document.getElementById('termSelect').value;
     
     if (classId && term) {
       loadStudentsForMarks(classId);
-      document.getElementById('marksEmptyState').classList.add('d-none');
-      document.getElementById('marksEntrySection').classList.remove('d-none');
     } else {
-      document.getElementById('marksEmptyState').classList.remove('d-none');
-      document.getElementById('marksEntrySection').classList.add('d-none');
+      // Clear student search if no class/term selected
+      clearStudentSearch();
     }
   }
 
@@ -5252,6 +5197,9 @@
       
       updateClassSelectors();
       
+      // Preload reports data for faster loading
+      preloadReportsData();
+      
       // Show/hide export buttons
       document.getElementById('exportPDFBtn').classList.remove('d-none');
       document.getElementById('exportExcelBtn').classList.remove('d-none');
@@ -5266,6 +5214,75 @@
       
       // Setup analytics filters
       setupAnalyticsFilters();
+      
+      // Preload analytics data for faster loading
+      preloadAnalyticsData();
+    }
+  }
+
+  // Preload reports data for faster loading
+  async function preloadReportsData() {
+    if (!currentSchool) return;
+    
+    try {
+      // Preload students and marks data
+      await Promise.all([
+        loadAllStudents(),
+        preloadMarksData()
+      ]);
+    } catch (error) {
+      console.error('Error preloading reports data:', error);
+    }
+  }
+
+  // Preload analytics data for faster loading
+  async function preloadAnalyticsData() {
+    if (!currentSchool) return;
+    
+    try {
+      // Preload current user's assigned subjects
+      loadAnalyticsSubjects();
+    } catch (error) {
+      console.error('Error preloading analytics data:', error);
+    }
+  }
+
+  // Load all students for reports
+  async function loadAllStudents() {
+    try {
+      const studentsQuery = window.firebase.query(
+        window.firebase.collection(window.firebase.db, 'students'),
+        window.firebase.where('schoolId', '==', currentSchool.id)
+      );
+      
+      const querySnapshot = await window.firebase.getDocs(studentsQuery);
+      currentStudents = [];
+      
+      querySnapshot.forEach(doc => {
+        currentStudents.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      
+      console.log(`Preloaded ${currentStudents.length} students for reports`);
+    } catch (error) {
+      console.error('Error loading all students:', error);
+    }
+  }
+
+  // Preload marks data
+  async function preloadMarksData() {
+    try {
+      const marksQuery = window.firebase.query(
+        window.firebase.collection(window.firebase.db, 'marks'),
+        window.firebase.where('schoolId', '==', currentSchool.id)
+      );
+      
+      const querySnapshot = await window.firebase.getDocs(marksQuery);
+      console.log(`Preloaded marks data: ${querySnapshot.size} documents`);
+    } catch (error) {
+      console.error('Error preloading marks data:', error);
     }
   }
 
@@ -5585,7 +5602,7 @@
     });
   }
 
-  // Export subject analytics - ENHANCED to match Excel template
+  // Export subject analytics
   async function exportSubjectAnalytics() {
     try {
       const classId = document.getElementById('analyticsClassSelect').value;
@@ -5623,7 +5640,7 @@
       // Create workbook
       const wb = XLSX.utils.book_new();
       
-      // Sheet 1: Performance Overview (like the Excel sample)
+      // Sheet 1: Performance Overview
       const overviewData = [
         ['P.6 Mathematics Performance Overview'],
         ['Generated:', new Date().toLocaleDateString()],
@@ -5635,12 +5652,12 @@
         ['Subject', 'Total Students', 'Highest Mark', 'Lowest Mark', 'Class Average', 'Pass Rate (%)']
       ];
       
-      // Sheet 2: Student performance (like the Excel sample)
+      // Sheet 2: Student performance
       const performanceData = [
         ['Student Name', 'Score', 'Grade']
       ];
       
-      // Sheet 3: Grade Distribution Analysis (like the Excel sample)
+      // Sheet 3: Grade Distribution Analysis
       const gradeDistributionData = [
         ['Grade Distribution Analysis'],
         ['Grade', 'Count', 'Percentage%']
@@ -5872,7 +5889,7 @@
     }
   }
 
-  // Display student report - ENHANCED to match DOCX template
+  // Display student report
   async function displayStudentReport(studentId, marks) {
     const student = currentStudents.find(s => s.id === studentId);
     if (!student) return;
@@ -6260,7 +6277,7 @@
     document.getElementById('exportPDFBtn').classList.add('d-none');
   }
 
-  // Export report card as PDF - ENHANCED to match DOCX template
+  // Export report card as PDF
   async function exportReportCard() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('p', 'mm', 'a4');
@@ -6382,7 +6399,7 @@
     doc.save(`Report_Card_${student.name}_${new Date().toISOString().slice(0, 10)}.pdf`);
   }
 
-  // Export class analysis as Excel - ENHANCED to match Excel sample
+  // Export class analysis as Excel
   function exportClassAnalysis() {
     // Create workbook
     const wb = XLSX.utils.book_new();
@@ -6581,7 +6598,7 @@
     return code;
   }
 
-  // Open school portal - FIXED: Only show exit button after portal is open
+  // Open school portal - FIXED: Show exit button only after portal is opened
   function openSchoolPortal() {
     isSchoolPortalOpen = true;
     
@@ -6596,13 +6613,13 @@
       managementLogo.style.display = 'block';
     }
     
-    // Show exit buttons only after portal is open
+    // Show exit button only after portal is opened
     if (isMobileView) {
       containers.mobileBottomNav.style.display = 'flex';
       containers.mobileBottomNav.classList.add('active');
-      containers.mobileExitBtn.classList.add('active');
+      containers.portalExitBtn.style.display = 'none'; // Hide desktop exit button on mobile
     } else {
-      containers.portalExitBtn.classList.add('active');
+      containers.portalExitBtn.style.display = 'flex'; // Show desktop exit button
     }
     
     // Show management section
@@ -6621,15 +6638,16 @@
     }
   }
 
-  // Close school portal - FIXED: Hide exit buttons
+  // Close school portal - FIXED: Hide exit button
   function closeSchoolPortal() {
     isSchoolPortalOpen = false;
     
-    // Hide exit buttons
+    // Hide exit button
+    containers.portalExitBtn.style.display = 'none';
+    
+    // Hide mobile bottom nav
     containers.mobileBottomNav.style.display = 'none';
     containers.mobileBottomNav.classList.remove('active');
-    containers.mobileExitBtn.classList.remove('active');
-    containers.portalExitBtn.classList.remove('active');
     
     // Show dashboard
     showContainer('dashboardSection');
@@ -6758,15 +6776,14 @@ PWA FEATURES:
 • Add to home screen
 
 KEY IMPROVEMENTS:
-✓ Fixed profile image upload - now saves correctly
-✓ Exit Portal button only appears after opening portal
-✓ Enhanced user profile card with new layout
-✓ Enhanced teacher cards with new layout
-✓ Marks entry dropdowns appear when "Enter" is clicked
-✓ PDF report cards match DOCX template exactly
-✓ Excel exports match sample templates exactly
-✓ PWA install prompt fixed for all devices
-✓ Proper GitHub Pages paths configured
+✓ Fixed: Exit Portal button only appears after opening portal
+✓ Fixed: Marks entry dropdowns always visible
+✓ Fixed: Desktop PWA install prompt for desktop users only
+✓ Enhanced: Faster report and analytics loading
+✓ Enhanced: Preloaded data for quick access
+✓ Enhanced: User profile card with new layout
+✓ Enhanced: Teacher cards with new layout
+✓ Fixed: Proper GitHub Pages paths configured
 
 SUPPORT:
 For assistance, contact your school administrator or visit the help section.`);
@@ -6782,8 +6799,7 @@ For assistance, contact your school administrator or visit the help section.`);
       isSchoolPortalOpen = false;
       containers.mobileBottomNav.style.display = 'none';
       containers.mobileBottomNav.classList.remove('active');
-      containers.mobileExitBtn.classList.remove('active');
-      containers.portalExitBtn.classList.remove('active');
+      containers.portalExitBtn.style.display = 'none';
       showContainer('loginSection');
     } catch (error) {
       console.error('Error signing out:', error);
