@@ -1,10 +1,9 @@
-// Service Worker for Skore Point - GitHub Pages version
-const CACHE_NAME = 'skore-point-v5';
+// Service Worker for Skore Point
+const CACHE_NAME = 'skore-point-v2';
 const urlsToCache = [
-  '/testing/',
-  '/testing/index.html',
-  '/testing/skore-icon.jpg',
-  '/testing/manifest.json',
+  '/',
+  '/index.html',
+  '/skore-icon.jpg',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
@@ -17,16 +16,49 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache for Skore Point');
+        console.log('Opened cache');
         return cache.addAll(urlsToCache).catch(error => {
-          console.error('Failed to cache some resources:', error);
+          console.error('Failed to cache:', error);
         });
       })
   );
-  self.skipWaiting();
 });
 
-// Activate event - clean up old caches
+// Fetch event with network-first strategy
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        // Check if we received a valid response
+        if(!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+
+        // Clone the response
+        const responseToCache = response.clone();
+
+        caches.open(CACHE_NAME)
+          .then(cache => {
+            cache.put(event.request, responseToCache);
+          });
+
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try cache
+        return caches.match(event.request)
+          .then(response => {
+            if (response) {
+              return response;
+            }
+            // Return offline page or fallback
+            return caches.match('/index.html');
+          });
+      })
+  );
+});
+
+// Activate event
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -40,77 +72,4 @@ self.addEventListener('activate', event => {
       );
     })
   );
-  self.clients.claim();
-});
-
-// Fetch event with network-first strategy for Firebase, cache-first for static assets
-self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
-  
-  // Skip Firebase requests - always go to network
-  if (url.hostname.includes('firebase') || 
-      url.hostname.includes('googleapis') ||
-      url.hostname.includes('gstatic')) {
-    return;
-  }
-  
-  // For static assets, try cache first
-  if (url.pathname.includes('/testing/') && 
-      !url.pathname.includes('/testing/index.html')) {
-    event.respondWith(
-      caches.match(event.request)
-        .then(response => {
-          if (response) {
-            return response;
-          }
-          return fetch(event.request)
-            .then(response => {
-              if (!response || response.status !== 200 || response.type !== 'basic') {
-                return response;
-              }
-              const responseToCache = response.clone();
-              caches.open(CACHE_NAME)
-                .then(cache => {
-                  cache.put(event.request, responseToCache);
-                });
-              return response;
-            })
-            .catch(() => {
-              return caches.match('/testing/index.html');
-            });
-        })
-    );
-  } else {
-    // For HTML pages, network first
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-          return response;
-        })
-        .catch(() => {
-          return caches.match(event.request)
-            .then(response => {
-              if (response) {
-                return response;
-              }
-              return caches.match('/testing/index.html');
-            });
-        })
-    );
-  }
-});
-
-// Handle messages from the app
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
 });
