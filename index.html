@@ -1336,7 +1336,7 @@
       background: white;
       color: #333;
       border-radius: 0;
-      padding: 40px;
+      padding: 30px;
       margin-top: 30px;
       border: 1px solid #ddd;
       position: relative;
@@ -1347,22 +1347,26 @@
       margin: 20px auto;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
       page-break-inside: avoid;
+      font-size: 12px;
     }
 
     /* Report Card Header matching template */
     .report-header {
       text-align: center;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       position: relative;
-      padding-top: 20px;
+      padding-top: 10px;
     }
 
     .skore-point-logo {
       position: absolute;
-      left: 0;
-      top: 0;
+      left: 20px;
+      top: 10px;
       width: 50px;
       height: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .skore-point-logo img {
@@ -1371,11 +1375,18 @@
       object-fit: contain;
     }
 
+    .skore-point-text {
+      font-size: 10px;
+      font-weight: bold;
+      margin-top: 2px;
+      color: #4361ee;
+    }
+
     .school-logo-large {
       display: inline-block;
-      margin: 0 auto 15px;
-      width: 120px;
-      height: 120px;
+      margin: 10px auto 15px;
+      width: 100px;
+      height: 100px;
     }
 
     .school-logo-large img {
@@ -1388,27 +1399,27 @@
     }
 
     .school-name {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: bold;
-      margin: 10px 0 5px;
+      margin: 5px 0 3px;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       color: #000;
     }
 
     .product-info {
-      font-size: 12px;
+      font-size: 10px;
       color: #666;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       font-style: italic;
     }
 
     .report-title {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
-      margin: 20px 0;
+      margin: 15px 0;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       text-decoration: underline;
       color: #000;
     }
@@ -1417,61 +1428,66 @@
     .student-info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-bottom: 30px;
-      padding: 20px;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding: 15px;
       background: #f8f8f8;
       border: 1px solid #ddd;
+      font-size: 11px;
     }
 
     .info-item {
       display: flex;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .info-label {
       font-weight: bold;
-      min-width: 150px;
+      min-width: 120px;
       color: #333;
+      font-size: 11px;
     }
 
     .info-value {
       flex: 1;
       color: #000;
       font-weight: normal;
+      font-size: 11px;
     }
 
     /* Subject Table matching template */
     .subject-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       border: 2px solid #000;
+      font-size: 11px;
     }
 
     .subject-table th {
       background: #f0f0f0;
       font-weight: bold;
       text-align: center;
-      padding: 12px 8px;
+      padding: 8px 6px;
       border: 1px solid #000;
-      font-size: 14px;
+      font-size: 11px;
       text-transform: uppercase;
     }
 
     .subject-table td {
-      padding: 10px 8px;
+      padding: 8px 6px;
       border: 1px solid #000;
       text-align: center;
-      font-size: 14px;
+      font-size: 11px;
     }
 
     /* Summary Table matching template */
     .summary-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
+      font-size: 11px;
     }
 
     .summary-table th {
@@ -1479,43 +1495,44 @@
       color: white;
       font-weight: bold;
       text-align: center;
-      padding: 15px;
+      padding: 12px;
       border: 1px solid #000;
-      font-size: 14px;
+      font-size: 11px;
       text-transform: uppercase;
     }
 
     .summary-table td {
-      padding: 15px;
+      padding: 12px;
       text-align: center;
       border: 1px solid #000;
       font-weight: bold;
-      font-size: 16px;
+      font-size: 13px;
       background: #f8f8f8;
     }
 
     /* Remarks Section */
     .remarks-section {
-      margin: 40px 0;
+      margin: 30px 0;
+      font-size: 11px;
     }
 
     .remarks-section h4 {
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 12px;
       color: #333;
     }
 
     .signature-line {
       border-bottom: 1px solid #000;
       margin-top: 5px;
-      padding-top: 30px;
-      height: 40px;
+      padding-top: 25px;
+      height: 35px;
     }
 
     .next-term-info {
-      margin-top: 30px;
-      font-size: 14px;
+      margin-top: 20px;
+      font-size: 11px;
     }
 
     .next-term-info p {
@@ -1526,20 +1543,21 @@
     .signature-area {
       display: flex;
       justify-content: space-between;
-      margin-top: 60px;
-      padding-top: 20px;
+      margin-top: 50px;
+      padding-top: 15px;
       border-top: 2px solid #000;
+      font-size: 11px;
     }
 
     .signature-box {
       text-align: center;
       flex: 1;
-      min-width: 150px;
+      min-width: 120px;
     }
 
     .signature-line-box {
       border-bottom: 1px solid #000;
-      margin: 40px auto 10px;
+      margin: 30px auto 8px;
       width: 80%;
     }
 
@@ -1547,7 +1565,7 @@
       margin-top: 5px;
       font-weight: bold;
       color: #333;
-      font-size: 14px;
+      font-size: 11px;
     }
 
     /* Analytics */
@@ -1797,18 +1815,20 @@
       }
       
       .enhanced-report-card {
-        padding: 20px;
+        padding: 15px;
         width: 100%;
         min-height: auto;
+        font-size: 10px;
       }
       
       .student-info-grid {
         grid-template-columns: 1fr;
+        font-size: 10px;
       }
       
       .signature-area {
         flex-direction: column;
-        gap: 30px;
+        gap: 20px;
       }
       
       .portal-exit-btn {
@@ -1817,6 +1837,16 @@
       
       .list-grid {
         grid-template-columns: 1fr;
+      }
+      
+      .subject-table,
+      .summary-table {
+        font-size: 9px;
+      }
+      
+      .subject-table th,
+      .subject-table td {
+        padding: 6px 4px;
       }
     }
 
@@ -1865,6 +1895,19 @@
         opacity: 1;
       }
     }
+    
+    /* Utility Classes */
+    .d-none {
+      display: none !important;
+    }
+    
+    .mt-10 { margin-top: 10px; }
+    .mt-20 { margin-top: 20px; }
+    .mt-30 { margin-top: 30px; }
+    .mb-20 { margin-bottom: 20px; }
+    .mb-30 { margin-bottom: 30px; }
+    .w-100 { width: 100%; }
+    .text-center { text-align: center; }
   </style>
 </head>
 <body>
@@ -5261,9 +5304,10 @@
     const enhancedReportCard = document.getElementById('enhancedReportCard');
     enhancedReportCard.innerHTML = `
       <div class="report-header">
-        <!-- Small Skore Point icon in top-left -->
+        <!-- Skore Point logo with text -->
         <div class="skore-point-logo">
           <img src="skore-icon.jpg" alt="Skore Point">
+          <div class="skore-point-text">SKORE POINT</div>
         </div>
         
         <!-- School logo in center -->
@@ -5411,8 +5455,10 @@
     const enhancedReportCard = document.getElementById('enhancedReportCard');
     enhancedReportCard.innerHTML = `
       <div class="report-header">
+        <!-- Skore Point logo with text -->
         <div class="skore-point-logo">
           <img src="skore-icon.jpg" alt="Skore Point">
+          <div class="skore-point-text">SKORE POINT</div>
         </div>
         
         <div class="school-logo-large">
@@ -5539,8 +5585,10 @@
     const enhancedReportCard = document.getElementById('enhancedReportCard');
     enhancedReportCard.innerHTML = `
       <div class="report-header">
+        <!-- Skore Point logo with text -->
         <div class="skore-point-logo">
           <img src="skore-icon.jpg" alt="Skore Point">
+          <div class="skore-point-text">SKORE POINT</div>
         </div>
         
         <div class="school-logo-large">
@@ -5670,22 +5718,28 @@
     const currentTerm = getCurrentTerm();
     const reportTitle = getReportTitle(currentTerm, term);
     
-    // Add Skore Point logo (small, top-left)
+    // Add Skore Point logo with text (top-left)
     const skoreIconUrl = 'skore-icon.jpg';
     try {
       const skoreIcon = await loadImage(skoreIconUrl);
-      doc.addImage(skoreIcon, 'JPEG', 20, 20, 15, 15); // Small icon in top-left
+      doc.addImage(skoreIcon, 'JPEG', 20, 20, 15, 15);
+      doc.setFontSize(8);
+      doc.setTextColor(67, 97, 238);
+      doc.text('SKORE POINT', 27, 37);
     } catch (e) {
-      // If image fails, just leave it
+      // If image fails, just add text
+      doc.setFontSize(10);
+      doc.setTextColor(67, 97, 238);
+      doc.text('SKORE POINT', 20, 25);
     }
     
-    // Add school logo (larger, top-center)
+    // Add school logo (center)
     let schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
     try {
       const schoolLogo = await loadImage(schoolLogoUrl);
-      doc.addImage(schoolLogo, 'JPEG', 85, 25, 40, 40); // Larger logo in center
+      doc.addImage(schoolLogo, 'JPEG', 85, 25, 40, 40);
     } catch (e) {
-      // If image fails, just leave it
+      // If image fails, continue without it
     }
     
     // School name
@@ -5877,15 +5931,21 @@
         // Calculate position on page
         const pageY = i === 0 ? 10 : 10;
         
-        // Add Skore Point logo (small, top-left)
+        // Add Skore Point logo with text
         try {
           const skoreIcon = await loadImage('skore-icon.jpg');
           doc.addImage(skoreIcon, 'JPEG', 20, pageY + 10, 15, 15);
+          doc.setFontSize(8);
+          doc.setTextColor(67, 97, 238);
+          doc.text('SKORE POINT', 27, pageY + 27);
         } catch (e) {
           // Continue without image
+          doc.setFontSize(10);
+          doc.setTextColor(67, 97, 238);
+          doc.text('SKORE POINT', 20, pageY + 15);
         }
         
-        // Add school logo (larger, top-center)
+        // Add school logo
         try {
           const schoolLogo = await loadImage(currentSchool.logoUrl || 'skore-icon.jpg');
           doc.addImage(schoolLogo, 'JPEG', 85, pageY + 15, 40, 40);
@@ -6459,7 +6519,9 @@
     alert(`Skore Point User Guide
 
 KEY IMPROVEMENTS:
-✓ Report Cards: 100% match to template with small Skore Point icon in top-left and school logo in center
+✓ Report Cards: 100% match to template with Skore Point logo + text in top-left
+✓ Added "SKORE POINT" text below the icon and "A product of SERUSOFT" below school name
+✓ Optimized font sizes for better A4 page fit
 ✓ Data Export: Automatic data reloading before export to prevent empty files
 ✓ Smooth Scrolling: Automatic scroll to top when switching tabs
 ✓ Marks Entry: Dropdowns always visible and functional
@@ -6473,9 +6535,10 @@ GETTING STARTED:
 
 REPORT CARD FEATURES:
 • Professional design matching provided template
-• Small Skore Point logo in top-left corner
+• Skore Point logo with "SKORE POINT" text in top-left corner
+• "A product of SERUSOFT" displayed below school name
 • School logo prominently displayed in center
-• Clean, organized layout with proper spacing
+• Optimized for A4 paper printing
 • Export as PDF with all formatting preserved
 
 DATA MANAGEMENT:
