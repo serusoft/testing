@@ -2847,7 +2847,6 @@
   let isSchoolPortalOpen = false;
   let isMobileView = window.innerWidth <= 768;
   let gradeChart = null;
-  let deferredPrompt = null;
 
   // Firebase Configuration
   const firebaseConfig = {
@@ -2860,44 +2859,22 @@
     measurementId: "G-RGCH68RJ8H"
   };
 
-  // Initialize Firebase
-  let firebaseApp, firebaseAuth, firestore;
+  // Firebase Modules
+  let firebaseApp, firebaseAuth, firestoreDB;
+  let authModule, firestoreModule;
 
-  // Firebase initialization function
+  // Initialize Firebase
   async function initializeFirebase() {
     try {
-      const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js');
-      const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
-      const { getFirestore, collection, addDoc, getDocs, query, where, doc, setDoc, getDoc, updateDoc, deleteDoc, arrayUnion, arrayRemove } = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+      // Dynamically import Firebase modules
+      const appModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js');
+      authModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
+      firestoreModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
 
       // Initialize Firebase
-      firebaseApp = initializeApp(firebaseConfig);
-      firebaseAuth = getAuth(firebaseApp);
-      firestore = getFirestore(firebaseApp);
-
-      // Make Firebase available globally
-      window.firebase = {
-        auth: firebaseAuth,
-        db: firestore,
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        signOut,
-        onAuthStateChanged,
-        updateProfile,
-        sendPasswordResetEmail,
-        collection,
-        addDoc,
-        getDocs,
-        query,
-        where,
-        doc,
-        setDoc,
-        getDoc,
-        updateDoc,
-        deleteDoc,
-        arrayUnion,
-        arrayRemove
-      };
+      firebaseApp = appModule.initializeApp(firebaseConfig);
+      firebaseAuth = authModule.getAuth(firebaseApp);
+      firestoreDB = firestoreModule.getFirestore(firebaseApp);
 
       console.log('Firebase initialized successfully');
       return true;
@@ -2943,7 +2920,7 @@
       
       if (firebaseInitialized) {
         // Set up auth state listener
-        window.firebase.onAuthStateChanged(window.firebase.auth, async (user) => {
+        authModule.onAuthStateChanged(firebaseAuth, async (user) => {
           if (user) {
             currentUser = user;
             await loadUserData(user.uid);
@@ -3026,8 +3003,8 @@
     try {
       console.log('Loading user data for:', userId);
       
-      const userDocRef = window.firebase.doc(window.firebase.db, 'users', userId);
-      const userDoc = await window.firebase.getDoc(userDocRef);
+      const userDocRef = firestoreModule.doc(firestoreDB, 'users', userId);
+      const userDoc = await firestoreModule.getDoc(userDocRef);
       
       if (userDoc.exists()) {
         currentUserData = userDoc.data();
@@ -3047,8 +3024,8 @@
       } else {
         console.log('No user document found');
         // Create user document if it doesn't exist
-        await window.firebase.setDoc(
-          window.firebase.doc(window.firebase.db, 'users', userId),
+        await firestoreModule.setDoc(
+          firestoreModule.doc(firestoreDB, 'users', userId),
           {
             name: currentUser.displayName || 'User',
             email: currentUser.email,
@@ -3117,8 +3094,8 @@
     try {
       console.log('Loading school data for:', schoolId);
       
-      const schoolDocRef = window.firebase.doc(window.firebase.db, 'schools', schoolId);
-      const schoolDoc = await window.firebase.getDoc(schoolDocRef);
+      const schoolDocRef = firestoreModule.doc(firestoreDB, 'schools', schoolId);
+      const schoolDoc = await firestoreModule.getDoc(schoolDocRef);
       
       if (schoolDoc.exists()) {
         currentSchool = {
@@ -3153,8 +3130,8 @@
       } else {
         console.log('School document not found');
         // User has a schoolId but school doesn't exist - clear it
-        await window.firebase.updateDoc(
-          window.firebase.doc(window.firebase.db, 'users', currentUser.uid),
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
           {
             schoolId: null
           }
@@ -3347,8 +3324,8 @@
           const studentName = jsonData[i][0];
           if (studentName && typeof studentName === 'string' && studentName.trim()) {
             try {
-              await window.firebase.addDoc(
-                window.firebase.collection(window.firebase.db, 'students'),
+              await firestoreModule.addDoc(
+                firestoreModule.collection(firestoreDB, 'students'),
                 {
                   name: studentName.trim(),
                   classId: classId,
@@ -3488,9 +3465,7 @@
     hideAlert('loginError');
     
     try {
-      await window.firebase.signInWithEmailAndPassword(
-        window.firebase.auth, email, password
-      );
+      await authModule.signInWithEmailAndPassword(firebaseAuth, email, password);
       // Auth state listener will handle the rest
     } catch (error) {
       hideLoading('loginLoading');
@@ -3548,9 +3523,7 @@
     
     try {
       // Create user account
-      const userCredential = await window.firebase.createUserWithEmailAndPassword(
-        window.firebase.auth, email, password
-      );
+      const userCredential = await authModule.createUserWithEmailAndPassword(firebaseAuth, email, password);
       
       // Create user document in Firestore
       const userData = {
@@ -3564,14 +3537,14 @@
       
       console.log('Creating user document with data:', userData);
       
-      await window.firebase.setDoc(
-        window.firebase.doc(window.firebase.db, 'users', userCredential.user.uid),
+      await firestoreModule.setDoc(
+        firestoreModule.doc(firestoreDB, 'users', userCredential.user.uid),
         userData
       );
       
       // Update profile with display name
       if (name) {
-        await window.firebase.updateProfile(userCredential.user, {
+        await authModule.updateProfile(userCredential.user, {
           displayName: name
         });
       }
@@ -3628,13 +3601,13 @@
       console.log('Searching for school:', schoolName, 'code:', schoolCode);
       
       // Find school by name and code
-      const schoolsQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'schools'),
-        window.firebase.where('name', '==', schoolName),
-        window.firebase.where('code', '==', schoolCode)
+      const schoolsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'schools'),
+        firestoreModule.where('name', '==', schoolName),
+        firestoreModule.where('code', '==', schoolCode)
       );
       
-      const querySnapshot = await window.firebase.getDocs(schoolsQuery);
+      const querySnapshot = await firestoreModule.getDocs(schoolsQuery);
       
       if (querySnapshot.empty) {
         showAlert('joinSchoolError', 'School not found. Please check the name and code.', 'error');
@@ -3650,8 +3623,8 @@
       console.log('School found:', currentSchool);
       
       // Update user document
-      await window.firebase.updateDoc(
-        window.firebase.doc(window.firebase.db, 'users', currentUser.uid),
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
         {
           schoolId: schoolDoc.id,
           role: 'teacher'
@@ -3729,16 +3702,16 @@
       
       console.log('Creating school with data:', schoolData);
       
-      const schoolRef = await window.firebase.addDoc(
-        window.firebase.collection(window.firebase.db, 'schools'),
+      const schoolRef = await firestoreModule.addDoc(
+        firestoreModule.collection(firestoreDB, 'schools'),
         schoolData
       );
       
       console.log('School created with ID:', schoolRef.id);
       
       // Update user document
-      await window.firebase.updateDoc(
-        window.firebase.doc(window.firebase.db, 'users', currentUser.uid),
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
         {
           schoolId: schoolRef.id,
           role: 'admin'
@@ -3757,8 +3730,8 @@
       console.log('Adding default subjects:', defaultSubjects);
       
       for (const subjectName of defaultSubjects) {
-        await window.firebase.addDoc(
-          window.firebase.collection(window.firebase.db, 'subjects'),
+        await firestoreModule.addDoc(
+          firestoreModule.collection(firestoreDB, 'subjects'),
           {
             name: subjectName,
             schoolId: schoolRef.id,
@@ -3772,8 +3745,8 @@
       console.log('Adding default classes:', defaultClasses);
       
       for (const className of defaultClasses) {
-        await window.firebase.addDoc(
-          window.firebase.collection(window.firebase.db, 'classes'),
+        await firestoreModule.addDoc(
+          firestoreModule.collection(firestoreDB, 'classes'),
           {
             name: className,
             schoolId: schoolRef.id,
@@ -3817,7 +3790,7 @@
     hideAlert('forgotPasswordSuccess');
     
     try {
-      await window.firebase.sendPasswordResetEmail(window.firebase.auth, email);
+      await authModule.sendPasswordResetEmail(firebaseAuth, email);
       showAlert('forgotPasswordSuccess', 'Password reset email sent! Check your inbox.', 'success');
       
       // Clear form and hide modal after delay
@@ -3839,8 +3812,8 @@
     const className = document.getElementById('className').value;
     
     try {
-      await window.firebase.addDoc(
-        window.firebase.collection(window.firebase.db, 'classes'),
+      await firestoreModule.addDoc(
+        firestoreModule.collection(firestoreDB, 'classes'),
         {
           name: className,
           schoolId: currentSchool.id,
@@ -3867,8 +3840,8 @@
     const subjectName = document.getElementById('subjectName').value;
     
     try {
-      await window.firebase.addDoc(
-        window.firebase.collection(window.firebase.db, 'subjects'),
+      await firestoreModule.addDoc(
+        firestoreModule.collection(firestoreDB, 'subjects'),
         {
           name: subjectName,
           schoolId: currentSchool.id,
@@ -3908,12 +3881,12 @@
     
     try {
       // First, check if user exists
-      const usersQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'users'),
-        window.firebase.where('email', '==', teacherEmail)
+      const usersQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'users'),
+        firestoreModule.where('email', '==', teacherEmail)
       );
       
-      const querySnapshot = await window.firebase.getDocs(usersQuery);
+      const querySnapshot = await firestoreModule.getDocs(usersQuery);
       let teacherUserId = null;
       
       if (!querySnapshot.empty) {
@@ -3921,8 +3894,8 @@
         const userDoc = querySnapshot.docs[0];
         teacherUserId = userDoc.id;
         
-        await window.firebase.updateDoc(
-          window.firebase.doc(window.firebase.db, 'users', teacherUserId),
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'users', teacherUserId),
           {
             schoolId: currentSchool.id,
             role: teacherRole,
@@ -3933,8 +3906,8 @@
         );
       } else {
         // Create new user document
-        const newTeacherRef = await window.firebase.addDoc(
-          window.firebase.collection(window.firebase.db, 'users'),
+        const newTeacherRef = await firestoreModule.addDoc(
+          firestoreModule.collection(firestoreDB, 'users'),
           {
             name: teacherName,
             email: teacherEmail,
@@ -3952,19 +3925,19 @@
       }
       
       // Update school's teacher list
-      await window.firebase.updateDoc(
-        window.firebase.doc(window.firebase.db, 'schools', currentSchool.id),
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
         {
-          teachers: window.firebase.arrayUnion(teacherUserId)
+          teachers: firestoreModule.arrayUnion(teacherUserId)
         }
       );
       
       // If admin, add to admins list
       if (teacherRole === 'admin') {
-        await window.firebase.updateDoc(
-          window.firebase.doc(window.firebase.db, 'schools', currentSchool.id),
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
           {
-            admins: window.firebase.arrayUnion(teacherUserId)
+            admins: firestoreModule.arrayUnion(teacherUserId)
           }
         );
       }
@@ -3991,8 +3964,8 @@
     const studentClass = document.getElementById('studentClass').value;
     
     try {
-      await window.firebase.addDoc(
-        window.firebase.collection(window.firebase.db, 'students'),
+      await firestoreModule.addDoc(
+        firestoreModule.collection(firestoreDB, 'students'),
         {
           name: studentName,
           classId: studentClass,
@@ -4018,12 +3991,12 @@
     if (!currentSchool) return;
     
     try {
-      const classesQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'classes'),
-        window.firebase.where('schoolId', '==', currentSchool.id)
+      const classesQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'classes'),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
       );
       
-      const querySnapshot = await window.firebase.getDocs(classesQuery);
+      const querySnapshot = await firestoreModule.getDocs(classesQuery);
       currentClasses = [];
       const classList = document.getElementById('classList');
       classList.innerHTML = '';
@@ -4075,19 +4048,19 @@
     try {
       let studentsQuery;
       if (classId) {
-        studentsQuery = window.firebase.query(
-          window.firebase.collection(window.firebase.db, 'students'),
-          window.firebase.where('schoolId', '==', currentSchool.id),
-          window.firebase.where('classId', '==', classId)
+        studentsQuery = firestoreModule.query(
+          firestoreModule.collection(firestoreDB, 'students'),
+          firestoreModule.where('schoolId', '==', currentSchool.id),
+          firestoreModule.where('classId', '==', classId)
         );
       } else {
-        studentsQuery = window.firebase.query(
-          window.firebase.collection(window.firebase.db, 'students'),
-          window.firebase.where('schoolId', '==', currentSchool.id)
+        studentsQuery = firestoreModule.query(
+          firestoreModule.collection(firestoreDB, 'students'),
+          firestoreModule.where('schoolId', '==', currentSchool.id)
         );
       }
       
-      const querySnapshot = await window.firebase.getDocs(studentsQuery);
+      const querySnapshot = await firestoreModule.getDocs(studentsQuery);
       currentStudents = [];
       const studentList = document.getElementById('studentList');
       studentList.innerHTML = '';
@@ -4132,12 +4105,12 @@
     if (!currentSchool) return;
     
     try {
-      const subjectsQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'subjects'),
-        window.firebase.where('schoolId', '==', currentSchool.id)
+      const subjectsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'subjects'),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
       );
       
-      const querySnapshot = await window.firebase.getDocs(subjectsQuery);
+      const querySnapshot = await firestoreModule.getDocs(subjectsQuery);
       currentSubjects = [];
       const subjectsList = document.getElementById('subjectsList');
       subjectsList.innerHTML = '';
@@ -4183,12 +4156,12 @@
     
     try {
       // Get all users in the school
-      const usersQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'users'),
-        window.firebase.where('schoolId', '==', currentSchool.id)
+      const usersQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'users'),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
       );
       
-      const querySnapshot = await window.firebase.getDocs(usersQuery);
+      const querySnapshot = await firestoreModule.getDocs(usersQuery);
       currentTeachers = [];
       const teacherList = document.getElementById('teacherList');
       teacherList.innerHTML = '';
@@ -4365,13 +4338,13 @@
   // Load students for marks
   async function loadStudentsForMarks(classId) {
     try {
-      const studentsQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'students'),
-        window.firebase.where('classId', '==', classId),
-        window.firebase.where('schoolId', '==', currentSchool.id)
+      const studentsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'students'),
+        firestoreModule.where('classId', '==', classId),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
       );
       
-      const querySnapshot = await window.firebase.getDocs(studentsQuery);
+      const querySnapshot = await firestoreModule.getDocs(studentsQuery);
       currentStudents = [];
       
       querySnapshot.forEach(doc => {
@@ -4514,8 +4487,8 @@
     const term = document.getElementById('termSelect').value;
     
     try {
-      const marksDoc = await window.firebase.getDoc(
-        window.firebase.doc(window.firebase.db, 'marks', `${studentId}_${term}`)
+      const marksDoc = await firestoreModule.getDoc(
+        firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
       );
       
       if (marksDoc.exists()) {
@@ -4553,7 +4526,7 @@
       const subjectId = input.dataset.subject;
       const value = parseInt(input.value);
       if (!isNaN(value) && value >= 0 && value <= 100) {
-        marks[subject.id] = value;
+        marks[subjectId] = value;
         hasMarks = true;
       }
     });
@@ -4565,8 +4538,8 @@
     
     try {
       // Save marks
-      await window.firebase.setDoc(
-        window.firebase.doc(window.firebase.db, 'marks', `${selectedStudentId}_${term}`),
+      await firestoreModule.setDoc(
+        firestoreModule.doc(firestoreDB, 'marks', `${selectedStudentId}_${term}`),
         {
           studentId: selectedStudentId,
           schoolId: currentSchool.id,
@@ -4676,12 +4649,12 @@
   // Load all students for reports
   async function loadAllStudents() {
     try {
-      const studentsQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'students'),
-        window.firebase.where('schoolId', '==', currentSchool.id)
+      const studentsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'students'),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
       );
       
-      const querySnapshot = await window.firebase.getDocs(studentsQuery);
+      const querySnapshot = await firestoreModule.getDocs(studentsQuery);
       currentStudents = [];
       
       querySnapshot.forEach(doc => {
@@ -4700,12 +4673,12 @@
   // Preload marks data
   async function preloadMarksData() {
     try {
-      const marksQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'marks'),
-        window.firebase.where('schoolId', '==', currentSchool.id)
+      const marksQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'marks'),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
       );
       
-      const querySnapshot = await window.firebase.getDocs(marksQuery);
+      const querySnapshot = await firestoreModule.getDocs(marksQuery);
       console.log(`Preloaded marks data: ${querySnapshot.size} documents`);
     } catch (error) {
       console.error('Error preloading marks data:', error);
@@ -4783,13 +4756,13 @@
     
     try {
       // Get marks data
-      const marksQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'marks'),
-        window.firebase.where('schoolId', '==', currentSchool.id),
-        window.firebase.where('term', '==', term)
+      const marksQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'marks'),
+        firestoreModule.where('schoolId', '==', currentSchool.id),
+        firestoreModule.where('term', '==', term)
       );
       
-      const marksSnapshot = await window.firebase.getDocs(marksQuery);
+      const marksSnapshot = await firestoreModule.getDocs(marksQuery);
       const marksData = [];
       
       marksSnapshot.forEach(doc => {
@@ -5053,13 +5026,13 @@
       await reloadDataForExport();
       
       // Get marks data
-      const marksQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'marks'),
-        window.firebase.where('schoolId', '==', currentSchool.id),
-        window.firebase.where('term', '==', term)
+      const marksQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'marks'),
+        firestoreModule.where('schoolId', '==', currentSchool.id),
+        firestoreModule.where('term', '==', term)
       );
       
-      const marksSnapshot = await window.firebase.getDocs(marksQuery);
+      const marksSnapshot = await firestoreModule.getDocs(marksQuery);
       const marksData = [];
       
       marksSnapshot.forEach(doc => {
@@ -5179,13 +5152,13 @@
     select.disabled = false;
     
     try {
-      const studentsQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'students'),
-        window.firebase.where('classId', '==', classId),
-        window.firebase.where('schoolId', '==', currentSchool.id)
+      const studentsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'students'),
+        firestoreModule.where('classId', '==', classId),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
       );
       
-      const querySnapshot = await window.firebase.getDocs(studentsQuery);
+      const querySnapshot = await firestoreModule.getDocs(studentsQuery);
       
       querySnapshot.forEach(doc => {
         const student = { id: doc.id, ...doc.data() };
@@ -5211,8 +5184,8 @@
       let marksQuery;
       if (studentId) {
         // Specific student
-        const marksDoc = await window.firebase.getDoc(
-          window.firebase.doc(window.firebase.db, 'marks', `${studentId}_${term}`)
+        const marksDoc = await firestoreModule.getDoc(
+          firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
         );
         
         if (marksDoc.exists()) {
@@ -5224,13 +5197,13 @@
         }
       } else if (classId) {
         // Whole class
-        marksQuery = window.firebase.query(
-          window.firebase.collection(window.firebase.db, 'marks'),
-          window.firebase.where('schoolId', '==', currentSchool.id),
-          window.firebase.where('term', '==', term)
+        marksQuery = firestoreModule.query(
+          firestoreModule.collection(firestoreDB, 'marks'),
+          firestoreModule.where('schoolId', '==', currentSchool.id),
+          firestoreModule.where('term', '==', term)
         );
         
-        const marksSnapshot = await window.firebase.getDocs(marksQuery);
+        const marksSnapshot = await firestoreModule.getDocs(marksQuery);
         const classStudents = currentStudents.filter(s => s.classId === classId);
         const marksData = [];
         
@@ -5250,13 +5223,13 @@
         }
       } else {
         // All students
-        marksQuery = window.firebase.query(
-          window.firebase.collection(window.firebase.db, 'marks'),
-          window.firebase.where('schoolId', '==', currentSchool.id),
-          window.firebase.where('term', '==', term)
+        marksQuery = firestoreModule.query(
+          firestoreModule.collection(firestoreDB, 'marks'),
+          firestoreModule.where('schoolId', '==', currentSchool.id),
+          firestoreModule.where('term', '==', term)
         );
         
-        const marksSnapshot = await window.firebase.getDocs(marksQuery);
+        const marksSnapshot = await firestoreModule.getDocs(marksQuery);
         const marksData = [];
         
         marksSnapshot.forEach(doc => {
@@ -5317,9 +5290,7 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <div style="width: 40px; height: 40px; background: #4361ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
-              SP
-            </div>
+            <img src="skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
@@ -5468,9 +5439,7 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <div style="width: 40px; height: 40px; background: #4361ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
-              SP
-            </div>
+            <img src="skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
@@ -5602,9 +5571,7 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <div style="width: 40px; height: 40px; background: #4361ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
-              SP
-            </div>
+            <img src="skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
@@ -5701,8 +5668,8 @@
     const term = document.getElementById('reportTermSelect').value;
     
     // Get marks data
-    const marksDoc = await window.firebase.getDoc(
-      window.firebase.doc(window.firebase.db, 'marks', `${studentId}_${term}`)
+    const marksDoc = await firestoreModule.getDoc(
+      firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
     );
     
     if (!marksDoc.exists()) {
@@ -5745,125 +5712,152 @@
     doc.setTextColor(100, 100, 100);
     doc.text('A product of SERUSOFT', 20, 18);
     
-    // Add school logo (center)
-    let schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
+    // Add Skore Point icon
     try {
-      // Create a simple SP icon since we don't have the actual image
-      doc.setFillColor(67, 97, 238);
-      doc.rect(85, 25, 40, 40, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(20);
-      doc.text('SP', 105, 50, { align: 'center' });
-    } catch (e) {
-      // If image fails, continue without it
-    }
-    
-    // School name
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text(currentSchool.name, 105, 75, { align: 'center' });
-    
-    // Report title
-    doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.text(reportTitle, 105, 85, { align: 'center' });
-    
-    // Student information
-    doc.setFontSize(12);
-    doc.text(`Student Name: ${student.name}`, 20, 100);
-    doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 107);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 114);
-    
-    // Subject table header
-    doc.autoTable({
-      startY: 120,
-      head: [['SUBJECT', 'SCORE', 'GRADE']],
-      theme: 'grid',
-      headStyles: { 
-        fillColor: [240, 240, 240],
-        textColor: [0, 0, 0],
-        fontStyle: 'bold'
-      },
-      margin: { left: 20, right: 20 },
-      styles: { 
-        fontSize: 10,
-        cellPadding: 5,
-        lineWidth: 0.5,
-        lineColor: [0, 0, 0]
-      }
-    });
-    
-    // Subject rows
-    const tableData = subjectScores.map(score => [score.name, score.score.toString(), score.grade]);
-    
-    if (tableData.length > 0) {
-      doc.autoTable({
-        startY: 120,
-        body: tableData,
-        theme: 'grid',
-        margin: { left: 20, right: 20 },
-        styles: { 
-          fontSize: 10,
-          cellPadding: 5,
-          lineWidth: 0.5,
-          lineColor: [0, 0, 0]
+      const iconUrl = 'skore-icon.jpg';
+      const img = new Image();
+      img.src = iconUrl;
+      
+      // Add image after it loads
+      img.onload = () => {
+        doc.addImage(img, 'JPEG', 20, 5, 10, 10);
+        // Continue with PDF generation after image is loaded
+        continuePDFGeneration();
+      };
+      
+      img.onerror = () => {
+        // If image fails to load, continue without it
+        continuePDFGeneration();
+      };
+      
+      function continuePDFGeneration() {
+        // Add school logo (center)
+        let schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
+        try {
+          const schoolImg = new Image();
+          schoolImg.src = schoolLogoUrl;
+          schoolImg.onload = () => {
+            doc.addImage(schoolImg, 'JPEG', 85, 25, 40, 40);
+            continueAfterSchoolLogo();
+          };
+          schoolImg.onerror = continueAfterSchoolLogo;
+        } catch (e) {
+          continueAfterSchoolLogo();
         }
-      });
-    }
-    
-    const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 140;
-    
-    // Summary table
-    const summaryData = [
-      ['TOTAL MARKS', 'AVERAGE MARK', 'AGGREGATES', 'FINAL GRADE/DIVISION'],
-      [totalMarks.toString(), average.toString(), aggregate.toString(), division]
-    ];
-    
-    doc.autoTable({
-      startY: finalY,
-      head: [summaryData[0]],
-      body: [summaryData[1]],
-      theme: 'grid',
-      headStyles: { 
-        fillColor: [67, 97, 238],
-        textColor: [255, 255, 255],
-        fontStyle: 'bold'
-      },
-      margin: { left: 20, right: 20 },
-      styles: { 
-        fontSize: 10,
-        cellPadding: 5,
-        lineWidth: 0.5,
-        lineColor: [0, 0, 0]
+        
+        function continueAfterSchoolLogo() {
+          // School name
+          doc.setFontSize(16);
+          doc.setTextColor(0, 0, 0);
+          doc.text(currentSchool.name, 105, 75, { align: 'center' });
+          
+          // Report title
+          doc.setFontSize(14);
+          doc.setTextColor(0, 0, 0);
+          doc.text(reportTitle, 105, 85, { align: 'center' });
+          
+          // Student information
+          doc.setFontSize(12);
+          doc.text(`Student Name: ${student.name}`, 20, 100);
+          doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 107);
+          doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 114);
+          
+          // Subject table header
+          doc.autoTable({
+            startY: 120,
+            head: [['SUBJECT', 'SCORE', 'GRADE']],
+            theme: 'grid',
+            headStyles: { 
+              fillColor: [240, 240, 240],
+              textColor: [0, 0, 0],
+              fontStyle: 'bold'
+            },
+            margin: { left: 20, right: 20 },
+            styles: { 
+              fontSize: 10,
+              cellPadding: 5,
+              lineWidth: 0.5,
+              lineColor: [0, 0, 0]
+            }
+          });
+          
+          // Subject rows
+          const tableData = subjectScores.map(score => [score.name, score.score.toString(), score.grade]);
+          
+          if (tableData.length > 0) {
+            doc.autoTable({
+              startY: 120,
+              body: tableData,
+              theme: 'grid',
+              margin: { left: 20, right: 20 },
+              styles: { 
+                fontSize: 10,
+                cellPadding: 5,
+                lineWidth: 0.5,
+                lineColor: [0, 0, 0]
+              }
+            });
+          }
+          
+          const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 140;
+          
+          // Summary table
+          const summaryData = [
+            ['TOTAL MARKS', 'AVERAGE MARK', 'AGGREGATES', 'FINAL GRADE/DIVISION'],
+            [totalMarks.toString(), average.toString(), aggregate.toString(), division]
+          ];
+          
+          doc.autoTable({
+            startY: finalY,
+            head: [summaryData[0]],
+            body: [summaryData[1]],
+            theme: 'grid',
+            headStyles: { 
+              fillColor: [67, 97, 238],
+              textColor: [255, 255, 255],
+              fontStyle: 'bold'
+            },
+            margin: { left: 20, right: 20 },
+            styles: { 
+              fontSize: 10,
+              cellPadding: 5,
+              lineWidth: 0.5,
+              lineColor: [0, 0, 0]
+            }
+          });
+          
+          const finalY2 = doc.lastAutoTable.finalY + 15;
+          
+          // Remarks section
+          doc.setFontSize(12);
+          doc.text('Class Teacher\'s Remarks:', 20, finalY2);
+          doc.line(20, finalY2 + 5, 190, finalY2 + 5);
+          
+          doc.text('Head Teacher\'s Remarks:', 20, finalY2 + 20);
+          doc.line(20, finalY2 + 25, 190, finalY2 + 25);
+          
+          doc.text('Next Term Begins On: ________________________________', 20, finalY2 + 35);
+          
+          // Signature lines
+          const signatureY = finalY2 + 50;
+          doc.line(30, signatureY, 80, signatureY);
+          doc.text('Class Teacher Signature', 55, signatureY + 10, { align: 'center' });
+          
+          doc.line(110, signatureY, 160, signatureY);
+          doc.text('Head Teacher Signature', 135, signatureY + 10, { align: 'center' });
+          
+          // School stamp box
+          doc.rect(175, signatureY - 5, 20, 20);
+          doc.text('School Stamp', 185, signatureY + 25, { align: 'center' });
+          
+          // Save the PDF
+          doc.save(`Report_Card_${student.name}_${new Date().toISOString().slice(0, 10)}.pdf`);
+        }
       }
-    });
-    
-    const finalY2 = doc.lastAutoTable.finalY + 15;
-    
-    // Remarks section
-    doc.setFontSize(12);
-    doc.text('Class Teacher\'s Remarks:', 20, finalY2);
-    doc.line(20, finalY2 + 5, 190, finalY2 + 5);
-    
-    doc.text('Head Teacher\'s Remarks:', 20, finalY2 + 20);
-    doc.line(20, finalY2 + 25, 190, finalY2 + 25);
-    
-    doc.text('Next Term Begins On: ________________________________', 20, finalY2 + 35);
-    
-    // Signature lines
-    const signatureY = finalY2 + 50;
-    doc.line(30, signatureY, 80, signatureY);
-    doc.text('Class Teacher Signature', 55, signatureY + 10, { align: 'center' });
-    
-    doc.line(110, signatureY, 160, signatureY);
-    doc.text('Head Teacher Signature', 135, signatureY + 10, { align: 'center' });
-    
-    // School stamp box
-    doc.rect(175, signatureY - 5, 20, 20);
-    doc.text('School Stamp', 185, signatureY + 25, { align: 'center' });
-    
-    // Save the PDF
-    doc.save(`Report_Card_${student.name}_${new Date().toISOString().slice(0, 10)}.pdf`);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Error generating report card. Please try again.');
+    }
   }
 
   // Export ALL student report cards as PDF - WITH DATA RELOADING
@@ -5914,8 +5908,8 @@
     }
     
     // Check if student has marks
-    const marksDoc = await window.firebase.getDoc(
-      window.firebase.doc(window.firebase.db, 'marks', `${studentId}_${term}`)
+    const marksDoc = await firestoreModule.getDoc(
+      firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
     );
     
     if (!marksDoc.exists()) {
@@ -5957,8 +5951,8 @@
         const student = classStudents[i];
         
         // Get marks for this student
-        const marksDoc = await window.firebase.getDoc(
-          window.firebase.doc(window.firebase.db, 'marks', `${student.id}_${term}`)
+        const marksDoc = await firestoreModule.getDoc(
+          firestoreModule.doc(firestoreDB, 'marks', `${student.id}_${term}`)
         );
         
         if (!marksDoc.exists()) {
@@ -5986,13 +5980,23 @@
         doc.setTextColor(100, 100, 100);
         doc.text('A product of SERUSOFT', 20, pageY + 13);
         
+        // Add Skore Point icon
+        try {
+          const iconUrl = 'skore-icon.jpg';
+          const img = new Image();
+          img.src = iconUrl;
+          // Add small icon
+          doc.addImage(img, 'JPEG', 20, pageY + 2, 8, 8);
+        } catch (e) {
+          // Continue without image
+        }
+        
         // Add school logo
         try {
-          doc.setFillColor(67, 97, 238);
-          doc.rect(85, pageY + 15, 40, 40, 'F');
-          doc.setTextColor(255, 255, 255);
-          doc.setFontSize(20);
-          doc.text('SP', 105, pageY + 40, { align: 'center' });
+          const schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
+          const schoolImg = new Image();
+          schoolImg.src = schoolLogoUrl;
+          doc.addImage(schoolImg, 'JPEG', 85, pageY + 15, 40, 40);
         } catch (e) {
           // Continue without image
         }
@@ -6174,13 +6178,13 @@
       exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Excel...';
       
       // Get marks data
-      const marksQuery = window.firebase.query(
-        window.firebase.collection(window.firebase.db, 'marks'),
-        window.firebase.where('schoolId', '==', currentSchool.id),
-        window.firebase.where('term', '==', term)
+      const marksQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'marks'),
+        firestoreModule.where('schoolId', '==', currentSchool.id),
+        firestoreModule.where('term', '==', term)
       );
       
-      const marksSnapshot = await window.firebase.getDocs(marksQuery);
+      const marksSnapshot = await firestoreModule.getDocs(marksQuery);
       const marksData = [];
       
       marksSnapshot.forEach(doc => {
@@ -6562,6 +6566,7 @@ KEY IMPROVEMENTS:
 ✓ Marks Entry: Dropdowns always visible and functional
 ✓ Mobile Optimized: Professional mobile interface with bottom navigation
 ✓ PWA Ready: Install as native app with offline functionality
+✓ Skore Point Icon: Uses "skore-icon.jpg" for all branding
 
 GETTING STARTED:
 1. Create a user account with profile picture
@@ -6589,7 +6594,7 @@ Contact your school administrator or visit help section for assistance.`);
   // Handle logout
   async function handleLogout() {
     try {
-      await window.firebase.signOut(window.firebase.auth);
+      await authModule.signOut(firebaseAuth);
       currentUser = null;
       currentUserData = null;
       currentSchool = null;
@@ -6654,23 +6659,23 @@ Contact your school administrator or visit help section for assistance.`);
     if (confirm('Are you sure you want to delete this class? All students in this class will also be deleted.')) {
       try {
         // Delete students in this class first
-        const studentsQuery = window.firebase.query(
-          window.firebase.collection(window.firebase.db, 'students'),
-          window.firebase.where('classId', '==', classId)
+        const studentsQuery = firestoreModule.query(
+          firestoreModule.collection(firestoreDB, 'students'),
+          firestoreModule.where('classId', '==', classId)
         );
         
-        const studentsSnapshot = await window.firebase.getDocs(studentsQuery);
+        const studentsSnapshot = await firestoreModule.getDocs(studentsQuery);
         const deletePromises = [];
         
         studentsSnapshot.forEach(doc => {
-          deletePromises.push(window.firebase.deleteDoc(doc.ref));
+          deletePromises.push(firestoreModule.deleteDoc(doc.ref));
         });
         
         await Promise.all(deletePromises);
         
         // Delete the class
-        await window.firebase.deleteDoc(
-          window.firebase.doc(window.firebase.db, 'classes', classId)
+        await firestoreModule.deleteDoc(
+          firestoreModule.doc(firestoreDB, 'classes', classId)
         );
         
         loadClasses();
@@ -6685,8 +6690,8 @@ Contact your school administrator or visit help section for assistance.`);
   window.deleteStudent = async function(studentId) {
     if (confirm('Are you sure you want to delete this student?')) {
       try {
-        await window.firebase.deleteDoc(
-          window.firebase.doc(window.firebase.db, 'students', studentId)
+        await firestoreModule.deleteDoc(
+          firestoreModule.doc(firestoreDB, 'students', studentId)
         );
         loadStudents();
       } catch (error) {
@@ -6699,8 +6704,8 @@ Contact your school administrator or visit help section for assistance.`);
   window.deleteSubject = async function(subjectId) {
     if (confirm('Are you sure you want to delete this subject?')) {
       try {
-        await window.firebase.deleteDoc(
-          window.firebase.doc(window.firebase.db, 'subjects', subjectId)
+        await firestoreModule.deleteDoc(
+          firestoreModule.doc(firestoreDB, 'subjects', subjectId)
         );
         loadSubjects();
       } catch (error) {
@@ -6717,8 +6722,8 @@ Contact your school administrator or visit help section for assistance.`);
     if (confirm(`Are you sure you want to ${action} this teacher?`)) {
       try {
         // Update teacher's role
-        await window.firebase.updateDoc(
-          window.firebase.doc(window.firebase.db, 'users', teacherId),
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'users', teacherId),
           {
             role: newRole
           }
@@ -6726,17 +6731,17 @@ Contact your school administrator or visit help section for assistance.`);
         
         // Update school's admin list
         if (newRole === 'admin') {
-          await window.firebase.updateDoc(
-            window.firebase.doc(window.firebase.db, 'schools', currentSchool.id),
+          await firestoreModule.updateDoc(
+            firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
             {
-              admins: window.firebase.arrayUnion(teacherId)
+              admins: firestoreModule.arrayUnion(teacherId)
             }
           );
         } else {
-          await window.firebase.updateDoc(
-            window.firebase.doc(window.firebase.db, 'schools', currentSchool.id),
+          await firestoreModule.updateDoc(
+            firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
             {
-              admins: window.firebase.arrayRemove(teacherId)
+              admins: firestoreModule.arrayRemove(teacherId)
             }
           );
         }
@@ -6754,8 +6759,8 @@ Contact your school administrator or visit help section for assistance.`);
     if (confirm('Are you sure you want to remove this teacher from the school?')) {
       try {
         // Update teacher's school
-        await window.firebase.updateDoc(
-          window.firebase.doc(window.firebase.db, 'users', teacherId),
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'users', teacherId),
           {
             schoolId: null,
             role: 'teacher'
@@ -6763,11 +6768,11 @@ Contact your school administrator or visit help section for assistance.`);
         );
         
         // Remove from school's lists
-        await window.firebase.updateDoc(
-          window.firebase.doc(window.firebase.db, 'schools', currentSchool.id),
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
           {
-            teachers: window.firebase.arrayRemove(teacherId),
-            admins: window.firebase.arrayRemove(teacherId)
+            teachers: firestoreModule.arrayRemove(teacherId),
+            admins: firestoreModule.arrayRemove(teacherId)
           }
         );
         
