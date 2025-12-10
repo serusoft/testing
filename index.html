@@ -1372,6 +1372,9 @@
       width: 40px;
       height: 40px;
       margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .skore-point-icon img {
@@ -5314,7 +5317,9 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <img src="skore-icon.jpg" alt="Skore Point">
+            <div style="width: 40px; height: 40px; background: #4361ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+              SP
+            </div>
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
@@ -5322,7 +5327,7 @@
         
         <!-- School logo in center -->
         <div class="school-logo-large">
-          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}">
+          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='skore-icon.jpg'">
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
@@ -5463,14 +5468,16 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <img src="skore-icon.jpg" alt="Skore Point">
+            <div style="width: 40px; height: 40px; background: #4361ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+              SP
+            </div>
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
         </div>
         
         <div class="school-logo-large">
-          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}">
+          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='skore-icon.jpg'">
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
@@ -5595,14 +5602,16 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <img src="skore-icon.jpg" alt="Skore Point">
+            <div style="width: 40px; height: 40px; background: #4361ee; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px;">
+              SP
+            </div>
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
         </div>
         
         <div class="school-logo-large">
-          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}">
+          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='skore-icon.jpg'">
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
@@ -5739,8 +5748,12 @@
     // Add school logo (center)
     let schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
     try {
-      const schoolLogo = await loadImage(schoolLogoUrl);
-      doc.addImage(schoolLogo, 'JPEG', 85, 25, 40, 40);
+      // Create a simple SP icon since we don't have the actual image
+      doc.setFillColor(67, 97, 238);
+      doc.rect(85, 25, 40, 40, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20);
+      doc.text('SP', 105, 50, { align: 'center' });
     } catch (e) {
       // If image fails, continue without it
     }
@@ -5975,8 +5988,11 @@
         
         // Add school logo
         try {
-          const schoolLogo = await loadImage(currentSchool.logoUrl || 'skore-icon.jpg');
-          doc.addImage(schoolLogo, 'JPEG', 85, pageY + 15, 40, 40);
+          doc.setFillColor(67, 97, 238);
+          doc.rect(85, pageY + 15, 40, 40, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(20);
+          doc.text('SP', 105, pageY + 40, { align: 'center' });
         } catch (e) {
           // Continue without image
         }
