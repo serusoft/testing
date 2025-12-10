@@ -1353,23 +1353,28 @@
     /* Report Card Header matching template */
     .report-header {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       position: relative;
       padding-top: 10px;
     }
 
-    .skore-point-logo {
+    .skore-point-badge {
       position: absolute;
       left: 20px;
       top: 10px;
-      width: 50px;
-      height: 50px;
+      text-align: left;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
     }
 
-    .skore-point-logo img {
+    .skore-point-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 2px;
+    }
+
+    .skore-point-icon img {
       width: 100%;
       height: 100%;
       object-fit: contain;
@@ -1378,15 +1383,24 @@
     .skore-point-text {
       font-size: 10px;
       font-weight: bold;
-      margin-top: 2px;
       color: #4361ee;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .serusoft-text {
+      font-size: 8px;
+      color: #666;
+      font-style: italic;
+      margin: 2px 0 0 0;
+      line-height: 1;
     }
 
     .school-logo-large {
       display: inline-block;
-      margin: 10px auto 15px;
-      width: 100px;
-      height: 100px;
+      margin: 5px auto 10px;
+      width: 80px;
+      height: 80px;
     }
 
     .school-logo-large img {
@@ -1394,43 +1408,36 @@
       height: 100%;
       object-fit: contain;
       border: 1px solid #ddd;
-      padding: 5px;
+      padding: 2px;
       background: white;
     }
 
     .school-name {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: bold;
       margin: 5px 0 3px;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       color: #000;
     }
 
-    .product-info {
-      font-size: 10px;
-      color: #666;
-      margin-bottom: 15px;
-      font-style: italic;
-    }
-
     .report-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
-      margin: 15px 0;
+      margin: 10px 0 15px;
       text-transform: uppercase;
       letter-spacing: 1px;
       text-decoration: underline;
       color: #000;
     }
 
-    /* Student Information */
+    /* Student Information - Adjusted for better fit */
     .student-info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 25px;
-      padding: 15px;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding: 12px;
       background: #f8f8f8;
       border: 1px solid #ddd;
       font-size: 11px;
@@ -1439,12 +1446,12 @@
     .info-item {
       display: flex;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .info-label {
       font-weight: bold;
-      min-width: 120px;
+      min-width: 100px;
       color: #333;
       font-size: 11px;
     }
@@ -1456,11 +1463,11 @@
       font-size: 11px;
     }
 
-    /* Subject Table matching template */
+    /* Subject Table matching template - Adjusted for better fit */
     .subject-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       border: 2px solid #000;
       font-size: 11px;
     }
@@ -1469,24 +1476,24 @@
       background: #f0f0f0;
       font-weight: bold;
       text-align: center;
-      padding: 8px 6px;
+      padding: 6px 4px;
       border: 1px solid #000;
       font-size: 11px;
       text-transform: uppercase;
     }
 
     .subject-table td {
-      padding: 8px 6px;
+      padding: 6px 4px;
       border: 1px solid #000;
       text-align: center;
       font-size: 11px;
     }
 
-    /* Summary Table matching template */
+    /* Summary Table matching template - Adjusted for better fit */
     .summary-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       font-size: 11px;
     }
 
@@ -1495,56 +1502,56 @@
       color: white;
       font-weight: bold;
       text-align: center;
-      padding: 12px;
+      padding: 8px;
       border: 1px solid #000;
       font-size: 11px;
       text-transform: uppercase;
     }
 
     .summary-table td {
-      padding: 12px;
+      padding: 8px;
       text-align: center;
       border: 1px solid #000;
       font-weight: bold;
-      font-size: 13px;
+      font-size: 11px;
       background: #f8f8f8;
     }
 
-    /* Remarks Section */
+    /* Remarks Section - Adjusted for better fit */
     .remarks-section {
-      margin: 30px 0;
+      margin: 20px 0;
       font-size: 11px;
     }
 
     .remarks-section h4 {
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 11px;
       color: #333;
     }
 
     .signature-line {
       border-bottom: 1px solid #000;
-      margin-top: 5px;
-      padding-top: 25px;
-      height: 35px;
+      margin-top: 3px;
+      padding-top: 15px;
+      height: 25px;
     }
 
     .next-term-info {
-      margin-top: 20px;
+      margin-top: 15px;
       font-size: 11px;
     }
 
     .next-term-info p {
-      margin-bottom: 5px;
+      margin-bottom: 3px;
     }
 
-    /* Signature Area */
+    /* Signature Area - Adjusted for better fit */
     .signature-area {
       display: flex;
       justify-content: space-between;
-      margin-top: 50px;
-      padding-top: 15px;
+      margin-top: 30px;
+      padding-top: 10px;
       border-top: 2px solid #000;
       font-size: 11px;
     }
@@ -1552,17 +1559,17 @@
     .signature-box {
       text-align: center;
       flex: 1;
-      min-width: 120px;
+      min-width: 100px;
     }
 
     .signature-line-box {
       border-bottom: 1px solid #000;
-      margin: 30px auto 8px;
+      margin: 20px auto 5px;
       width: 80%;
     }
 
     .signature-box div {
-      margin-top: 5px;
+      margin-top: 3px;
       font-weight: bold;
       color: #333;
       font-size: 11px;
@@ -1828,7 +1835,7 @@
       
       .signature-area {
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
       }
       
       .portal-exit-btn {
@@ -1846,7 +1853,7 @@
       
       .subject-table th,
       .subject-table td {
-        padding: 6px 4px;
+        padding: 4px 3px;
       }
     }
 
@@ -3221,7 +3228,7 @@
     
     // Reports
     document.getElementById('generateReportBtn').addEventListener('click', generateReport);
-    document.getElementById('exportPDFBtn').addEventListener('click', exportAllStudentReportCards);
+    document.getElementById('exportPDFBtn').addEventListener('click', exportReportCards);
     document.getElementById('exportExcelBtn').addEventListener('click', exportClassAnalysis);
     document.getElementById('exportSubjectAnalyticsBtn').addEventListener('click', exportSubjectAnalytics);
     document.getElementById('reportClassSelect').addEventListener('change', updateReportStudentSelect);
@@ -4543,7 +4550,7 @@
       const subjectId = input.dataset.subject;
       const value = parseInt(input.value);
       if (!isNaN(value) && value >= 0 && value <= 100) {
-        marks[subjectId] = value;
+        marks[subject.id] = value;
         hasMarks = true;
       }
     });
@@ -5305,9 +5312,12 @@
     enhancedReportCard.innerHTML = `
       <div class="report-header">
         <!-- Skore Point logo with text -->
-        <div class="skore-point-logo">
-          <img src="skore-icon.jpg" alt="Skore Point">
+        <div class="skore-point-badge">
+          <div class="skore-point-icon">
+            <img src="skore-icon.jpg" alt="Skore Point">
+          </div>
           <div class="skore-point-text">SKORE POINT</div>
+          <div class="serusoft-text">A product of SERUSOFT</div>
         </div>
         
         <!-- School logo in center -->
@@ -5316,7 +5326,6 @@
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
-        <div class="product-info">A product of SERUSOFT</div>
         <div class="report-title">${reportTitle}</div>
       </div>
       
@@ -5332,10 +5341,6 @@
         <div class="info-item">
           <span class="info-label">Date:</span>
           <span class="info-value">${new Date().toLocaleDateString()}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">School Level:</span>
-          <span class="info-value">${currentSchool.level === 'primary' ? 'Primary' : 'Secondary'}</span>
         </div>
       </div>
       
@@ -5403,7 +5408,7 @@
           <div>Head Teacher Signature</div>
         </div>
         <div class="signature-box">
-          <div style="width: 100px; height: 100px; border: 2px dashed #666; margin: 0 auto;"></div>
+          <div style="width: 80px; height: 80px; border: 2px dashed #666; margin: 0 auto;"></div>
           <div>School Stamp</div>
         </div>
       </div>
@@ -5456,9 +5461,12 @@
     enhancedReportCard.innerHTML = `
       <div class="report-header">
         <!-- Skore Point logo with text -->
-        <div class="skore-point-logo">
-          <img src="skore-icon.jpg" alt="Skore Point">
+        <div class="skore-point-badge">
+          <div class="skore-point-icon">
+            <img src="skore-icon.jpg" alt="Skore Point">
+          </div>
           <div class="skore-point-text">SKORE POINT</div>
+          <div class="serusoft-text">A product of SERUSOFT</div>
         </div>
         
         <div class="school-logo-large">
@@ -5466,7 +5474,6 @@
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
-        <div class="product-info">A product of SERUSOFT</div>
         <div class="report-title">CLASS PERFORMANCE SUMMARY</div>
       </div>
       
@@ -5586,9 +5593,12 @@
     enhancedReportCard.innerHTML = `
       <div class="report-header">
         <!-- Skore Point logo with text -->
-        <div class="skore-point-logo">
-          <img src="skore-icon.jpg" alt="Skore Point">
+        <div class="skore-point-badge">
+          <div class="skore-point-icon">
+            <img src="skore-icon.jpg" alt="Skore Point">
+          </div>
           <div class="skore-point-text">SKORE POINT</div>
+          <div class="serusoft-text">A product of SERUSOFT</div>
         </div>
         
         <div class="school-logo-large">
@@ -5596,7 +5606,6 @@
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
-        <div class="product-info">A product of SERUSOFT</div>
         <div class="report-title">SCHOOL PERFORMANCE REPORT</div>
       </div>
       
@@ -5718,20 +5727,14 @@
     const currentTerm = getCurrentTerm();
     const reportTitle = getReportTitle(currentTerm, term);
     
-    // Add Skore Point logo with text (top-left)
-    const skoreIconUrl = 'skore-icon.jpg';
-    try {
-      const skoreIcon = await loadImage(skoreIconUrl);
-      doc.addImage(skoreIcon, 'JPEG', 20, 20, 15, 15);
-      doc.setFontSize(8);
-      doc.setTextColor(67, 97, 238);
-      doc.text('SKORE POINT', 27, 37);
-    } catch (e) {
-      // If image fails, just add text
-      doc.setFontSize(10);
-      doc.setTextColor(67, 97, 238);
-      doc.text('SKORE POINT', 20, 25);
-    }
+    // Add Skore Point branding to top-left corner
+    doc.setFontSize(8);
+    doc.setTextColor(67, 97, 238);
+    doc.text('SKORE POINT', 20, 15);
+    
+    doc.setFontSize(6);
+    doc.setTextColor(100, 100, 100);
+    doc.text('A product of SERUSOFT', 20, 18);
     
     // Add school logo (center)
     let schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
@@ -5747,25 +5750,20 @@
     doc.setTextColor(0, 0, 0);
     doc.text(currentSchool.name, 105, 75, { align: 'center' });
     
-    // Product info
-    doc.setFontSize(10);
-    doc.setTextColor(100, 100, 100);
-    doc.text('A product of SERUSOFT', 105, 82, { align: 'center' });
-    
     // Report title
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
-    doc.text(reportTitle, 105, 95, { align: 'center' });
+    doc.text(reportTitle, 105, 85, { align: 'center' });
     
     // Student information
     doc.setFontSize(12);
-    doc.text(`Student Name: ${student.name}`, 20, 110);
-    doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 117);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 124);
+    doc.text(`Student Name: ${student.name}`, 20, 100);
+    doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 107);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 114);
     
     // Subject table header
     doc.autoTable({
-      startY: 130,
+      startY: 120,
       head: [['SUBJECT', 'SCORE', 'GRADE']],
       theme: 'grid',
       headStyles: { 
@@ -5787,7 +5785,7 @@
     
     if (tableData.length > 0) {
       doc.autoTable({
-        startY: 130,
+        startY: 120,
         body: tableData,
         theme: 'grid',
         margin: { left: 20, right: 20 },
@@ -5856,8 +5854,9 @@
   }
 
   // Export ALL student report cards as PDF - WITH DATA RELOADING
-  async function exportAllStudentReportCards() {
+  async function exportReportCards() {
     const classId = document.getElementById('reportClassSelect').value;
+    const studentId = document.getElementById('reportStudentSelect').value;
     const term = document.getElementById('reportTermSelect').value;
     
     if (!classId) {
@@ -5875,33 +5874,67 @@
       // Reload data before export
       await reloadDataForExport();
       
-      // Get all students in the class
-      const classStudents = currentStudents.filter(s => s.classId === classId);
-      
-      if (classStudents.length === 0) {
-        alert('No students found in this class');
-        return;
+      if (studentId && studentId !== '') {
+        // Export single student report card
+        await exportSingleReportCard(studentId, term);
+      } else {
+        // Export all students in the class
+        await exportAllStudentReportCards(classId, term);
       }
       
-      // Check if any students have marks
-      let hasMarks = false;
-      for (const student of classStudents) {
-        const marksDoc = await window.firebase.getDoc(
-          window.firebase.doc(window.firebase.db, 'marks', `${student.id}_${term}`)
-        );
-        if (marksDoc.exists()) {
-          hasMarks = true;
-          break;
-        }
-      }
-      
-      if (!hasMarks) {
-        alert('No marks found for any student in this class. Please enter marks first.');
-        return;
-      }
-      
-      exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDFs...';
-      
+    } catch (error) {
+      console.error('Error generating PDFs:', error);
+      alert('Error generating report cards. Please try again.');
+    } finally {
+      // Restore button
+      exportBtn.innerHTML = originalText;
+      exportBtn.disabled = false;
+    }
+  }
+
+  // Export single report card
+  async function exportSingleReportCard(studentId, term) {
+    const student = currentStudents.find(s => s.id === studentId);
+    if (!student) {
+      alert('Student not found');
+      return;
+    }
+    
+    // Check if student has marks
+    const marksDoc = await window.firebase.getDoc(
+      window.firebase.doc(window.firebase.db, 'marks', `${studentId}_${term}`)
+    );
+    
+    if (!marksDoc.exists()) {
+      alert('No marks found for this student');
+      return;
+    }
+    
+    exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+    
+    try {
+      await exportReportCard(studentId);
+      alert(`Report card for ${student.name} exported successfully!`);
+    } catch (error) {
+      console.error('Error generating single PDF:', error);
+      alert('Error generating report card. Please try again.');
+    }
+  }
+
+  // Export all student report cards
+  async function exportAllStudentReportCards(classId, term) {
+    // Get all students in the class
+    const classStudents = currentStudents.filter(s => s.classId === classId);
+    const classObj = currentClasses.find(c => c.id === classId);
+    
+    if (classStudents.length === 0) {
+      alert('No students found in this class');
+      return;
+    }
+    
+    exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDFs...';
+    
+    try {
       // Create a single PDF with all report cards
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF('p', 'mm', 'a4');
@@ -5931,19 +5964,14 @@
         // Calculate position on page
         const pageY = i === 0 ? 10 : 10;
         
-        // Add Skore Point logo with text
-        try {
-          const skoreIcon = await loadImage('skore-icon.jpg');
-          doc.addImage(skoreIcon, 'JPEG', 20, pageY + 10, 15, 15);
-          doc.setFontSize(8);
-          doc.setTextColor(67, 97, 238);
-          doc.text('SKORE POINT', 27, pageY + 27);
-        } catch (e) {
-          // Continue without image
-          doc.setFontSize(10);
-          doc.setTextColor(67, 97, 238);
-          doc.text('SKORE POINT', 20, pageY + 15);
-        }
+        // Add Skore Point branding
+        doc.setFontSize(8);
+        doc.setTextColor(67, 97, 238);
+        doc.text('SKORE POINT', 20, pageY + 10);
+        
+        doc.setFontSize(6);
+        doc.setTextColor(100, 100, 100);
+        doc.text('A product of SERUSOFT', 20, pageY + 13);
         
         // Add school logo
         try {
@@ -5958,23 +5986,18 @@
         doc.setTextColor(0, 0, 0);
         doc.text(currentSchool.name, 105, pageY + 65, { align: 'center' });
         
-        // Product info
-        doc.setFontSize(10);
-        doc.setTextColor(100, 100, 100);
-        doc.text('A product of SERUSOFT', 105, pageY + 72, { align: 'center' });
-        
         // Report title
         const currentTerm = getCurrentTerm();
         const reportTitle = getReportTitle(currentTerm, term);
         doc.setFontSize(14);
         doc.setTextColor(0, 0, 0);
-        doc.text(reportTitle, 105, pageY + 85, { align: 'center' });
+        doc.text(reportTitle, 105, pageY + 75, { align: 'center' });
         
         // Student information
         doc.setFontSize(12);
-        doc.text(`Student Name: ${student.name}`, 20, pageY + 100);
-        doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, pageY + 107);
-        doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, pageY + 114);
+        doc.text(`Student Name: ${student.name}`, 20, pageY + 90);
+        doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, pageY + 97);
+        doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, pageY + 104);
         
         // Calculate statistics
         let totalMarks = 0;
@@ -6001,7 +6024,7 @@
         // Add subject table
         if (tableData.length > 0) {
           doc.autoTable({
-            startY: pageY + 120,
+            startY: pageY + 110,
             head: [['SUBJECT', 'SCORE', 'GRADE']],
             body: tableData,
             theme: 'grid',
@@ -6020,7 +6043,7 @@
           });
         }
         
-        const tableEndY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 5 : pageY + 125;
+        const tableEndY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 5 : pageY + 115;
         
         // Add summary table
         const summaryData = [
@@ -6072,10 +6095,6 @@
     } catch (error) {
       console.error('Error generating PDFs:', error);
       alert('Error generating report cards. Please try again.');
-    } finally {
-      // Restore button
-      exportBtn.innerHTML = originalText;
-      exportBtn.disabled = false;
     }
   }
 
