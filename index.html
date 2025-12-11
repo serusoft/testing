@@ -5657,210 +5657,201 @@
 
   // Export report card as PDF - MATCHING TEMPLATE 100%
   async function exportReportCard(studentId) {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'mm', 'a4');
-    
-    // Get student data
-    const student = currentStudents.find(s => s.id === studentId);
-    if (!student) return;
-    
-    const classObj = currentClasses.find(c => c.id === student.classId);
-    const term = document.getElementById('reportTermSelect').value;
-    
-    // Get marks data
-    const marksDoc = await firestoreModule.getDoc(
-      firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
-    );
-    
-    if (!marksDoc.exists()) {
-      alert('No marks found for this student');
-      return;
-    }
-    
-    const marks = marksDoc.data();
-    
-    // Calculate statistics
-    let totalMarks = 0;
-    let subjectCount = 0;
-    const subjectScores = [];
-    
-    currentSubjects.forEach(subject => {
-      const score = marks[subject.id];
-      if (score !== undefined && score > 0) {
-        totalMarks += score;
-        subjectCount++;
-        subjectScores.push({
-          name: subject.name,
-          score: score,
-          grade: calculateGrade(score, currentSchool.level)
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('p', 'mm', 'a4');
+      
+      // Get student data
+      const student = currentStudents.find(s => s.id === studentId);
+      if (!student) return;
+      
+      const classObj = currentClasses.find(c => c.id === student.classId);
+      const term = document.getElementById('reportTermSelect').value;
+      
+      // Get marks data
+      const marksDoc = await firestoreModule.getDoc(
+        firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
+      );
+      
+      if (!marksDoc.exists()) {
+        alert('No marks found for this student');
+        return;
+      }
+      
+      const marks = marksDoc.data();
+      
+      // Calculate statistics
+      let totalMarks = 0;
+      let subjectCount = 0;
+      const subjectScores = [];
+      
+      currentSubjects.forEach(subject => {
+        const score = marks[subject.id];
+        if (score !== undefined && score > 0) {
+          totalMarks += score;
+          subjectCount++;
+          subjectScores.push({
+            name: subject.name,
+            score: score,
+            grade: calculateGrade(score, currentSchool.level)
+          });
+        }
+      });
+      
+      const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
+      const aggregate = calculateAggregate(marks);
+      const division = calculateDivision(average, aggregate);
+      const currentTerm = getCurrentTerm();
+      const reportTitle = getReportTitle(currentTerm, term);
+      
+      // Add Skore Point branding to top-left corner
+      doc.setFontSize(8);
+      doc.setTextColor(67, 97, 238);
+      doc.text('SKORE POINT', 20, 15);
+      
+      doc.setFontSize(6);
+      doc.setTextColor(100, 100, 100);
+      doc.text('A product of SERUSOFT', 20, 18);
+      
+      // Add Skore Point icon
+      try {
+        // Create a simple icon if image fails
+        doc.setFillColor(67, 97, 238);
+        doc.rect(20, 5, 10, 10, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(6);
+        doc.text('SP', 25, 11, { align: 'center' });
+      } catch (e) {
+        // Continue without icon
+      }
+      
+      // Add school logo (center)
+      try {
+        // Create a simple placeholder for school logo
+        doc.setFillColor(240, 240, 240);
+        doc.rect(85, 25, 40, 40, 'F');
+        doc.setTextColor(100, 100, 100);
+        doc.setFontSize(8);
+        doc.text('SCHOOL', 105, 45, { align: 'center' });
+        doc.text('LOGO', 105, 52, { align: 'center' });
+      } catch (e) {
+        // Continue without logo
+      }
+      
+      // School name
+      doc.setFontSize(16);
+      doc.setTextColor(0, 0, 0);
+      doc.text(currentSchool.name, 105, 75, { align: 'center' });
+      
+      // Report title
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 0);
+      doc.text(reportTitle, 105, 85, { align: 'center' });
+      
+      // Student information
+      doc.setFontSize(12);
+      doc.text(`Student Name: ${student.name}`, 20, 100);
+      doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 107);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 114);
+      
+      // Subject table header
+      doc.autoTable({
+        startY: 120,
+        head: [['SUBJECT', 'SCORE', 'GRADE']],
+        theme: 'grid',
+        headStyles: { 
+          fillColor: [240, 240, 240],
+          textColor: [0, 0, 0],
+          fontStyle: 'bold'
+        },
+        margin: { left: 20, right: 20 },
+        styles: { 
+          fontSize: 10,
+          cellPadding: 5,
+          lineWidth: 0.5,
+          lineColor: [0, 0, 0]
+        }
+      });
+      
+      // Subject rows
+      const tableData = subjectScores.map(score => [score.name, score.score.toString(), score.grade]);
+      
+      if (tableData.length > 0) {
+        doc.autoTable({
+          startY: 120,
+          body: tableData,
+          theme: 'grid',
+          margin: { left: 20, right: 20 },
+          styles: { 
+            fontSize: 10,
+            cellPadding: 5,
+            lineWidth: 0.5,
+            lineColor: [0, 0, 0]
+          }
         });
       }
-    });
-    
-    const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
-    const aggregate = calculateAggregate(marks);
-    const division = calculateDivision(average, aggregate);
-    const currentTerm = getCurrentTerm();
-    const reportTitle = getReportTitle(currentTerm, term);
-    
-    // Add Skore Point branding to top-left corner
-    doc.setFontSize(8);
-    doc.setTextColor(67, 97, 238);
-    doc.text('SKORE POINT', 20, 15);
-    
-    doc.setFontSize(6);
-    doc.setTextColor(100, 100, 100);
-    doc.text('A product of SERUSOFT', 20, 18);
-    
-    // Add Skore Point icon
-    try {
-      const iconUrl = 'skore-icon.jpg';
-      const img = new Image();
-      img.src = iconUrl;
       
-      // Add image after it loads
-      img.onload = () => {
-        doc.addImage(img, 'JPEG', 20, 5, 10, 10);
-        // Continue with PDF generation after image is loaded
-        continuePDFGeneration();
-      };
+      const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 140;
       
-      img.onerror = () => {
-        // If image fails to load, continue without it
-        continuePDFGeneration();
-      };
+      // Summary table
+      const summaryData = [
+        ['TOTAL MARKS', 'AVERAGE MARK', 'AGGREGATES', 'FINAL GRADE/DIVISION'],
+        [totalMarks.toString(), average.toString(), aggregate.toString(), division]
+      ];
       
-      function continuePDFGeneration() {
-        // Add school logo (center)
-        let schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
-        try {
-          const schoolImg = new Image();
-          schoolImg.src = schoolLogoUrl;
-          schoolImg.onload = () => {
-            doc.addImage(schoolImg, 'JPEG', 85, 25, 40, 40);
-            continueAfterSchoolLogo();
-          };
-          schoolImg.onerror = continueAfterSchoolLogo;
-        } catch (e) {
-          continueAfterSchoolLogo();
+      doc.autoTable({
+        startY: finalY,
+        head: [summaryData[0]],
+        body: [summaryData[1]],
+        theme: 'grid',
+        headStyles: { 
+          fillColor: [67, 97, 238],
+          textColor: [255, 255, 255],
+          fontStyle: 'bold'
+        },
+        margin: { left: 20, right: 20 },
+        styles: { 
+          fontSize: 10,
+          cellPadding: 5,
+          lineWidth: 0.5,
+          lineColor: [0, 0, 0]
         }
-        
-        function continueAfterSchoolLogo() {
-          // School name
-          doc.setFontSize(16);
-          doc.setTextColor(0, 0, 0);
-          doc.text(currentSchool.name, 105, 75, { align: 'center' });
-          
-          // Report title
-          doc.setFontSize(14);
-          doc.setTextColor(0, 0, 0);
-          doc.text(reportTitle, 105, 85, { align: 'center' });
-          
-          // Student information
-          doc.setFontSize(12);
-          doc.text(`Student Name: ${student.name}`, 20, 100);
-          doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 107);
-          doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 114);
-          
-          // Subject table header
-          doc.autoTable({
-            startY: 120,
-            head: [['SUBJECT', 'SCORE', 'GRADE']],
-            theme: 'grid',
-            headStyles: { 
-              fillColor: [240, 240, 240],
-              textColor: [0, 0, 0],
-              fontStyle: 'bold'
-            },
-            margin: { left: 20, right: 20 },
-            styles: { 
-              fontSize: 10,
-              cellPadding: 5,
-              lineWidth: 0.5,
-              lineColor: [0, 0, 0]
-            }
-          });
-          
-          // Subject rows
-          const tableData = subjectScores.map(score => [score.name, score.score.toString(), score.grade]);
-          
-          if (tableData.length > 0) {
-            doc.autoTable({
-              startY: 120,
-              body: tableData,
-              theme: 'grid',
-              margin: { left: 20, right: 20 },
-              styles: { 
-                fontSize: 10,
-                cellPadding: 5,
-                lineWidth: 0.5,
-                lineColor: [0, 0, 0]
-              }
-            });
-          }
-          
-          const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 10 : 140;
-          
-          // Summary table
-          const summaryData = [
-            ['TOTAL MARKS', 'AVERAGE MARK', 'AGGREGATES', 'FINAL GRADE/DIVISION'],
-            [totalMarks.toString(), average.toString(), aggregate.toString(), division]
-          ];
-          
-          doc.autoTable({
-            startY: finalY,
-            head: [summaryData[0]],
-            body: [summaryData[1]],
-            theme: 'grid',
-            headStyles: { 
-              fillColor: [67, 97, 238],
-              textColor: [255, 255, 255],
-              fontStyle: 'bold'
-            },
-            margin: { left: 20, right: 20 },
-            styles: { 
-              fontSize: 10,
-              cellPadding: 5,
-              lineWidth: 0.5,
-              lineColor: [0, 0, 0]
-            }
-          });
-          
-          const finalY2 = doc.lastAutoTable.finalY + 15;
-          
-          // Remarks section
-          doc.setFontSize(12);
-          doc.text('Class Teacher\'s Remarks:', 20, finalY2);
-          doc.line(20, finalY2 + 5, 190, finalY2 + 5);
-          
-          doc.text('Head Teacher\'s Remarks:', 20, finalY2 + 20);
-          doc.line(20, finalY2 + 25, 190, finalY2 + 25);
-          
-          doc.text('Next Term Begins On: ________________________________', 20, finalY2 + 35);
-          
-          // Signature lines
-          const signatureY = finalY2 + 50;
-          doc.line(30, signatureY, 80, signatureY);
-          doc.text('Class Teacher Signature', 55, signatureY + 10, { align: 'center' });
-          
-          doc.line(110, signatureY, 160, signatureY);
-          doc.text('Head Teacher Signature', 135, signatureY + 10, { align: 'center' });
-          
-          // School stamp box
-          doc.rect(175, signatureY - 5, 20, 20);
-          doc.text('School Stamp', 185, signatureY + 25, { align: 'center' });
-          
-          // Save the PDF
-          doc.save(`Report_Card_${student.name}_${new Date().toISOString().slice(0, 10)}.pdf`);
-        }
-      }
+      });
+      
+      const finalY2 = doc.lastAutoTable.finalY + 15;
+      
+      // Remarks section
+      doc.setFontSize(12);
+      doc.text('Class Teacher\'s Remarks:', 20, finalY2);
+      doc.line(20, finalY2 + 5, 190, finalY2 + 5);
+      
+      doc.text('Head Teacher\'s Remarks:', 20, finalY2 + 20);
+      doc.line(20, finalY2 + 25, 190, finalY2 + 25);
+      
+      doc.text('Next Term Begins On: ________________________________', 20, finalY2 + 35);
+      
+      // Signature lines
+      const signatureY = finalY2 + 50;
+      doc.line(30, signatureY, 80, signatureY);
+      doc.text('Class Teacher Signature', 55, signatureY + 10, { align: 'center' });
+      
+      doc.line(110, signatureY, 160, signatureY);
+      doc.text('Head Teacher Signature', 135, signatureY + 10, { align: 'center' });
+      
+      // School stamp box
+      doc.rect(175, signatureY - 5, 20, 20);
+      doc.text('School Stamp', 185, signatureY + 25, { align: 'center' });
+      
+      // Save the PDF
+      doc.save(`Report_Card_${student.name.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`);
+      
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Error generating report card. Please try again.');
     }
   }
 
-  // Export ALL student report cards as PDF - WITH DATA RELOADING
+  // Export ALL student report cards as PDF - FIXED VERSION
   async function exportReportCards() {
     const classId = document.getElementById('reportClassSelect').value;
     const studentId = document.getElementById('reportStudentSelect').value;
@@ -5928,7 +5919,7 @@
     }
   }
 
-  // Export all student report cards
+  // Export all student report cards - FIXED VERSION
   async function exportAllStudentReportCards(classId, term) {
     // Get all students in the class
     const classStudents = currentStudents.filter(s => s.classId === classId);
@@ -5942,13 +5933,36 @@
     exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDFs...';
     
     try {
+      // Get marks data
+      const marksQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'marks'),
+        firestoreModule.where('schoolId', '==', currentSchool.id),
+        firestoreModule.where('term', '==', term)
+      );
+      
+      const marksSnapshot = await firestoreModule.getDocs(marksQuery);
+      const marksData = [];
+      
+      marksSnapshot.forEach(doc => {
+        marksData.push({ id: doc.id, ...doc.data() });
+      });
+      
+      // Check if any marks exist
+      const studentsWithMarks = classStudents.filter(student => {
+        return marksData.some(mark => mark.studentId === student.id);
+      });
+      
+      if (studentsWithMarks.length === 0) {
+        alert('No marks found for any student in this class. Please enter marks first.');
+        return;
+      }
+      
       // Create a single PDF with all report cards
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF('p', 'mm', 'a4');
-      let currentPage = 1;
       
-      for (let i = 0; i < classStudents.length; i++) {
-        const student = classStudents[i];
+      for (let i = 0; i < studentsWithMarks.length; i++) {
+        const student = studentsWithMarks[i];
         
         // Get marks for this student
         const marksDoc = await firestoreModule.getDoc(
@@ -5962,7 +5976,6 @@
         // Start new page for each student after the first
         if (i > 0) {
           doc.addPage();
-          currentPage++;
         }
         
         const marks = marksDoc.data();
@@ -5982,23 +5995,25 @@
         
         // Add Skore Point icon
         try {
-          const iconUrl = 'skore-icon.jpg';
-          const img = new Image();
-          img.src = iconUrl;
-          // Add small icon
-          doc.addImage(img, 'JPEG', 20, pageY + 2, 8, 8);
+          doc.setFillColor(67, 97, 238);
+          doc.rect(20, pageY + 2, 8, 8, 'F');
+          doc.setTextColor(255, 255, 255);
+          doc.setFontSize(4);
+          doc.text('SP', 24, pageY + 7, { align: 'center' });
         } catch (e) {
-          // Continue without image
+          // Continue without icon
         }
         
-        // Add school logo
+        // Add school logo placeholder
         try {
-          const schoolLogoUrl = currentSchool.logoUrl || 'skore-icon.jpg';
-          const schoolImg = new Image();
-          schoolImg.src = schoolLogoUrl;
-          doc.addImage(schoolImg, 'JPEG', 85, pageY + 15, 40, 40);
+          doc.setFillColor(240, 240, 240);
+          doc.rect(85, pageY + 15, 40, 40, 'F');
+          doc.setTextColor(100, 100, 100);
+          doc.setFontSize(8);
+          doc.text('SCHOOL', 105, pageY + 35, { align: 'center' });
+          doc.text('LOGO', 105, pageY + 42, { align: 'center' });
         } catch (e) {
-          // Continue without image
+          // Continue without logo
         }
         
         // School name
@@ -6103,30 +6118,19 @@
         // Add page number
         doc.setFontSize(10);
         doc.setTextColor(150, 150, 150);
-        doc.text(`Page ${currentPage} of ${classStudents.length}`, 105, 287, { align: 'center' });
+        doc.text(`Page ${i + 1} of ${studentsWithMarks.length}`, 105, 287, { align: 'center' });
       }
       
       // Save the PDF
-      const className = currentClasses.find(c => c.id === classId)?.name || 'Class';
+      const className = currentClasses.find(c => c.id === classId)?.name.replace(/\s+/g, '_') || 'Class';
       doc.save(`Report_Cards_${className}_${term}_${new Date().toISOString().slice(0, 10)}.pdf`);
       
-      alert(`Successfully exported ${classStudents.length} report cards!`);
+      alert(`Successfully exported ${studentsWithMarks.length} report cards!`);
       
     } catch (error) {
       console.error('Error generating PDFs:', error);
       alert('Error generating report cards. Please try again.');
     }
-  }
-
-  // Helper function to load images
-  function loadImage(url) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img);
-      img.onerror = reject;
-      img.src = url;
-    });
   }
 
   // Reload data before export to prevent empty files
@@ -6136,7 +6140,7 @@
       await Promise.all([
         loadClasses(),
         loadSubjects(),
-        loadStudents()
+        loadAllStudents()
       ]);
       
       console.log('Data reloaded successfully for export');
@@ -6146,7 +6150,7 @@
     }
   }
 
-  // Export class analysis as Excel - WITH DATA RELOADING
+  // Export class analysis as Excel - FIXED VERSION
   async function exportClassAnalysis() {
     const classId = document.getElementById('reportClassSelect').value;
     const term = document.getElementById('reportTermSelect').value;
@@ -6285,9 +6289,10 @@
       
       // Save the file
       const className = classObj ? classObj.name.replace(/\s+/g, '_') : 'Class';
-      XLSX.writeFile(wb, `Class_Analysis_${className}_${term}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+      const fileName = `Class_Analysis_${className}_${term}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+      XLSX.writeFile(wb, fileName);
       
-      alert(`Excel report generated successfully!`);
+      alert(`Excel report "${fileName}" generated successfully!`);
       
     } catch (error) {
       console.error('Error generating Excel:', error);
