@@ -1,5 +1,5 @@
 // Service Worker for Skore Point PWA
-const CACHE_NAME = 'skore-point-v2.0.0';
+const CACHE_NAME = 'skore-point-v3.0.0';
 const CACHE_ASSETS = [
   '/',
   '/index.html',
@@ -17,13 +17,6 @@ const CACHE_ASSETS = [
   'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js'
 ];
 
-// Font Awesome icons
-const FONT_AWESOME_ICONS = [
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2'
-];
-
 // Install event - cache assets
 self.addEventListener('install', event => {
   console.log('[Service Worker] Installing...');
@@ -32,14 +25,7 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('[Service Worker] Caching app shell and assets');
-        
-        // Cache core assets
-        return Promise.all([
-          cache.addAll(CACHE_ASSETS),
-          cache.addAll(FONT_AWESOME_ICONS).catch(err => {
-            console.log('[Service Worker] Failed to cache some fonts:', err);
-          })
-        ]);
+        return cache.addAll(CACHE_ASSETS);
       })
       .then(() => {
         console.log('[Service Worker] Installation complete');
@@ -81,7 +67,7 @@ self.addEventListener('fetch', event => {
   // Skip Chrome extensions
   if (event.request.url.startsWith('chrome-extension://')) return;
   
-  // Skip Firebase Storage requests (let them go through)
+  // Skip Firebase Storage requests
   if (event.request.url.includes('firebasestorage.app')) return;
   
   // For Firebase Firestore/Auth requests, always go to network
@@ -173,99 +159,11 @@ async function cacheFirst(request) {
     // For CSS/JS files, return empty response to prevent errors
     if (request.url.match(/\.(css|js)$/)) {
       return new Response('/* Offline - Resource not available */', {
-        headers: { 'Content-Type': 'text/css' }
+        headers: { 'Content-Type': request.url.match(/\.css$/) ? 'text/css' : 'application/javascript' }
       });
     }
     
     throw error;
-  }
-}
-
-// Handle background sync for offline data
-self.addEventListener('sync', event => {
-  console.log('[Service Worker] Background sync:', event.tag);
-  
-  if (event.tag === 'sync-marks') {
-    event.waitUntil(syncMarks());
-  }
-});
-
-// Sync marks data when back online
-async function syncMarks() {
-  console.log('[Service Worker] Syncing marks data...');
-  // This would sync any pending marks from IndexedDB
-  // Implement based on your offline data storage
-}
-
-// Handle push notifications
-self.addEventListener('push', event => {
-  const data = event.data ? event.data.json() : {};
-  
-  const options = {
-    body: data.body || 'Skore Point notification',
-    icon: 'skore-icon.jpg',
-    badge: 'skore-icon.jpg',
-    tag: data.tag || 'skore-notification',
-    data: {
-      url: data.url || '/'
-    },
-    actions: [
-      {
-        action: 'open',
-        title: 'Open App'
-      },
-      {
-        action: 'close',
-        title: 'Close'
-      }
-    ]
-  };
-  
-  event.waitUntil(
-    self.registration.showNotification(data.title || 'Skore Point', options)
-  );
-});
-
-// Handle notification clicks
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
-  
-  if (event.action === 'open') {
-    event.waitUntil(
-      clients.openWindow(event.notification.data.url)
-    );
-  } else if (event.action === 'close') {
-    // Do nothing
-  } else {
-    // Default action - open app
-    event.waitUntil(
-      clients.openWindow('/')
-    );
-  }
-});
-
-// Handle periodic background sync
-self.addEventListener('periodicsync', event => {
-  if (event.tag === 'update-cache') {
-    console.log('[Service Worker] Periodic sync for cache update');
-    event.waitUntil(updateCache());
-  }
-});
-
-// Update cache periodically
-async function updateCache() {
-  const cache = await caches.open(CACHE_NAME);
-  
-  // Update cached assets
-  for (const requestUrl of CACHE_ASSETS) {
-    try {
-      const response = await fetch(requestUrl);
-      if (response && response.status === 200) {
-        await cache.put(requestUrl, response);
-      }
-    } catch (error) {
-      console.log('[Service Worker] Failed to update:', requestUrl);
-    }
   }
 }
 
