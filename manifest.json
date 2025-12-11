@@ -19,32 +19,18 @@
       "purpose": "any maskable"
     },
     {
-      "src": "skore-icon-512.jpg",
+      "src": "skore-icon.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
-    },
-    {
-      "src": "skore-icon-maskable.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
-      "purpose": "maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "screenshot1.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "platform": "wide",
+      "src": "skore-icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
       "label": "Skore Point Dashboard"
-    },
-    {
-      "src": "screenshot2.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "platform": "narrow",
-      "label": "Mobile Report Card View"
     }
   ],
   "shortcuts": [
@@ -55,7 +41,7 @@
       "url": "/?source=dashboard",
       "icons": [
         {
-          "src": "icons/dashboard-icon.jpg",
+          "src": "skore-icon.jpg",
           "sizes": "96x96"
         }
       ]
@@ -67,7 +53,7 @@
       "url": "/?source=marks",
       "icons": [
         {
-          "src": "icons/marks-icon.jpg",
+          "src": "skore-icon.jpg",
           "sizes": "96x96"
         }
       ]
@@ -79,24 +65,11 @@
       "url": "/?source=reports",
       "icons": [
         {
-          "src": "icons/reports-icon.jpg",
+          "src": "skore-icon.jpg",
           "sizes": "96x96"
         }
       ]
     }
   ],
-  "related_applications": [],
-  "prefer_related_applications": false,
-  "protocol_handlers": [
-    {
-      "protocol": "web+skorepoint",
-      "url": "/?protocol=%s"
-    }
-  ],
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  },
-  "edge_side_panel": {
-    "preferred_width": 400
-  }
+  "prefer_related_applications": false
 }
