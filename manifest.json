@@ -2,11 +2,15 @@
   "name": "Skore Point",
   "short_name": "SkorePoint",
   "description": "Professional School Report Card Generator by SERUSOFT",
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#4361ee",
   "orientation": "portrait",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity", "utilities"],
   "icons": [
     {
       "src": "skore-icon.jpg",
@@ -15,25 +19,84 @@
       "purpose": "any maskable"
     },
     {
-      "src": "skore-icon.jpg",
+      "src": "skore-icon-512.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
+    },
+    {
+      "src": "skore-icon-maskable.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
     }
   ],
-  "categories": ["education", "productivity"],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Skore Point Dashboard"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Mobile Report Card View"
+    }
+  ],
   "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Home",
+      "description": "Go to dashboard",
+      "url": "/?source=dashboard",
+      "icons": [
+        {
+          "src": "icons/dashboard-icon.jpg",
+          "sizes": "96x96"
+        }
+      ]
+    },
     {
       "name": "Enter Marks",
       "short_name": "Marks",
-      "description": "Enter student marks",
-      "url": "./?marks"
+      "description": "Quick marks entry",
+      "url": "/?source=marks",
+      "icons": [
+        {
+          "src": "icons/marks-icon.jpg",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Generate Reports",
       "short_name": "Reports",
-      "description": "Generate report cards",
-      "url": "./?reports"
+      "description": "Create report cards",
+      "url": "/?source=reports",
+      "icons": [
+        {
+          "src": "icons/reports-icon.jpg",
+          "sizes": "96x96"
+        }
+      ]
     }
-  ]
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "protocol_handlers": [
+    {
+      "protocol": "web+skorepoint",
+      "url": "/?protocol=%s"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "edge_side_panel": {
+    "preferred_width": 400
+  }
 }
