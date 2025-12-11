@@ -1,75 +1,281 @@
-// Service Worker for Skore Point
-const CACHE_NAME = 'skore-point-v2';
-const urlsToCache = [
+// Service Worker for Skore Point PWA
+const CACHE_NAME = 'skore-point-v2.0.0';
+const CACHE_ASSETS = [
   '/',
   '/index.html',
-  '/skore-icon.jpg',
+  '/manifest.json',
+  'skore-icon.jpg',
+  // External libraries
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js',
-  'https://cdn.jsdelivr.net/npm/chart.js'
+  'https://cdn.jsdelivr.net/npm/chart.js',
+  // Firebase SDK
+  'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js',
+  'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js',
+  'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js'
 ];
 
-// Install event
+// Font Awesome icons
+const FONT_AWESOME_ICONS = [
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2'
+];
+
+// Install event - cache assets
 self.addEventListener('install', event => {
+  console.log('[Service Worker] Installing...');
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache).catch(error => {
-          console.error('Failed to cache:', error);
-        });
+        console.log('[Service Worker] Caching app shell and assets');
+        
+        // Cache core assets
+        return Promise.all([
+          cache.addAll(CACHE_ASSETS),
+          cache.addAll(FONT_AWESOME_ICONS).catch(err => {
+            console.log('[Service Worker] Failed to cache some fonts:', err);
+          })
+        ]);
+      })
+      .then(() => {
+        console.log('[Service Worker] Installation complete');
+        return self.skipWaiting();
+      })
+      .catch(error => {
+        console.error('[Service Worker] Installation failed:', error);
       })
   );
 });
 
-// Fetch event with network-first strategy
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        // Check if we received a valid response
-        if(!response || response.status !== 200 || response.type !== 'basic') {
-          return response;
-        }
-
-        // Clone the response
-        const responseToCache = response.clone();
-
-        caches.open(CACHE_NAME)
-          .then(cache => {
-            cache.put(event.request, responseToCache);
-          });
-
-        return response;
-      })
-      .catch(() => {
-        // If network fails, try cache
-        return caches.match(event.request)
-          .then(response => {
-            if (response) {
-              return response;
-            }
-            // Return offline page or fallback
-            return caches.match('/index.html');
-          });
-      })
-  );
-});
-
-// Activate event
+// Activate event - clean up old caches
 self.addEventListener('activate', event => {
+  console.log('[Service Worker] Activating...');
+  
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
+            console.log('[Service Worker] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
+    .then(() => {
+      console.log('[Service Worker] Activation complete');
+      return self.clients.claim();
+    })
   );
+});
+
+// Fetch event - network first with cache fallback
+self.addEventListener('fetch', event => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') return;
+  
+  // Skip Chrome extensions
+  if (event.request.url.startsWith('chrome-extension://')) return;
+  
+  // Skip Firebase Storage requests (let them go through)
+  if (event.request.url.includes('firebasestorage.app')) return;
+  
+  // For Firebase Firestore/Auth requests, always go to network
+  if (event.request.url.includes('firebaseio.com') || 
+      event.request.url.includes('googleapis.com')) {
+    event.respondWith(networkFirst(event.request));
+    return;
+  }
+  
+  // For HTML pages, use network first
+  if (event.request.headers.get('accept').includes('text/html')) {
+    event.respondWith(networkFirst(event.request));
+    return;
+  }
+  
+  // For CSS, JS, images, and fonts - use cache first
+  if (event.request.url.match(/\.(css|js|jpg|jpeg|png|gif|woff|woff2|ttf|eot|svg)$/)) {
+    event.respondWith(cacheFirst(event.request));
+    return;
+  }
+  
+  // Default: network first for everything else
+  event.respondWith(networkFirst(event.request));
+});
+
+// Network first strategy
+async function networkFirst(request) {
+  try {
+    // Try network first
+    const networkResponse = await fetch(request);
+    
+    // If successful, update cache
+    if (networkResponse && networkResponse.status === 200) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, networkResponse.clone());
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    // Network failed, try cache
+    console.log('[Service Worker] Network failed, trying cache for:', request.url);
+    const cachedResponse = await caches.match(request);
+    
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    
+    // If not in cache and offline, show offline page
+    if (!navigator.onLine) {
+      return caches.match('/').then(response => {
+        if (response) {
+          return response;
+        }
+        return new Response('You are offline. Please check your internet connection.', {
+          status: 503,
+          statusText: 'Service Unavailable',
+          headers: new Headers({
+            'Content-Type': 'text/html'
+          })
+        });
+      });
+    }
+    
+    throw error;
+  }
+}
+
+// Cache first strategy
+async function cacheFirst(request) {
+  const cachedResponse = await caches.match(request);
+  
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    
+    // Cache the new resource
+    if (networkResponse && networkResponse.status === 200) {
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, networkResponse.clone());
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.log('[Service Worker] Fetch failed for:', request.url, error);
+    
+    // For CSS/JS files, return empty response to prevent errors
+    if (request.url.match(/\.(css|js)$/)) {
+      return new Response('/* Offline - Resource not available */', {
+        headers: { 'Content-Type': 'text/css' }
+      });
+    }
+    
+    throw error;
+  }
+}
+
+// Handle background sync for offline data
+self.addEventListener('sync', event => {
+  console.log('[Service Worker] Background sync:', event.tag);
+  
+  if (event.tag === 'sync-marks') {
+    event.waitUntil(syncMarks());
+  }
+});
+
+// Sync marks data when back online
+async function syncMarks() {
+  console.log('[Service Worker] Syncing marks data...');
+  // This would sync any pending marks from IndexedDB
+  // Implement based on your offline data storage
+}
+
+// Handle push notifications
+self.addEventListener('push', event => {
+  const data = event.data ? event.data.json() : {};
+  
+  const options = {
+    body: data.body || 'Skore Point notification',
+    icon: 'skore-icon.jpg',
+    badge: 'skore-icon.jpg',
+    tag: data.tag || 'skore-notification',
+    data: {
+      url: data.url || '/'
+    },
+    actions: [
+      {
+        action: 'open',
+        title: 'Open App'
+      },
+      {
+        action: 'close',
+        title: 'Close'
+      }
+    ]
+  };
+  
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'Skore Point', options)
+  );
+});
+
+// Handle notification clicks
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  
+  if (event.action === 'open') {
+    event.waitUntil(
+      clients.openWindow(event.notification.data.url)
+    );
+  } else if (event.action === 'close') {
+    // Do nothing
+  } else {
+    // Default action - open app
+    event.waitUntil(
+      clients.openWindow('/')
+    );
+  }
+});
+
+// Handle periodic background sync
+self.addEventListener('periodicsync', event => {
+  if (event.tag === 'update-cache') {
+    console.log('[Service Worker] Periodic sync for cache update');
+    event.waitUntil(updateCache());
+  }
+});
+
+// Update cache periodically
+async function updateCache() {
+  const cache = await caches.open(CACHE_NAME);
+  
+  // Update cached assets
+  for (const requestUrl of CACHE_ASSETS) {
+    try {
+      const response = await fetch(requestUrl);
+      if (response && response.status === 200) {
+        await cache.put(requestUrl, response);
+      }
+    } catch (error) {
+      console.log('[Service Worker] Failed to update:', requestUrl);
+    }
+  }
+}
+
+// Handle messages from the main thread
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  
+  if (event.data && event.data.type === 'CLEAR_CACHE') {
+    caches.delete(CACHE_NAME);
+  }
 });
