@@ -168,25 +168,6 @@
       background: var(--primary);
     }
 
-    .close-portal {
-      background: var(--error);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: var(--border-radius-sm);
-      cursor: pointer;
-      font-weight: 600;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .close-portal:hover {
-      background: #dc2626;
-      transform: translateY(-1px);
-    }
-
     /* Mobile Bottom Navigation */
     .mobile-bottom-nav {
       position: fixed;
@@ -209,6 +190,7 @@
       display: flex;
       justify-content: space-around;
       width: 100%;
+      position: relative;
     }
 
     .mobile-nav-item {
@@ -242,6 +224,31 @@
       font-size: 11px;
       font-weight: 500;
       text-align: center;
+    }
+
+    /* Mobile Exit Portal Button */
+    .mobile-portal-exit-btn {
+      position: absolute;
+      right: 10px;
+      top: -45px;
+      background: var(--error);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      padding: 10px 15px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .mobile-portal-exit-btn:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
     }
 
     /* Desktop Portal Exit Button */
@@ -390,6 +397,7 @@
       margin: 0 auto;
       padding: 20px;
       padding-top: 80px;
+      transition: transform 0.3s ease;
     }
 
     /* Auth Containers */
@@ -535,66 +543,6 @@
     .password-toggle:hover {
       color: var(--primary);
       background: rgba(255, 255, 255, 0.05);
-    }
-
-    /* Student Search */
-    .student-search-container {
-      position: relative;
-      margin-bottom: 20px;
-    }
-
-    .student-search-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .student-search-input {
-      width: 100%;
-      padding: 14px 50px 14px 45px;
-      border: 2px solid var(--gray);
-      border-radius: var(--border-radius-sm);
-      background: var(--darker);
-      color: var(--light);
-      font-size: 15px;
-      transition: var(--transition);
-      font-family: inherit;
-    }
-
-    .student-search-input:focus {
-      border-color: var(--primary);
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .student-search-icon {
-      position: absolute;
-      left: 15px;
-      color: var(--primary-light);
-      font-size: 18px;
-    }
-
-    .student-search-clear {
-      position: absolute;
-      right: 15px;
-      background: none;
-      border: none;
-      color: var(--gray-light);
-      cursor: pointer;
-      transition: var(--transition);
-      padding: 5px;
-      border-radius: 4px;
-      display: none;
-    }
-
-    .student-search-clear:hover {
-      color: var(--error);
-      background: rgba(239, 68, 68, 0.1);
-    }
-
-    .student-search-clear.show {
-      display: block;
     }
 
     /* Buttons */
@@ -936,6 +884,7 @@
       padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
+      min-height: calc(100vh - 80px);
     }
 
     .management-header {
@@ -1020,6 +969,7 @@
       border-radius: var(--border-radius);
       padding: 30px;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 80px; /* Space for mobile nav */
     }
 
     .list-header {
@@ -1191,6 +1141,7 @@
       border-radius: var(--border-radius);
       padding: 30px;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 80px; /* Space for mobile nav */
     }
 
     .marks-filters {
@@ -1198,6 +1149,65 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       margin-bottom: 30px;
+    }
+
+    .student-search-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .student-search-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .student-search-input {
+      width: 100%;
+      padding: 14px 50px 14px 45px;
+      border: 2px solid var(--gray);
+      border-radius: var(--border-radius-sm);
+      background: var(--darker);
+      color: var(--light);
+      font-size: 15px;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    .student-search-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .student-search-icon {
+      position: absolute;
+      left: 15px;
+      color: var(--primary-light);
+      font-size: 18px;
+    }
+
+    .student-search-clear {
+      position: absolute;
+      right: 15px;
+      background: none;
+      border: none;
+      color: var(--gray-light);
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 5px;
+      border-radius: 4px;
+      display: none;
+    }
+
+    .student-search-clear:hover {
+      color: var(--error);
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .student-search-clear.show {
+      display: block;
     }
 
     .student-suggestions {
@@ -1273,87 +1283,28 @@
       border-radius: 6px;
     }
 
-    /* Reports */
-    .reports-container {
-      background: var(--darker);
-      border-radius: var(--border-radius);
-      padding: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .report-filters {
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: var(--border-radius-sm);
-      padding: 25px;
-      margin-bottom: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .filter-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 25px;
-    }
-
-    .report-actions {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .stat-card {
-      background: var(--card-gradient);
-      border-radius: var(--border-radius-sm);
-      padding: 25px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .stat-card h4 {
-      font-size: 14px;
-      color: var(--gray-lighter);
-      margin-bottom: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .stat-card p {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    /* Enhanced Report Card - MATCHING TEMPLATE 100% */
+    /* Enhanced Report Card - Optimized for more subjects */
     .enhanced-report-card {
       background: white;
       color: #333;
       border-radius: 0;
-      padding: 30px;
-      margin-top: 30px;
+      padding: 20px;
+      margin: 20px auto 100px;
       border: 1px solid #ddd;
       position: relative;
       overflow: hidden;
       font-family: 'Times New Roman', Times, serif;
       width: 210mm;
       min-height: 297mm;
-      margin: 20px auto;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
       page-break-inside: avoid;
-      font-size: 12px;
+      font-size: 11px; /* Reduced font size */
     }
 
-    /* Report Card Header matching template */
+    /* Report Card Header */
     .report-header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       position: relative;
       padding-top: 10px;
     }
@@ -1369,8 +1320,8 @@
     }
 
     .skore-point-icon {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       margin-bottom: 2px;
       display: flex;
       align-items: center;
@@ -1384,26 +1335,26 @@
     }
 
     .skore-point-text {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: bold;
       color: #4361ee;
       margin: 0;
-      line-height: 1.2;
+      line-height: 1.1;
     }
 
     .serusoft-text {
-      font-size: 8px;
+      font-size: 7px;
       color: #666;
       font-style: italic;
-      margin: 2px 0 0 0;
+      margin: 1px 0 0 0;
       line-height: 1;
     }
 
     .school-logo-large {
       display: inline-block;
-      margin: 5px auto 10px;
-      width: 80px;
-      height: 80px;
+      margin: 0 auto 8px;
+      width: 70px;
+      height: 70px;
     }
 
     .school-logo-large img {
@@ -1416,88 +1367,88 @@
     }
 
     .school-name {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
-      margin: 5px 0 3px;
+      margin: 3px 0 2px;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #000;
     }
 
     .report-title {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
-      margin: 10px 0 15px;
+      margin: 8px 0 12px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       text-decoration: underline;
       color: #000;
     }
 
-    /* Student Information - Adjusted for better fit */
+    /* Student Information - More compact */
     .student-info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
-      padding: 12px;
+      gap: 6px;
+      margin-bottom: 15px;
+      padding: 10px;
       background: #f8f8f8;
       border: 1px solid #ddd;
-      font-size: 11px;
+      font-size: 10px;
     }
 
     .info-item {
       display: flex;
       align-items: center;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .info-label {
       font-weight: bold;
-      min-width: 100px;
+      min-width: 80px;
       color: #333;
-      font-size: 11px;
+      font-size: 10px;
     }
 
     .info-value {
       flex: 1;
       color: #000;
       font-weight: normal;
-      font-size: 11px;
+      font-size: 10px;
     }
 
-    /* Subject Table matching template - Adjusted for better fit */
+    /* Subject Table - More compact */
     .subject-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
-      border: 2px solid #000;
-      font-size: 11px;
+      margin-bottom: 15px;
+      border: 1px solid #000;
+      font-size: 10px;
     }
 
     .subject-table th {
       background: #f0f0f0;
       font-weight: bold;
       text-align: center;
-      padding: 6px 4px;
+      padding: 4px 3px;
       border: 1px solid #000;
-      font-size: 11px;
+      font-size: 9px;
       text-transform: uppercase;
     }
 
     .subject-table td {
-      padding: 6px 4px;
+      padding: 4px 3px;
       border: 1px solid #000;
       text-align: center;
-      font-size: 11px;
+      font-size: 10px;
     }
 
-    /* Summary Table matching template - Adjusted for better fit */
+    /* Summary Table - More compact */
     .summary-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 20px;
-      font-size: 11px;
+      margin-bottom: 15px;
+      font-size: 10px;
     }
 
     .summary-table th {
@@ -1505,77 +1456,77 @@
       color: white;
       font-weight: bold;
       text-align: center;
-      padding: 8px;
+      padding: 6px;
       border: 1px solid #000;
-      font-size: 11px;
+      font-size: 9px;
       text-transform: uppercase;
     }
 
     .summary-table td {
-      padding: 8px;
+      padding: 6px;
       text-align: center;
       border: 1px solid #000;
       font-weight: bold;
-      font-size: 11px;
+      font-size: 10px;
       background: #f8f8f8;
     }
 
-    /* Remarks Section - Adjusted for better fit */
+    /* Remarks Section - More compact */
     .remarks-section {
-      margin: 20px 0;
-      font-size: 11px;
+      margin: 15px 0;
+      font-size: 10px;
     }
 
     .remarks-section h4 {
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       font-weight: bold;
-      font-size: 11px;
+      font-size: 10px;
       color: #333;
     }
 
     .signature-line {
       border-bottom: 1px solid #000;
-      margin-top: 3px;
-      padding-top: 15px;
-      height: 25px;
+      margin-top: 2px;
+      padding-top: 12px;
+      height: 20px;
     }
 
     .next-term-info {
-      margin-top: 15px;
-      font-size: 11px;
+      margin-top: 12px;
+      font-size: 10px;
     }
 
     .next-term-info p {
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
-    /* Signature Area - Adjusted for better fit */
+    /* Signature Area - More compact */
     .signature-area {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
-      padding-top: 10px;
-      border-top: 2px solid #000;
-      font-size: 11px;
+      margin-top: 25px;
+      padding-top: 8px;
+      border-top: 1px solid #000;
+      font-size: 10px;
     }
 
     .signature-box {
       text-align: center;
       flex: 1;
-      min-width: 100px;
+      min-width: 90px;
     }
 
     .signature-line-box {
       border-bottom: 1px solid #000;
-      margin: 20px auto 5px;
+      margin: 15px auto 3px;
       width: 80%;
     }
 
     .signature-box div {
-      margin-top: 3px;
+      margin-top: 2px;
       font-weight: bold;
       color: #333;
-      font-size: 11px;
+      font-size: 9px;
     }
 
     /* Analytics */
@@ -1584,6 +1535,7 @@
       border-radius: var(--border-radius);
       padding: 30px;
       border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 80px; /* Space for mobile nav */
     }
 
     .analytics-header {
@@ -1639,12 +1591,12 @@
     /* Subject Checkboxes */
     .subject-checkboxes {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
       margin-top: 10px;
-      max-height: 200px;
+      max-height: 150px;
       overflow-y: auto;
-      padding: 15px;
+      padding: 12px;
       background: rgba(255, 255, 255, 0.02);
       border-radius: var(--border-radius-sm);
       border: 1px solid rgba(255, 255, 255, 0.05);
@@ -1653,8 +1605,8 @@
     .subject-checkbox {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
+      gap: 8px;
+      padding: 6px 10px;
       background: rgba(255, 255, 255, 0.03);
       border-radius: 6px;
       cursor: pointer;
@@ -1663,6 +1615,65 @@
 
     .subject-checkbox:hover {
       background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Reports Section */
+    .reports-container {
+      background: var(--darker);
+      border-radius: var(--border-radius);
+      padding: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 80px; /* Space for mobile nav */
+    }
+
+    .report-filters {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: var(--border-radius-sm);
+      padding: 25px;
+      margin-bottom: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .report-actions {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--card-gradient);
+      border-radius: var(--border-radius-sm);
+      padding: 25px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .stat-card h4 {
+      font-size: 14px;
+      color: var(--gray-lighter);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stat-card p {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--primary);
     }
 
     /* Empty State */
@@ -1796,6 +1807,47 @@
       transform: rotate(90deg);
     }
 
+    /* Subject Assignment Modal */
+    .subject-assignment-container {
+      max-height: 300px;
+      overflow-y: auto;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: var(--border-radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .subject-assignment-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .subject-assignment-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .subject-assignment-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .subject-assignment-item input[type="checkbox"] {
+      margin: 0;
+    }
+
+    .subject-assignment-item label {
+      flex: 1;
+      margin: 0;
+      cursor: pointer;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .navbar {
@@ -1828,17 +1880,18 @@
         padding: 15px;
         width: 100%;
         min-height: auto;
-        font-size: 10px;
+        font-size: 9px;
+        margin-bottom: 150px;
       }
       
       .student-info-grid {
         grid-template-columns: 1fr;
-        font-size: 10px;
+        font-size: 9px;
       }
       
       .signature-area {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
       }
       
       .portal-exit-btn {
@@ -1851,12 +1904,43 @@
       
       .subject-table,
       .summary-table {
-        font-size: 9px;
+        font-size: 8px;
       }
       
       .subject-table th,
       .subject-table td {
-        padding: 4px 3px;
+        padding: 3px 2px;
+      }
+      
+      .skore-point-badge {
+        left: 10px;
+        top: 5px;
+      }
+      
+      .skore-point-icon {
+        width: 25px;
+        height: 25px;
+      }
+      
+      .skore-point-text {
+        font-size: 7px;
+      }
+      
+      .serusoft-text {
+        font-size: 6px;
+      }
+      
+      .school-logo-large {
+        width: 50px;
+        height: 50px;
+      }
+      
+      .school-name {
+        font-size: 14px;
+      }
+      
+      .report-title {
+        font-size: 11px;
       }
     }
 
@@ -1864,9 +1948,13 @@
       .mobile-bottom-nav {
         display: none !important;
       }
+      
+      .mobile-only {
+        display: none !important;
+      }
     }
 
-    /* Smooth scrolling for tabs */
+    /* Smooth animations */
     .smooth-scroll {
       scroll-behavior: smooth;
     }
@@ -1911,6 +1999,24 @@
       display: none !important;
     }
     
+    .mobile-only {
+      display: none;
+    }
+    
+    .desktop-only {
+      display: block;
+    }
+    
+    @media (max-width: 768px) {
+      .mobile-only {
+        display: block !important;
+      }
+      
+      .desktop-only {
+        display: none !important;
+      }
+    }
+    
     .mt-10 { margin-top: 10px; }
     .mt-20 { margin-top: 20px; }
     .mt-30 { margin-top: 30px; }
@@ -1918,12 +2024,57 @@
     .mb-30 { margin-bottom: 30px; }
     .w-100 { width: 100%; }
     .text-center { text-align: center; }
+    
+    /* Loading Overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      display: none;
+    }
+    
+    .loading-overlay.active {
+      display: flex;
+    }
+    
+    .loading-content {
+      background: var(--darker);
+      padding: 40px;
+      border-radius: var(--border-radius);
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+    
+    .loading-content .spinner {
+      width: 40px;
+      height: 40px;
+      border-width: 4px;
+      margin: 0 auto 20px;
+    }
   </style>
 </head>
 <body>
   <!-- Offline Indicator -->
   <div class="offline-indicator" id="offlineIndicator">
     <i class="fas fa-wifi-slash"></i> You are currently offline
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <h3 id="loadingText">Loading...</h3>
+    </div>
   </div>
 
   <!-- LAUNCH SCREEN -->
@@ -1956,6 +2107,9 @@
 
   <!-- MOBILE BOTTOM NAVIGATION -->
   <div class="mobile-bottom-nav" id="mobileBottomNav">
+    <button class="mobile-portal-exit-btn" id="mobilePortalExitBtn">
+      <i class="fas fa-door-closed"></i> Close Portal
+    </button>
     <div class="mobile-nav-items">
       <button class="mobile-nav-item" data-tab="classes">
         <i class="fas fa-chalkboard"></i>
@@ -1985,7 +2139,7 @@
   </div>
 
   <!-- DESKTOP PORTAL EXIT BUTTON -->
-  <button class="portal-exit-btn" id="portalExitBtn">
+  <button class="portal-exit-btn desktop-only" id="portalExitBtn">
     <i class="fas fa-door-open"></i> Exit Portal
   </button>
 
@@ -2325,6 +2479,9 @@
               </div>
               <button class="btn btn-primary" id="addTeacherBtn" style="display: none;">
                 <i class="fas fa-user-plus"></i> Add Teacher
+              </button>
+              <button class="btn btn-warning" id="assignSubjectsBtn" style="display: none;">
+                <i class="fas fa-tasks"></i> Assign Subjects
               </button>
             </div>
 
@@ -2752,6 +2909,38 @@
     </div>
   </div>
 
+  <!-- Assign Subjects Modal -->
+  <div class="modal" id="assignSubjectsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Assign Subjects to Teacher</h3>
+        <button class="close-modal" id="closeAssignSubjectsModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="assignSubjectsError" class="alert error d-none">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="assignSubjectsErrorText"></span>
+      </div>
+      <form id="assignSubjectsForm">
+        <input type="hidden" id="assignTeacherId">
+        <div class="form-group">
+          <label><i class="fas fa-chalkboard-teacher"></i> Teacher</label>
+          <input type="text" id="assignTeacherName" readonly>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-book"></i> Available Subjects</label>
+          <div class="subject-assignment-container" id="subjectAssignmentList">
+            <!-- Subjects checkboxes will be loaded here -->
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <i class="fas fa-tasks"></i> Assign Selected Subjects
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- Forgot Password Modal -->
   <div class="modal" id="forgotPasswordModal">
     <div class="modal-content">
@@ -2890,6 +3079,7 @@
     launchScreen: document.getElementById('launchScreen'),
     navbar: document.getElementById('navbar'),
     mobileBottomNav: document.getElementById('mobileBottomNav'),
+    mobilePortalExitBtn: document.getElementById('mobilePortalExitBtn'),
     loginSection: document.getElementById('loginSection'),
     registerSection: document.getElementById('registerSection'),
     dashboardSection: document.getElementById('dashboardSection'),
@@ -2899,10 +3089,12 @@
     addClassModal: document.getElementById('addClassModal'),
     addSubjectModal: document.getElementById('addSubjectModal'),
     addTeacherModal: document.getElementById('addTeacherModal'),
+    assignSubjectsModal: document.getElementById('assignSubjectsModal'),
     addStudentModal: document.getElementById('addStudentModal'),
     forgotPasswordModal: document.getElementById('forgotPasswordModal'),
     portalExitBtn: document.getElementById('portalExitBtn'),
-    offlineIndicator: document.getElementById('offlineIndicator')
+    offlineIndicator: document.getElementById('offlineIndicator'),
+    loadingOverlay: document.getElementById('loadingOverlay')
   };
 
   // Initialize the application
@@ -3156,8 +3348,9 @@
     document.getElementById('forgotPassword').addEventListener('click', () => containers.forgotPasswordModal.classList.add('active'));
     document.getElementById('openSchoolPortalBtn').addEventListener('click', openSchoolPortal);
     
-    // Portal exit button
+    // Portal exit buttons
     containers.portalExitBtn.addEventListener('click', closeSchoolPortal);
+    containers.mobilePortalExitBtn.addEventListener('click', closeSchoolPortal);
     
     // Close buttons
     document.getElementById('closeJoinForm').addEventListener('click', () => containers.joinSchoolForm.classList.remove('active'));
@@ -3165,6 +3358,7 @@
     document.getElementById('closeAddClassModal').addEventListener('click', () => containers.addClassModal.classList.remove('active'));
     document.getElementById('closeAddSubjectModal').addEventListener('click', () => containers.addSubjectModal.classList.remove('active'));
     document.getElementById('closeAddTeacherModal').addEventListener('click', () => containers.addTeacherModal.classList.remove('active'));
+    document.getElementById('closeAssignSubjectsModal').addEventListener('click', () => containers.assignSubjectsModal.classList.remove('active'));
     document.getElementById('closeAddStudentModal').addEventListener('click', () => containers.addStudentModal.classList.remove('active'));
     document.getElementById('closeForgotPasswordModal').addEventListener('click', () => containers.forgotPasswordModal.classList.remove('active'));
     
@@ -3185,12 +3379,13 @@
     document.getElementById('addClassForm').addEventListener('submit', handleAddClass);
     document.getElementById('addSubjectForm').addEventListener('submit', handleAddSubject);
     document.getElementById('addTeacherForm').addEventListener('submit', handleAddTeacher);
+    document.getElementById('assignSubjectsForm').addEventListener('submit', handleAssignSubjects);
     document.getElementById('addStudentForm').addEventListener('submit', handleAddStudent);
     
-    // Tab switching
+    // Tab switching with smooth scrolling
     setupTabs();
     
-    // Mobile tab switching
+    // Mobile tab switching with smooth scrolling
     setupMobileTabs();
     
     // Password toggles
@@ -3223,7 +3418,84 @@
     document.getElementById('addClassBtn').addEventListener('click', () => containers.addClassModal.classList.add('active'));
     document.getElementById('addSubjectBtn').addEventListener('click', () => containers.addSubjectModal.classList.add('active'));
     document.getElementById('addTeacherBtn').addEventListener('click', () => containers.addTeacherModal.classList.add('active'));
+    document.getElementById('assignSubjectsBtn').addEventListener('click', showAssignSubjectsModal);
     document.getElementById('addStudentBtn').addEventListener('click', () => containers.addStudentModal.classList.add('active'));
+  }
+
+  // Setup tabs with smooth scrolling
+  function setupTabs() {
+    const tabs = document.querySelectorAll('.desktop-only .tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = tab.dataset.tab;
+        
+        // Smooth scroll to top first
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Wait for scroll to complete, then switch tab
+        setTimeout(() => {
+          switchTab(tabId);
+        }, 300);
+      });
+    });
+  }
+
+  // Setup mobile tabs with smooth scrolling
+  function setupMobileTabs() {
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+    mobileNavItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = item.dataset.tab;
+        
+        // Smooth scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Wait for scroll to complete, then switch tab
+        setTimeout(() => {
+          switchTab(tabId);
+        }, 300);
+      });
+    });
+  }
+
+  // Switch tab
+  function switchTab(tabId) {
+    // Update active tab
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
+    
+    // Activate selected tab
+    const selectedTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+    const selectedMobileTab = document.querySelector(`.mobile-nav-item[data-tab="${tabId}"]`);
+    if (selectedTab) selectedTab.classList.add('active');
+    if (selectedMobileTab) selectedMobileTab.classList.add('active');
+    
+    document.getElementById(`${tabId}Tab`).classList.add('active');
+    
+    // Load data for the active tab
+    switch(tabId) {
+      case 'classes':
+        loadClasses();
+        break;
+      case 'students':
+        loadStudents();
+        break;
+      case 'subjects':
+        loadSubjects();
+        break;
+      case 'teachers':
+        loadTeachers();
+        break;
+      case 'marks':
+        setupMarksTab();
+        break;
+      case 'reports':
+        setupReportsTab();
+        break;
+    }
   }
 
   // Handle image upload
@@ -3292,6 +3564,17 @@
     reader.readAsDataURL(file);
   }
 
+  // Show loading overlay
+  function showLoadingOverlay(text = 'Loading...') {
+    document.getElementById('loadingText').textContent = text;
+    containers.loadingOverlay.classList.add('active');
+  }
+
+  // Hide loading overlay
+  function hideLoadingOverlay() {
+    containers.loadingOverlay.classList.remove('active');
+  }
+
   // Handle student file upload
   async function handleStudentFileUpload(event) {
     const file = event.target.files[0];
@@ -3320,6 +3603,8 @@
           return;
         }
         
+        showLoadingOverlay('Adding students from Excel...');
+        
         for (let i = 0; i < jsonData.length; i++) {
           const studentName = jsonData[i][0];
           if (studentName && typeof studentName === 'string' && studentName.trim()) {
@@ -3341,6 +3626,7 @@
           }
         }
         
+        hideLoadingOverlay();
         alert(`Successfully added ${addedCount} students from the file.`);
         loadStudents();
       };
@@ -3348,88 +3634,9 @@
       reader.readAsArrayBuffer(file);
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error processing Excel file:', error);
       alert('Error processing Excel file. Please check the format and try again.');
-    }
-  }
-
-  // Setup tabs with smooth scrolling
-  function setupTabs() {
-    const tabs = document.querySelectorAll('.desktop-only .tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabId = tab.dataset.tab;
-        switchTab(tabId);
-        
-        // Smooth scroll to top of tab content
-        setTimeout(() => {
-          const tabContent = document.getElementById(`${tabId}Tab`);
-          if (tabContent) {
-            tabContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 100);
-      });
-    });
-  }
-
-  // Setup mobile tabs with smooth scrolling
-  function setupMobileTabs() {
-    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
-    mobileNavItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const tabId = item.dataset.tab;
-        
-        // Update active state
-        mobileNavItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        
-        // Switch tab
-        switchTab(tabId);
-        
-        // Smooth scroll to top
-        setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 100);
-      });
-    });
-  }
-
-  // Switch tab
-  function switchTab(tabId) {
-    // Update active tab
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
-    
-    // Activate selected tab
-    const selectedTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
-    const selectedMobileTab = document.querySelector(`.mobile-nav-item[data-tab="${tabId}"]`);
-    if (selectedTab) selectedTab.classList.add('active');
-    if (selectedMobileTab) selectedMobileTab.classList.add('active');
-    
-    document.getElementById(`${tabId}Tab`).classList.add('active');
-    
-    // Load data for the active tab
-    switch(tabId) {
-      case 'classes':
-        loadClasses();
-        break;
-      case 'students':
-        loadStudents();
-        break;
-      case 'subjects':
-        loadSubjects();
-        break;
-      case 'teachers':
-        loadTeachers();
-        break;
-      case 'marks':
-        setupMarksTab();
-        break;
-      case 'reports':
-        setupReportsTab();
-        break;
     }
   }
 
@@ -3702,6 +3909,8 @@
       
       console.log('Creating school with data:', schoolData);
       
+      showLoadingOverlay('Registering school...');
+      
       const schoolRef = await firestoreModule.addDoc(
         firestoreModule.collection(firestoreDB, 'schools'),
         schoolData
@@ -3766,6 +3975,8 @@
       document.getElementById('schoolCardCode').textContent = schoolCode;
       document.getElementById('manageSchoolCard').style.display = 'block';
       
+      hideLoadingOverlay();
+      
       // Show success message
       showAlert('registerSchoolSuccess', 'School registered successfully!', 'success');
       
@@ -3775,6 +3986,7 @@
       }, 2000);
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error registering school:', error);
       showAlert('registerSchoolError', 'Error registering school. Please try again.', 'error');
     }
@@ -3880,6 +4092,8 @@
     const allSubjects = [teacherSubject, ...additionalSubjectsArray].filter((v, i, a) => a.indexOf(v) === i);
     
     try {
+      showLoadingOverlay('Adding teacher...');
+      
       // First, check if user exists
       const usersQuery = firestoreModule.query(
         firestoreModule.collection(firestoreDB, 'users'),
@@ -3942,6 +4156,8 @@
         );
       }
       
+      hideLoadingOverlay();
+      
       // Clear form and reload
       document.getElementById('teacherName').value = '';
       document.getElementById('teacherEmail').value = '';
@@ -3951,8 +4167,185 @@
       loadTeachers();
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error adding teacher:', error);
       showAlert('addTeacherError', 'Error adding teacher. Please try again.', 'error');
+    }
+  }
+
+  // Show assign subjects modal
+  function showAssignSubjectsModal() {
+    // Load teachers for selection
+    loadTeachersForAssignment();
+  }
+
+  // Load teachers for subject assignment
+  async function loadTeachersForAssignment() {
+    try {
+      // Get all users in the school
+      const usersQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'users'),
+        firestoreModule.where('schoolId', '==', currentSchool.id),
+        firestoreModule.where('role', '==', 'teacher')
+      );
+      
+      const querySnapshot = await firestoreModule.getDocs(usersQuery);
+      const teachers = [];
+      
+      querySnapshot.forEach(doc => {
+        teachers.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      
+      // Create modal for teacher selection
+      const modalContent = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Select Teacher to Assign Subjects</h3>
+            <button class="close-modal" id="closeTeacherSelectModal">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-chalkboard-teacher"></i> Select Teacher</label>
+            <select id="teacherSelectForAssignment" class="w-100">
+              <option value="">Select a teacher</option>
+              ${teachers.map(teacher => `
+                <option value="${teacher.id}">${teacher.name} (${teacher.email})</option>
+              `).join('')}
+            </select>
+          </div>
+          <button class="btn btn-primary btn-block mt-20" id="selectTeacherBtn">
+            <i class="fas fa-arrow-right"></i> Continue
+          </button>
+        </div>
+      `;
+      
+      // Create modal
+      const modal = document.createElement('div');
+      modal.className = 'modal active';
+      modal.id = 'teacherSelectModal';
+      modal.innerHTML = modalContent;
+      document.body.appendChild(modal);
+      
+      // Add event listeners
+      document.getElementById('closeTeacherSelectModal').addEventListener('click', () => {
+        document.getElementById('teacherSelectModal').remove();
+      });
+      
+      document.getElementById('selectTeacherBtn').addEventListener('click', () => {
+        const teacherId = document.getElementById('teacherSelectForAssignment').value;
+        if (teacherId) {
+          document.getElementById('teacherSelectModal').remove();
+          openAssignSubjectsModal(teacherId);
+        }
+      });
+      
+    } catch (error) {
+      console.error('Error loading teachers:', error);
+    }
+  }
+
+  // Open assign subjects modal
+  async function openAssignSubjectsModal(teacherId) {
+    try {
+      // Get teacher data
+      const teacherDoc = await firestoreModule.getDoc(
+        firestoreModule.doc(firestoreDB, 'users', teacherId)
+      );
+      
+      if (!teacherDoc.exists()) {
+        alert('Teacher not found');
+        return;
+      }
+      
+      const teacher = { id: teacherDoc.id, ...teacherDoc.data() };
+      
+      // Load all subjects
+      const subjectsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'subjects'),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
+      );
+      
+      const subjectsSnapshot = await firestoreModule.getDocs(subjectsQuery);
+      const allSubjects = [];
+      
+      subjectsSnapshot.forEach(doc => {
+        allSubjects.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      
+      // Get teacher's currently assigned subjects
+      const teacherAssignedSubjects = teacher.assignedSubjects || [teacher.subject].filter(Boolean);
+      
+      // Create subject assignment list
+      const subjectAssignmentList = document.getElementById('subjectAssignmentList');
+      subjectAssignmentList.innerHTML = '';
+      
+      allSubjects.forEach(subject => {
+        const isAssigned = teacherAssignedSubjects.includes(subject.name);
+        const item = document.createElement('div');
+        item.className = 'subject-assignment-item';
+        item.innerHTML = `
+          <input type="checkbox" id="subject-${subject.id}" value="${subject.name}" ${isAssigned ? 'checked' : ''}>
+          <label for="subject-${subject.id}">${subject.name}</label>
+        `;
+        subjectAssignmentList.appendChild(item);
+      });
+      
+      // Fill form data
+      document.getElementById('assignTeacherId').value = teacher.id;
+      document.getElementById('assignTeacherName').value = teacher.name;
+      
+      // Show modal
+      containers.assignSubjectsModal.classList.add('active');
+      
+    } catch (error) {
+      console.error('Error opening assign subjects modal:', error);
+    }
+  }
+
+  // Handle assign subjects
+  async function handleAssignSubjects(e) {
+    e.preventDefault();
+    
+    const teacherId = document.getElementById('assignTeacherId').value;
+    const checkboxes = document.querySelectorAll('#subjectAssignmentList input[type="checkbox"]:checked');
+    const assignedSubjects = Array.from(checkboxes).map(cb => cb.value);
+    
+    if (assignedSubjects.length === 0) {
+      showAlert('assignSubjectsError', 'Please select at least one subject', 'error');
+      return;
+    }
+    
+    try {
+      showLoadingOverlay('Assigning subjects...');
+      
+      // Update teacher's assigned subjects
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', teacherId),
+        {
+          assignedSubjects: assignedSubjects,
+          subject: assignedSubjects[0] // Set first subject as primary
+        }
+      );
+      
+      hideLoadingOverlay();
+      
+      // Close modal and reload
+      containers.assignSubjectsModal.classList.remove('active');
+      loadTeachers();
+      
+      alert('Subjects assigned successfully!');
+      
+    } catch (error) {
+      hideLoadingOverlay();
+      console.error('Error assigning subjects:', error);
+      showAlert('assignSubjectsError', 'Error assigning subjects. Please try again.', 'error');
     }
   }
 
@@ -4203,6 +4596,9 @@
               <button class="btn btn-warning btn-sm" onclick="promoteTeacher('${doc.id}', '${teacherData.role}')">
                 <i class="fas fa-user-shield"></i> ${teacherData.role === 'admin' ? 'Demote' : 'Make Admin'}
               </button>
+              <button class="btn btn-info btn-sm" onclick="assignSubjectsToTeacher('${doc.id}')">
+                <i class="fas fa-tasks"></i> Assign Subjects
+              </button>
               <button class="btn btn-danger btn-sm" onclick="removeTeacher('${doc.id}')">
                 <i class="fas fa-user-minus"></i> Remove
               </button>
@@ -4211,6 +4607,11 @@
         `;
         teacherList.appendChild(teacherItem);
       });
+      
+      // Show/hide assign subjects button for admin
+      if (currentUserData.role === 'admin') {
+        document.getElementById('assignSubjectsBtn').style.display = 'block';
+      }
       
     } catch (error) {
       console.error('Error loading teachers:', error);
@@ -4280,14 +4681,6 @@
     } else {
       marksSubjectFilter.style.display = 'none';
     }
-    
-    // Smooth scroll to top of marks section
-    setTimeout(() => {
-      const marksSection = document.getElementById('marksEntrySection');
-      if (marksSection) {
-        marksSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
   }
 
   // Update marks subject selector for teachers
@@ -4612,11 +5005,6 @@
       // Preload analytics data for faster loading
       preloadAnalyticsData();
     }
-    
-    // Smooth scroll to top of reports section
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
   }
 
   // Preload reports data for faster loading
@@ -4755,6 +5143,8 @@
     }
     
     try {
+      showLoadingOverlay('Generating analytics...');
+      
       // Get marks data
       const marksQuery = firestoreModule.query(
         firestoreModule.collection(firestoreDB, 'marks'),
@@ -4883,6 +5273,8 @@
         }
       }
       
+      hideLoadingOverlay();
+      
       if (hasData) {
         document.getElementById('analyticsEmptyState').classList.add('d-none');
         
@@ -4895,6 +5287,7 @@
       }
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error generating analytics:', error);
       document.getElementById('analyticsEmptyState').classList.remove('d-none');
       document.getElementById('gradeChartContainer').classList.add('d-none');
@@ -5016,11 +5409,7 @@
         return;
       }
       
-      // Show loading
-      const exportBtn = document.getElementById('exportSubjectAnalyticsBtn');
-      const originalText = exportBtn.innerHTML;
-      exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Data...';
-      exportBtn.disabled = true;
+      showLoadingOverlay('Generating analytics export...');
       
       // Reload data before export
       await reloadDataForExport();
@@ -5121,16 +5510,13 @@
       const fileName = `Subject_Analytics_${new Date().toISOString().slice(0, 10)}.xlsx`;
       XLSX.writeFile(wb, fileName);
       
+      hideLoadingOverlay();
       alert(`Analytics exported successfully as ${fileName}`);
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error exporting subject analytics:', error);
       alert('Error exporting analytics. Please try again.');
-    } finally {
-      // Restore button
-      const exportBtn = document.getElementById('exportSubjectAnalyticsBtn');
-      exportBtn.innerHTML = '<i class="fas fa-file-excel"></i> Export Analytics';
-      exportBtn.disabled = false;
     }
   }
 
@@ -5180,6 +5566,8 @@
     const term = document.getElementById('reportTermSelect').value;
     
     try {
+      showLoadingOverlay('Generating report...');
+      
       // Get marks data
       let marksQuery;
       if (studentId) {
@@ -5245,12 +5633,15 @@
         }
       }
       
+      hideLoadingOverlay();
+      
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error generating report:', error);
     }
   }
 
-  // Display student report - MATCHING TEMPLATE 100%
+  // Display student report - Optimized for more subjects
   async function displayStudentReport(studentId, marks) {
     const student = currentStudents.find(s => s.id === studentId);
     if (!student) return;
@@ -5283,7 +5674,7 @@
     const aggregate = calculateAggregate(marks);
     const division = calculateDivision(average, aggregate);
     
-    // Generate report card HTML matching DOCX template 100%
+    // Generate report card HTML - Optimized for more subjects
     const enhancedReportCard = document.getElementById('enhancedReportCard');
     enhancedReportCard.innerHTML = `
       <div class="report-header">
@@ -5655,9 +6046,11 @@
     document.getElementById('statsGrid').classList.remove('d-none');
   }
 
-  // Export report card as PDF - MATCHING TEMPLATE 100%
+  // Export report card as PDF - Optimized for more subjects
   async function exportReportCard(studentId) {
     try {
+      showLoadingOverlay('Generating PDF...');
+      
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF('p', 'mm', 'a4');
       
@@ -5704,13 +6097,16 @@
       const currentTerm = getCurrentTerm();
       const reportTitle = getReportTitle(currentTerm, term);
       
-      // Generate the report card content using shared function
+      // Generate the report card content
       await generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, aggregate, division, reportTitle);
       
       // Save the PDF
       doc.save(`Report_Card_${student.name.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`);
       
+      hideLoadingOverlay();
+      
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error generating PDF:', error);
       alert('Error generating report card. Please try again.');
     }
@@ -5741,37 +6137,38 @@
     });
   }
   
-  // Shared function to generate report card content - EXACT TEMPLATE MATCH
+  // Shared function to generate report card content - Optimized for more subjects
   async function generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, aggregate, division, reportTitle) {
     const pageWidth = 210; // A4 width in mm
     const centerX = pageWidth / 2;
     
     // ========== SKORE POINT BRANDING (TOP LEFT) ==========
-    // Draw graduation cap icon (matching app header)
-    doc.setFillColor(67, 97, 238); // Blue color
-    doc.setDrawColor(67, 97, 238);
-    
-    // Graduation cap - mortarboard top
-    doc.setLineWidth(0.3);
-    doc.triangle(15, 14, 25, 10, 35, 14, 'F');
-    // Cap base
-    doc.rect(18, 14, 14, 4, 'F');
-    // Tassel
-    doc.setLineWidth(0.8);
-    doc.line(25, 12, 32, 18);
-    doc.circle(32, 19, 1.2, 'F');
+    // Use the skore-icon.jpg image
+    try {
+      const skoreIconBase64 = await loadImageAsBase64('skore-icon.jpg');
+      doc.addImage(skoreIconBase64, 'JPEG', 15, 15, 30, 30, 'skoreIcon', 'MEDIUM');
+    } catch (e) {
+      // Fallback to drawing if image fails to load
+      doc.setFillColor(67, 97, 238); // Blue color
+      doc.setDrawColor(67, 97, 238);
+      doc.triangle(15, 14, 25, 10, 35, 14, 'F');
+      doc.rect(18, 14, 14, 4, 'F');
+      doc.setLineWidth(0.8);
+      doc.line(25, 12, 32, 18);
+      doc.circle(32, 19, 1.2, 'F');
+    }
     
     // Skore Point text
-    doc.setFontSize(12);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(67, 97, 238);
-    doc.text('Skore Point', 15, 26);
+    doc.text('SKORE POINT', 15, 50);
     
     // A product of SERUSOFT
     doc.setFontSize(7);
     doc.setFont('helvetica', 'italic');
     doc.setTextColor(100, 100, 100);
-    doc.text('A product of SERUSOFT', 15, 30);
+    doc.text('A product of SERUSOFT', 15, 54);
     
     // ========== SCHOOL LOGO (CENTER) ==========
     let schoolLogoAdded = false;
@@ -5780,7 +6177,7 @@
     if (currentSchool.logoUrl) {
       try {
         const logoBase64 = await loadImageAsBase64(currentSchool.logoUrl);
-        doc.addImage(logoBase64, 'PNG', centerX - 18, 35, 36, 36, 'schoolLogo', 'MEDIUM');
+        doc.addImage(logoBase64, 'PNG', centerX - 15, 35, 30, 30, 'schoolLogo', 'MEDIUM');
         schoolLogoAdded = true;
       } catch (e) {
         console.log('Could not load school logo, using placeholder');
@@ -5792,43 +6189,44 @@
       doc.setFillColor(245, 245, 245);
       doc.setDrawColor(180, 180, 180);
       doc.setLineWidth(1);
-      doc.circle(centerX, 53, 18, 'FD');
+      doc.circle(centerX, 50, 15, 'FD');
       
       // School logo text
-      doc.setFontSize(9);
+      doc.setFontSize(8);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(150, 150, 150);
-      doc.text('SCHOOL', centerX, 51, { align: 'center' });
-      doc.text('LOGO', centerX, 57, { align: 'center' });
+      doc.text('SCHOOL', centerX, 48, { align: 'center' });
+      doc.text('LOGO', centerX, 54, { align: 'center' });
     }
     
     // ========== SCHOOL NAME ==========
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(0, 0, 0);
-    doc.text(currentSchool.name.toUpperCase(), centerX, 80, { align: 'center' });
-    
-    // ========== REPORT TITLE ==========
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text(reportTitle.toUpperCase(), centerX, 92, { align: 'center' });
+    doc.setTextColor(0, 0, 0);
+    doc.text(currentSchool.name.toUpperCase(), centerX, 75, { align: 'center' });
+    
+    // ========== REPORT TITLE ==========
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text(reportTitle.toUpperCase(), centerX, 85, { align: 'center' });
     
     // ========== STUDENT INFORMATION ==========
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     
     // Student Name and Class on same line
-    doc.text(`Student Name: ${student.name.toUpperCase()}`, 20, 105);
-    doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 130, 105);
+    doc.text(`Student Name: ${student.name.toUpperCase()}`, 20, 95);
+    doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 130, 95);
     
     // Date
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 112);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 102);
     
     // ========== SUBJECT TABLE ==========
     const tableData = subjectScores.map(score => [score.name, score.score.toString(), score.grade]);
     
+    // Use smaller font size for more subjects
     doc.autoTable({
-      startY: 120,
+      startY: 110,
       head: [['SUBJECT', 'SCORE', 'GRADE']],
       body: tableData,
       theme: 'grid',
@@ -5837,24 +6235,25 @@
         textColor: [0, 0, 0],
         fontStyle: 'bold',
         halign: 'center',
-        fontSize: 10
+        fontSize: 9
       },
       bodyStyles: {
         halign: 'center',
-        fontSize: 10
+        fontSize: 9
       },
       columnStyles: {
-        0: { halign: 'left' }
+        0: { halign: 'left', cellWidth: 120 }
       },
       margin: { left: 20, right: 20 },
       styles: { 
-        cellPadding: 4,
+        cellPadding: 3,
         lineWidth: 0.3,
-        lineColor: [0, 0, 0]
+        lineColor: [0, 0, 0],
+        fontSize: 9
       }
     });
     
-    const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 8 : 140;
+    const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 5 : 140;
     
     // ========== SUMMARY TABLE ==========
     doc.autoTable({
@@ -5867,59 +6266,60 @@
         textColor: [255, 255, 255],
         fontStyle: 'bold',
         halign: 'center',
-        fontSize: 9
+        fontSize: 8
       },
       bodyStyles: {
         halign: 'center',
         fontStyle: 'bold',
-        fontSize: 10
+        fontSize: 9
       },
       margin: { left: 20, right: 20 },
       styles: { 
-        cellPadding: 5,
+        cellPadding: 4,
         lineWidth: 0.3,
-        lineColor: [0, 0, 0]
+        lineColor: [0, 0, 0],
+        fontSize: 9
       }
     });
     
-    const finalY2 = doc.lastAutoTable.finalY + 12;
+    const finalY2 = doc.lastAutoTable.finalY + 10;
     
     // ========== REMARKS SECTION ==========
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.text("Class Teacher's Remarks:", 20, finalY2);
     doc.setLineWidth(0.3);
-    doc.line(20, finalY2 + 8, 190, finalY2 + 8);
-    doc.line(20, finalY2 + 16, 190, finalY2 + 16);
+    doc.line(20, finalY2 + 6, 190, finalY2 + 6);
+    doc.line(20, finalY2 + 12, 190, finalY2 + 12);
     
-    doc.text("Head Teacher's Remarks:", 20, finalY2 + 28);
+    doc.text("Head Teacher's Remarks:", 20, finalY2 + 24);
+    doc.line(20, finalY2 + 30, 190, finalY2 + 30);
     doc.line(20, finalY2 + 36, 190, finalY2 + 36);
-    doc.line(20, finalY2 + 44, 190, finalY2 + 44);
     
     doc.setFont('helvetica', 'normal');
-    doc.text('Next Term Begins On:', 20, finalY2 + 56);
-    doc.line(65, finalY2 + 56, 140, finalY2 + 56);
+    doc.text('Next Term Begins On:', 20, finalY2 + 48);
+    doc.line(65, finalY2 + 48, 140, finalY2 + 48);
     
     // ========== SIGNATURE SECTION ==========
-    const signatureY = finalY2 + 75;
+    const signatureY = finalY2 + 65;
     
     // Class Teacher Signature
     doc.line(25, signatureY, 75, signatureY);
-    doc.setFontSize(9);
-    doc.text('Class Teacher Signature', 50, signatureY + 6, { align: 'center' });
+    doc.setFontSize(8);
+    doc.text('Class Teacher Signature', 50, signatureY + 5, { align: 'center' });
     
     // Head Teacher Signature
     doc.line(90, signatureY, 140, signatureY);
-    doc.text('Head Teacher Signature', 115, signatureY + 6, { align: 'center' });
+    doc.text('Head Teacher Signature', 115, signatureY + 5, { align: 'center' });
     
     // School Stamp box
     doc.setLineWidth(0.5);
-    doc.rect(155, signatureY - 15, 35, 25);
-    doc.setFontSize(8);
-    doc.text('School Stamp', 172.5, signatureY + 15, { align: 'center' });
+    doc.rect(155, signatureY - 12, 35, 20);
+    doc.setFontSize(7);
+    doc.text('School Stamp', 172.5, signatureY + 12, { align: 'center' });
   }
 
-  // Export ALL student report cards as PDF - FIXED VERSION
+  // Export ALL student report cards as PDF
   async function exportReportCards() {
     // Check if jsPDF library is loaded
     if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
@@ -5937,11 +6337,7 @@
       return;
     }
     
-    // Show loading
-    const exportBtn = document.getElementById('exportPDFBtn');
-    const originalText = exportBtn.innerHTML;
-    exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Data...';
-    exportBtn.disabled = true;
+    showLoadingOverlay('Preparing PDF export...');
     
     try {
       // Reload data before export
@@ -5956,12 +6352,9 @@
       }
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error generating PDFs:', error);
       alert('Error generating report cards. Please try again.');
-    } finally {
-      // Restore button
-      exportBtn.innerHTML = originalText;
-      exportBtn.disabled = false;
     }
   }
 
@@ -5969,6 +6362,7 @@
   async function exportSingleReportCard(studentId, term) {
     const student = currentStudents.find(s => s.id === studentId);
     if (!student) {
+      hideLoadingOverlay();
       alert('Student not found');
       return;
     }
@@ -5979,13 +6373,9 @@
     );
     
     if (!marksDoc.exists()) {
+      hideLoadingOverlay();
       alert('No marks found for this student');
       return;
-    }
-    
-    const exportBtn = document.getElementById('exportPDFBtn');
-    if (exportBtn) {
-      exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
     }
     
     try {
@@ -5997,20 +6387,16 @@
     }
   }
 
-  // Export all student report cards - FIXED VERSION
+  // Export all student report cards
   async function exportAllStudentReportCards(classId, term) {
     // Get all students in the class
     const classStudents = currentStudents.filter(s => s.classId === classId);
     const classObj = currentClasses.find(c => c.id === classId);
     
     if (classStudents.length === 0) {
+      hideLoadingOverlay();
       alert('No students found in this class');
       return;
-    }
-    
-    const exportBtn = document.getElementById('exportPDFBtn');
-    if (exportBtn) {
-      exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDFs...';
     }
     
     try {
@@ -6034,6 +6420,7 @@
       });
       
       if (studentsWithMarks.length === 0) {
+        hideLoadingOverlay();
         alert('No marks found for any student in this class. Please enter marks first.');
         return;
       }
@@ -6090,7 +6477,7 @@
         await generateReportCardContent(doc, student, studentClassObj, marks, subjectScores, totalMarks, average, aggregate, division, reportTitle);
         
         // Add page number
-        doc.setFontSize(9);
+        doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
         doc.text(`Page ${i + 1} of ${studentsWithMarks.length}`, 105, 290, { align: 'center' });
       }
@@ -6099,9 +6486,11 @@
       const className = currentClasses.find(c => c.id === classId)?.name.replace(/\s+/g, '_') || 'Class';
       doc.save(`Report_Cards_${className}_${term}_${new Date().toISOString().slice(0, 10)}.pdf`);
       
+      hideLoadingOverlay();
       alert(`Successfully exported ${studentsWithMarks.length} report cards!`);
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error generating PDFs:', error);
       alert('Error generating report cards. Please try again.');
     }
@@ -6110,6 +6499,8 @@
   // Reload data before export to prevent empty files
   async function reloadDataForExport() {
     try {
+      showLoadingOverlay('Loading data for export...');
+      
       // Reload all necessary data
       await Promise.all([
         loadClasses(),
@@ -6118,13 +6509,14 @@
       ]);
       
       console.log('Data reloaded successfully for export');
+      
     } catch (error) {
       console.error('Error reloading data for export:', error);
       throw new Error('Failed to reload data. Please try again.');
     }
   }
 
-  // Export class analysis as Excel - FIXED VERSION
+  // Export class analysis as Excel
   async function exportClassAnalysis() {
     const classId = document.getElementById('reportClassSelect').value;
     const term = document.getElementById('reportTermSelect').value;
@@ -6134,11 +6526,7 @@
       return;
     }
     
-    // Show loading
-    const exportBtn = document.getElementById('exportExcelBtn');
-    const originalText = exportBtn.innerHTML;
-    exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading Data...';
-    exportBtn.disabled = true;
+    showLoadingOverlay('Generating Excel report...');
     
     try {
       // Reload data before export
@@ -6149,11 +6537,10 @@
       const classObj = currentClasses.find(c => c.id === classId);
       
       if (classStudents.length === 0) {
+        hideLoadingOverlay();
         alert('No students found in this class');
         return;
       }
-      
-      exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating Excel...';
       
       // Get marks data
       const marksQuery = firestoreModule.query(
@@ -6171,6 +6558,7 @@
       
       // Check if any marks exist
       if (marksData.length === 0) {
+        hideLoadingOverlay();
         alert('No marks found for this class. Please enter marks first.');
         return;
       }
@@ -6249,7 +6637,7 @@
       const colWidths = [
         { wch: 8 },  // Rank
         { wch: 25 }, // Student Name
-        ...currentSubjects.map(() => ({ wch: 12 })), // Subject scores
+        ...currentSubjects.map(() => ({ wch: 10 })), // Smaller width for subject scores
         { wch: 12 }, // Total
         { wch: 10 }, // Average
         { wch: 8 },  // Grade
@@ -6266,15 +6654,13 @@
       const fileName = `Class_Analysis_${className}_${term}_${new Date().toISOString().slice(0, 10)}.xlsx`;
       XLSX.writeFile(wb, fileName);
       
+      hideLoadingOverlay();
       alert(`Excel report "${fileName}" generated successfully!`);
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error generating Excel:', error);
       alert('Error generating Excel report. Please try again.');
-    } finally {
-      // Restore button
-      exportBtn.innerHTML = originalText;
-      exportBtn.disabled = false;
     }
   }
 
@@ -6399,7 +6785,7 @@
     return code;
   }
 
-  // Open school portal - Show exit button only after portal is opened
+  // Open school portal
   function openSchoolPortal() {
     isSchoolPortalOpen = true;
     
@@ -6414,13 +6800,13 @@
       managementLogo.style.display = 'block';
     }
     
-    // Show exit button only after portal is opened
+    // Show exit buttons
     if (isMobileView) {
       containers.mobileBottomNav.style.display = 'flex';
       containers.mobileBottomNav.classList.add('active');
-      containers.portalExitBtn.style.display = 'none'; // Hide desktop exit button on mobile
+      containers.portalExitBtn.style.display = 'none';
     } else {
-      containers.portalExitBtn.style.display = 'flex'; // Show desktop exit button
+      containers.portalExitBtn.style.display = 'flex';
     }
     
     // Show management section
@@ -6439,19 +6825,15 @@
     }
     
     // Smooth scroll to top
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Close school portal - Hide exit button
+  // Close school portal
   function closeSchoolPortal() {
     isSchoolPortalOpen = false;
     
-    // Hide exit button
+    // Hide exit buttons
     containers.portalExitBtn.style.display = 'none';
-    
-    // Hide mobile bottom nav
     containers.mobileBottomNav.style.display = 'none';
     containers.mobileBottomNav.classList.remove('active');
     
@@ -6537,15 +6919,13 @@
     alert(`Skore Point User Guide
 
 KEY IMPROVEMENTS:
-✓ Report Cards: 100% match to template with Skore Point logo + text in top-left
-✓ Added "SKORE POINT" text below the icon and "A product of SERUSOFT" below school name
-✓ Optimized font sizes for better A4 page fit
-✓ Data Export: Automatic data reloading before export to prevent empty files
-✓ Smooth Scrolling: Automatic scroll to top when switching tabs
-✓ Marks Entry: Dropdowns always visible and functional
-✓ Mobile Optimized: Professional mobile interface with bottom navigation
+✓ Mobile Exit Button: "Close School Portal" button added to mobile bottom navigation
+✓ Smooth Scrolling: Mobile tabs scroll up, desktop tabs scroll down smoothly
+✓ Optimized Tables: Reduced font sizes and padding for better fit with more subjects
+✓ Skore Point Icon: Uses "skore-icon.jpg" image for branding
+✓ Subject Assignment: Admin can assign multiple subjects to teachers
+✓ Enhanced UI: Improved loading states, better mobile experience
 ✓ PWA Ready: Install as native app with offline functionality
-✓ Skore Point Icon: Uses "skore-icon.jpg" for all branding
 
 GETTING STARTED:
 1. Create a user account with profile picture
@@ -6553,18 +6933,24 @@ GETTING STARTED:
 3. Access school portal to manage data
 
 REPORT CARD FEATURES:
-• Professional design matching provided template
+• Professional design optimized for A4 printing
 • Skore Point logo with "SKORE POINT" text in top-left corner
 • "A product of SERUSOFT" displayed below school name
 • School logo prominently displayed in center
-• Optimized for A4 paper printing
+• Optimized for schools with many subjects (5+)
 • Export as PDF with all formatting preserved
 
-DATA MANAGEMENT:
-• Automatic data reloading before export
-• Real-time updates from Firebase
-• Offline capability with PWA
-• Excel import/export functionality
+MOBILE FEATURES:
+• Bottom navigation with "Close School Portal" button
+• Smooth scrolling when switching tabs
+• Optimized for touch interaction
+• Responsive design for all screen sizes
+
+ADMIN FEATURES:
+• Assign multiple subjects to teachers
+• Manage classes, students, subjects, and teachers
+• Generate comprehensive reports
+• Export data in PDF and Excel formats
 
 SUPPORT:
 Contact your school administrator or visit help section for assistance.`);
@@ -6732,6 +7118,10 @@ Contact your school administrator or visit help section for assistance.`);
         alert(`Error ${action} teacher. Please try again.`);
       }
     }
+  };
+
+  window.assignSubjectsToTeacher = async function(teacherId) {
+    openAssignSubjectsModal(teacherId);
   };
 
   window.removeTeacher = async function(teacherId) {
