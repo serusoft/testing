@@ -1,5 +1,5 @@
 // Service Worker for Skore Point PWA
-const CACHE_NAME = 'skore-point-v3.0.0';
+const CACHE_NAME = 'skore-point-v4.0.0';
 const CACHE_ASSETS = [
   '/',
   '/index.html',
@@ -176,4 +176,57 @@ self.addEventListener('message', event => {
   if (event.data && event.data.type === 'CLEAR_CACHE') {
     caches.delete(CACHE_NAME);
   }
+});
+
+// Handle push notifications
+self.addEventListener('push', event => {
+  console.log('[Service Worker] Push received');
+  
+  const options = {
+    body: event.data ? event.data.text() : 'New notification from Skore Point',
+    icon: 'skore-icon.jpg',
+    badge: 'skore-icon.jpg',
+    vibrate: [100, 50, 100],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: '2'
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Open',
+        icon: 'skore-icon.jpg'
+      },
+      {
+        action: 'close',
+        title: 'Close',
+        icon: 'skore-icon.jpg'
+      }
+    ]
+  };
+  
+  event.waitUntil(
+    self.registration.showNotification('Skore Point', options)
+  );
+});
+
+// Handle notification click
+self.addEventListener('notificationclick', event => {
+  console.log('[Service Worker] Notification click received');
+  
+  event.notification.close();
+  
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then(clientList => {
+        for (const client of clientList) {
+          if (client.url === '/' && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow('/');
+        }
+      })
+  );
 });
