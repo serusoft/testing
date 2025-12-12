@@ -8,6 +8,8 @@
   <!-- PWA Meta Tags -->
   <meta name="theme-color" content="#4361ee">
   <meta name="description" content="Professional School Report Card Generator by SERUSOFT">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="skore-icon.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="skore-icon.jpg">
@@ -94,6 +96,201 @@
 
     ::-webkit-scrollbar-thumb:hover {
       background: var(--primary-dark);
+    }
+
+    /* PWA Install Prompt */
+    .pwa-install-prompts {
+      position: fixed;
+      z-index: 9999;
+    }
+
+    /* Desktop Install Button */
+    .desktop-install-btn {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: linear-gradient(135deg, #ff0080, #ff8c00, #40e0d0);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      font-weight: 700;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1001;
+      box-shadow: 0 8px 25px rgba(255, 0, 128, 0.4);
+      animation: pulse 2s infinite;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 14px;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.7);
+        transform: scale(1);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(255, 0, 128, 0);
+        transform: scale(1.05);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 0, 128, 0);
+        transform: scale(1);
+      }
+    }
+
+    .desktop-install-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(255, 0, 128, 0.6);
+    }
+
+    .desktop-install-btn i {
+      font-size: 18px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-3px); }
+    }
+
+    /* Mobile Install Prompt */
+    .mobile-install-prompt {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      z-index: 9998;
+      display: none;
+      animation: slideUp 0.5s ease-out;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+      }
+    }
+
+    .mobile-install-prompt.show {
+      display: block;
+    }
+
+    .mobile-install-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .mobile-install-icon {
+      width: 50px;
+      height: 50px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .mobile-install-icon i {
+      font-size: 24px;
+      color: var(--primary);
+    }
+
+    .mobile-install-header h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+      flex: 1;
+    }
+
+    .mobile-install-body {
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .mobile-install-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .mobile-install-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .mobile-install-btn.primary {
+      background: white;
+      color: var(--primary);
+    }
+
+    .mobile-install-btn.primary:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+    }
+
+    .mobile-install-btn.secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-install-btn.secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .close-prompt {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .close-prompt:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
     }
 
     /* Container Management */
@@ -207,6 +404,7 @@
       background: none;
       border: none;
       cursor: pointer;
+      touch-action: manipulation;
     }
 
     .mobile-nav-item:hover,
@@ -969,7 +1167,7 @@
       border-radius: var(--border-radius);
       padding: 30px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 80px; /* Space for mobile nav */
+      margin-bottom: 80px;
     }
 
     .list-header {
@@ -1141,7 +1339,7 @@
       border-radius: var(--border-radius);
       padding: 30px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 80px; /* Space for mobile nav */
+      margin-bottom: 80px;
     }
 
     .marks-filters {
@@ -1298,7 +1496,7 @@
       min-height: 297mm;
       box-shadow: 0 0 20px rgba(0,0,0,0.1);
       page-break-inside: avoid;
-      font-size: 11px; /* Reduced font size */
+      font-size: 11px;
     }
 
     /* Report Card Header */
@@ -1535,7 +1733,7 @@
       border-radius: var(--border-radius);
       padding: 30px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 80px; /* Space for mobile nav */
+      margin-bottom: 80px;
     }
 
     .analytics-header {
@@ -1623,7 +1821,7 @@
       border-radius: var(--border-radius);
       padding: 30px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 80px; /* Space for mobile nav */
+      margin-bottom: 80px;
     }
 
     .report-filters {
@@ -1942,6 +2140,14 @@
       .report-title {
         font-size: 11px;
       }
+      
+      .desktop-install-btn {
+        display: none !important;
+      }
+      
+      .mobile-install-prompt {
+        bottom: 90px;
+      }
     }
 
     @media (min-width: 769px) {
@@ -1950,6 +2156,10 @@
       }
       
       .mobile-only {
+        display: none !important;
+      }
+      
+      .mobile-install-prompt {
         display: none !important;
       }
     }
@@ -2061,12 +2271,83 @@
       border-width: 4px;
       margin: 0 auto 20px;
     }
+    
+    /* PWA Install Indicator */
+    .pwa-installed-badge {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: var(--success);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 999;
+      animation: slideInRight 0.5s ease-out;
+      box-shadow: var(--shadow);
+    }
+    
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .pwa-installed-badge i {
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <!-- Offline Indicator -->
   <div class="offline-indicator" id="offlineIndicator">
     <i class="fas fa-wifi-slash"></i> You are currently offline
+  </div>
+
+  <!-- PWA Installed Badge -->
+  <div class="pwa-installed-badge" id="pwaInstalledBadge" style="display: none;">
+    <i class="fas fa-check-circle"></i> App Installed
+  </div>
+
+  <!-- PWA Install Prompts -->
+  <div class="pwa-install-prompts">
+    <!-- Desktop Install Button -->
+    <button class="desktop-install-btn" id="desktopInstallBtn">
+      <i class="fas fa-download"></i> Install App
+    </button>
+    
+    <!-- Mobile Install Prompt -->
+    <div class="mobile-install-prompt" id="mobileInstallPrompt">
+      <button class="close-prompt" id="closeMobilePrompt">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="mobile-install-header">
+        <div class="mobile-install-icon">
+          <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h3>Install Skore Point</h3>
+      </div>
+      <div class="mobile-install-body">
+        Install the Skore Point app for a better experience. Get quick access, offline functionality, and push notifications.
+      </div>
+      <div class="mobile-install-actions">
+        <button class="mobile-install-btn primary" id="mobileInstallBtn">
+          <i class="fas fa-plus"></i> Install App
+        </button>
+        <button class="mobile-install-btn secondary" id="laterMobileBtn">
+          Later
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- Loading Overlay -->
@@ -3036,6 +3317,8 @@
   let isSchoolPortalOpen = false;
   let isMobileView = window.innerWidth <= 768;
   let gradeChart = null;
+  let deferredPrompt = null;
+  let isAppInstalled = false;
 
   // Firebase Configuration
   const firebaseConfig = {
@@ -3094,7 +3377,13 @@
     forgotPasswordModal: document.getElementById('forgotPasswordModal'),
     portalExitBtn: document.getElementById('portalExitBtn'),
     offlineIndicator: document.getElementById('offlineIndicator'),
-    loadingOverlay: document.getElementById('loadingOverlay')
+    loadingOverlay: document.getElementById('loadingOverlay'),
+    desktopInstallBtn: document.getElementById('desktopInstallBtn'),
+    mobileInstallPrompt: document.getElementById('mobileInstallPrompt'),
+    mobileInstallBtn: document.getElementById('mobileInstallBtn'),
+    laterMobileBtn: document.getElementById('laterMobileBtn'),
+    closeMobilePrompt: document.getElementById('closeMobilePrompt'),
+    pwaInstalledBadge: document.getElementById('pwaInstalledBadge')
   };
 
   // Initialize the application
@@ -3137,6 +3426,9 @@
     // Setup PWA
     setupPWA();
     
+    // Setup PWA Install Prompts
+    setupPWAInstallPrompts();
+    
     // Hide launch screen after 2 seconds if still showing
     setTimeout(() => {
       hideLaunchScreen();
@@ -3148,6 +3440,9 @@
 
   // Setup PWA functionality
   function setupPWA() {
+    // Check if app is already installed
+    checkIfAppInstalled();
+    
     // Check online/offline status
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
@@ -3158,10 +3453,153 @@
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then(registration => {
           console.log('ServiceWorker registration successful with scope:', registration.scope);
+          
+          // Check for updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            console.log('ServiceWorker update found!');
+            
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                console.log('New content is available; please refresh.');
+                // You could show a notification here
+              }
+            });
+          });
         }).catch(err => {
           console.log('ServiceWorker registration failed: ', err);
         });
       });
+    }
+  }
+
+  // Setup PWA Install Prompts
+  function setupPWAInstallPrompts() {
+    // Check if app can be installed
+    window.addEventListener('beforeinstallprompt', (e) => {
+      console.log('beforeinstallprompt event fired');
+      
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      
+      // Stash the event so it can be triggered later
+      deferredPrompt = e;
+      
+      // Update UI to notify the user they can install the PWA
+      showInstallPrompts();
+    });
+    
+    // Listen for app installation
+    window.addEventListener('appinstalled', (evt) => {
+      console.log('PWA was installed successfully!');
+      isAppInstalled = true;
+      
+      // Hide install prompts
+      hideInstallPrompts();
+      
+      // Show installed badge
+      showPWAInstalledBadge();
+      
+      // Clear the deferredPrompt so it can be garbage collected
+      deferredPrompt = null;
+    });
+    
+    // Check if running in standalone mode (installed)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      console.log('Running in standalone mode (installed)');
+      isAppInstalled = true;
+      showPWAInstalledBadge();
+    }
+  }
+
+  // Show install prompts based on device
+  function showInstallPrompts() {
+    if (isAppInstalled) {
+      hideInstallPrompts();
+      return;
+    }
+    
+    if (isMobileView) {
+      // Show mobile prompt after a delay
+      setTimeout(() => {
+        if (!isAppInstalled && deferredPrompt) {
+          containers.mobileInstallPrompt.classList.add('show');
+          
+          // Store in localStorage that prompt was shown
+          localStorage.setItem('pwaPromptShown', 'true');
+          localStorage.setItem('pwaPromptDate', new Date().toISOString());
+        }
+      }, 5000); // Show after 5 seconds
+    } else {
+      // Show desktop button
+      containers.desktopInstallBtn.style.display = 'flex';
+    }
+  }
+
+  // Hide install prompts
+  function hideInstallPrompts() {
+    containers.desktopInstallBtn.style.display = 'none';
+    containers.mobileInstallPrompt.classList.remove('show');
+  }
+
+  // Show PWA installed badge
+  function showPWAInstalledBadge() {
+    containers.pwaInstalledBadge.style.display = 'flex';
+    
+    // Hide after 5 seconds
+    setTimeout(() => {
+      containers.pwaInstalledBadge.style.display = 'none';
+    }, 5000);
+  }
+
+  // Check if app is installed
+  function checkIfAppInstalled() {
+    // Check various indicators
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      isAppInstalled = true;
+      showPWAInstalledBadge();
+    }
+    
+    // Check localStorage
+    if (localStorage.getItem('pwaInstalled') === 'true') {
+      isAppInstalled = true;
+    }
+  }
+
+  // Install PWA
+  async function installPWA() {
+    if (!deferredPrompt) {
+      alert('Your browser does not support PWA installation or the app is already installed.');
+      return;
+    }
+    
+    try {
+      // Show the install prompt
+      deferredPrompt.prompt();
+      
+      // Wait for the user to respond to the prompt
+      const choiceResult = await deferredPrompt.userChoice;
+      
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+        isAppInstalled = true;
+        localStorage.setItem('pwaInstalled', 'true');
+        hideInstallPrompts();
+        showPWAInstalledBadge();
+      } else {
+        console.log('User dismissed the install prompt');
+        
+        // Store dismissal in localStorage
+        localStorage.setItem('pwaPromptDismissed', 'true');
+        localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
+      }
+      
+      // Clear the deferredPrompt variable
+      deferredPrompt = null;
+      
+    } catch (error) {
+      console.error('Error installing PWA:', error);
+      alert('Error installing app. Please try again.');
     }
   }
 
@@ -3187,6 +3625,11 @@
         containers.mobileBottomNav.classList.remove('active');
         containers.portalExitBtn.style.display = 'flex';
       }
+    }
+    
+    // Update install prompts based on view
+    if (!isAppInstalled && deferredPrompt) {
+      showInstallPrompts();
     }
   }
 
@@ -3351,6 +3794,20 @@
     // Portal exit buttons
     containers.portalExitBtn.addEventListener('click', closeSchoolPortal);
     containers.mobilePortalExitBtn.addEventListener('click', closeSchoolPortal);
+    
+    // PWA Install buttons
+    containers.desktopInstallBtn.addEventListener('click', installPWA);
+    containers.mobileInstallBtn.addEventListener('click', installPWA);
+    containers.laterMobileBtn.addEventListener('click', () => {
+      containers.mobileInstallPrompt.classList.remove('show');
+      localStorage.setItem('pwaPromptDismissed', 'true');
+      localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
+    });
+    containers.closeMobilePrompt.addEventListener('click', () => {
+      containers.mobileInstallPrompt.classList.remove('show');
+      localStorage.setItem('pwaPromptDismissed', 'true');
+      localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
+    });
     
     // Close buttons
     document.getElementById('closeJoinForm').addEventListener('click', () => containers.joinSchoolForm.classList.remove('active'));
@@ -5673,6 +6130,7 @@
     const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
     const aggregate = calculateAggregate(marks);
     const division = calculateDivision(average, aggregate);
+    const averageGrade = calculateGrade(average, currentSchool.level);
     
     // Generate report card HTML - Optimized for more subjects
     const enhancedReportCard = document.getElementById('enhancedReportCard');
@@ -5737,8 +6195,9 @@
           <thead>
             <tr>
               <th>TOTAL MARKS</th>
-              <th>AVERAGE MARK</th>
-              <th>AGGREGATES</th>
+              <th>AVERAGE SCORE</th>
+              <th>AVERAGE GRADE</th>
+              <th>AGGREGATE</th>
               <th>FINAL GRADE/DIVISION</th>
             </tr>
           </thead>
@@ -5746,6 +6205,7 @@
             <tr>
               <td>${totalMarks}</td>
               <td>${average}</td>
+              <td>${averageGrade}</td>
               <td>${aggregate}</td>
               <td>${division}</td>
             </tr>
@@ -5800,26 +6260,38 @@
     
     // Calculate statistics
     const studentAverages = [];
+    const studentAggregates = [];
+    const studentGrades = [];
     
     marksData.forEach(mark => {
       let total = 0;
       let count = 0;
+      let totalPoints = 0;
       
       currentSubjects.forEach(subject => {
         const score = mark[subject.id];
         if (score !== undefined && score > 0) {
           total += score;
           count++;
+          
+          const grade = calculateGrade(score, currentSchool.level);
+          const gradePoints = APP_CONFIG.gradePoints[currentSchool.level][grade] || 9;
+          totalPoints += gradePoints;
         }
       });
       
       if (count > 0) {
-        studentAverages.push(total / count);
+        const average = total / count;
+        studentAverages.push(average);
+        studentAggregates.push(totalPoints);
+        studentGrades.push(calculateGrade(average, currentSchool.level));
       }
     });
     
     const totalStudents = students.length;
     const avgScore = studentAverages.length > 0 ? Math.round(studentAverages.reduce((a, b) => a + b) / studentAverages.length) : 0;
+    const avgGrade = calculateGrade(avgScore, currentSchool.level);
+    const avgAggregate = studentAggregates.length > 0 ? Math.round(studentAggregates.reduce((a, b) => a + b) / studentAggregates.length) : 0;
     const highScore = studentAverages.length > 0 ? Math.round(Math.max(...studentAverages)) : 0;
     const lowScore = studentAverages.length > 0 ? Math.round(Math.min(...studentAverages)) : 0;
     
@@ -5874,9 +6346,19 @@
         </thead>
         <tbody>
           <tr>
-            <td>Class Average</td>
+            <td>Class Average Score</td>
             <td>${avgScore}%</td>
             <td>${getPerformanceRemarks(avgScore)}</td>
+          </tr>
+          <tr>
+            <td>Class Average Grade</td>
+            <td>${avgGrade}</td>
+            <td>${getGradeRemarks(avgGrade)}</td>
+          </tr>
+          <tr>
+            <td>Class Average Aggregate</td>
+            <td>${avgAggregate}</td>
+            <td>${getAggregateRemarks(avgAggregate, currentSchool.level)}</td>
           </tr>
           <tr>
             <td>Highest Average</td>
@@ -5918,6 +6400,7 @@
   async function displaySchoolReport(marksData) {
     // Calculate school-wide statistics
     const studentAverages = [];
+    const studentAggregates = [];
     const classAverages = {};
     
     // Group by class
@@ -5928,18 +6411,24 @@
     marksData.forEach(mark => {
       let total = 0;
       let count = 0;
+      let totalPoints = 0;
       
       currentSubjects.forEach(subject => {
         const score = mark[subject.id];
         if (score !== undefined && score > 0) {
           total += score;
           count++;
+          
+          const grade = calculateGrade(score, currentSchool.level);
+          const gradePoints = APP_CONFIG.gradePoints[currentSchool.level][grade] || 9;
+          totalPoints += gradePoints;
         }
       });
       
       if (count > 0) {
         const average = total / count;
         studentAverages.push(average);
+        studentAggregates.push(totalPoints);
         
         // Add to class average
         const student = currentStudents.find(s => s.id === mark.studentId);
@@ -5952,6 +6441,8 @@
     // Calculate statistics
     const totalStudents = currentStudents.length;
     const avgScore = studentAverages.length > 0 ? Math.round(studentAverages.reduce((a, b) => a + b) / studentAverages.length) : 0;
+    const avgGrade = calculateGrade(avgScore, currentSchool.level);
+    const avgAggregate = studentAggregates.length > 0 ? Math.round(studentAggregates.reduce((a, b) => a + b) / studentAggregates.length) : 0;
     const highScore = studentAverages.length > 0 ? Math.round(Math.max(...studentAverages)) : 0;
     const lowScore = studentAverages.length > 0 ? Math.round(Math.min(...studentAverages)) : 0;
     
@@ -6006,9 +6497,19 @@
         </thead>
         <tbody>
           <tr>
-            <td>School Average</td>
+            <td>School Average Score</td>
             <td>${avgScore}%</td>
             <td>${getPerformanceRemarks(avgScore)}</td>
+          </tr>
+          <tr>
+            <td>School Average Grade</td>
+            <td>${avgGrade}</td>
+            <td>${getGradeRemarks(avgGrade)}</td>
+          </tr>
+          <tr>
+            <td>School Average Aggregate</td>
+            <td>${avgAggregate}</td>
+            <td>${getAggregateRemarks(avgAggregate, currentSchool.level)}</td>
           </tr>
           <tr>
             <td>Highest Average</td>
@@ -6094,11 +6595,12 @@
       const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
       const aggregate = calculateAggregate(marks);
       const division = calculateDivision(average, aggregate);
+      const averageGrade = calculateGrade(average, currentSchool.level);
       const currentTerm = getCurrentTerm();
       const reportTitle = getReportTitle(currentTerm, term);
       
       // Generate the report card content
-      await generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, aggregate, division, reportTitle);
+      await generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, averageGrade, aggregate, division, reportTitle);
       
       // Save the PDF
       doc.save(`Report_Card_${student.name.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`);
@@ -6138,18 +6640,17 @@
   }
   
   // Shared function to generate report card content - Optimized for more subjects
-  async function generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, aggregate, division, reportTitle) {
+  async function generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, averageGrade, aggregate, division, reportTitle) {
     const pageWidth = 210; // A4 width in mm
     const centerX = pageWidth / 2;
     
     // ========== SKORE POINT BRANDING (TOP LEFT) ==========
-    // Use the skore-icon.jpg image
     try {
       const skoreIconBase64 = await loadImageAsBase64('skore-icon.jpg');
       doc.addImage(skoreIconBase64, 'JPEG', 15, 15, 30, 30, 'skoreIcon', 'MEDIUM');
     } catch (e) {
       // Fallback to drawing if image fails to load
-      doc.setFillColor(67, 97, 238); // Blue color
+      doc.setFillColor(67, 97, 238);
       doc.setDrawColor(67, 97, 238);
       doc.triangle(15, 14, 25, 10, 35, 14, 'F');
       doc.rect(18, 14, 14, 4, 'F');
@@ -6173,7 +6674,6 @@
     // ========== SCHOOL LOGO (CENTER) ==========
     let schoolLogoAdded = false;
     
-    // Try to load actual school logo if available
     if (currentSchool.logoUrl) {
       try {
         const logoBase64 = await loadImageAsBase64(currentSchool.logoUrl);
@@ -6184,14 +6684,12 @@
       }
     }
     
-    // Draw circular placeholder if logo couldn't be loaded
     if (!schoolLogoAdded) {
       doc.setFillColor(245, 245, 245);
       doc.setDrawColor(180, 180, 180);
       doc.setLineWidth(1);
       doc.circle(centerX, 50, 15, 'FD');
       
-      // School logo text
       doc.setFontSize(8);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(150, 150, 150);
@@ -6214,17 +6712,13 @@
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     
-    // Student Name and Class on same line
     doc.text(`Student Name: ${student.name.toUpperCase()}`, 20, 95);
     doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 130, 95);
-    
-    // Date
     doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 102);
     
     // ========== SUBJECT TABLE ==========
     const tableData = subjectScores.map(score => [score.name, score.score.toString(), score.grade]);
     
-    // Use smaller font size for more subjects
     doc.autoTable({
       startY: 110,
       head: [['SUBJECT', 'SCORE', 'GRADE']],
@@ -6255,11 +6749,14 @@
     
     const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 5 : 140;
     
-    // ========== SUMMARY TABLE ==========
+    // ========== ENHANCED SUMMARY TABLE WITH AVERAGE GRADE AND AGGREGATE ==========
+    const summaryHeaders = ['TOTAL MARKS', 'AVERAGE SCORE', 'AVERAGE GRADE', 'AGGREGATE', 'FINAL GRADE/DIVISION'];
+    const summaryData = [totalMarks.toString(), average.toString(), averageGrade, aggregate.toString(), division];
+    
     doc.autoTable({
       startY: finalY,
-      head: [['TOTAL MARKS', 'AVERAGE MARK', 'AGGREGATES', 'FINAL GRADE/DIVISION']],
-      body: [[totalMarks.toString(), average.toString(), aggregate.toString(), division]],
+      head: [summaryHeaders],
+      body: [summaryData],
       theme: 'grid',
       headStyles: { 
         fillColor: [67, 97, 238],
@@ -6303,16 +6800,13 @@
     // ========== SIGNATURE SECTION ==========
     const signatureY = finalY2 + 65;
     
-    // Class Teacher Signature
     doc.line(25, signatureY, 75, signatureY);
     doc.setFontSize(8);
     doc.text('Class Teacher Signature', 50, signatureY + 5, { align: 'center' });
     
-    // Head Teacher Signature
     doc.line(90, signatureY, 140, signatureY);
     doc.text('Head Teacher Signature', 115, signatureY + 5, { align: 'center' });
     
-    // School Stamp box
     doc.setLineWidth(0.5);
     doc.rect(155, signatureY - 12, 35, 20);
     doc.setFontSize(7);
@@ -6321,7 +6815,6 @@
 
   // Export ALL student report cards as PDF
   async function exportReportCards() {
-    // Check if jsPDF library is loaded
     if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
       alert('PDF library not loaded. Please refresh the page and try again.');
       console.error('jsPDF library not available');
@@ -6367,7 +6860,6 @@
       return;
     }
     
-    // Check if student has marks
     const marksDoc = await firestoreModule.getDoc(
       firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
     );
@@ -6389,7 +6881,6 @@
 
   // Export all student report cards
   async function exportAllStudentReportCards(classId, term) {
-    // Get all students in the class
     const classStudents = currentStudents.filter(s => s.classId === classId);
     const classObj = currentClasses.find(c => c.id === classId);
     
@@ -6400,7 +6891,6 @@
     }
     
     try {
-      // Get marks data
       const marksQuery = firestoreModule.query(
         firestoreModule.collection(firestoreDB, 'marks'),
         firestoreModule.where('schoolId', '==', currentSchool.id),
@@ -6414,7 +6904,6 @@
         marksData.push({ id: doc.id, ...doc.data() });
       });
       
-      // Check if any marks exist
       const studentsWithMarks = classStudents.filter(student => {
         return marksData.some(mark => mark.studentId === student.id);
       });
@@ -6425,23 +6914,20 @@
         return;
       }
       
-      // Create a single PDF with all report cards
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF('p', 'mm', 'a4');
       
       for (let i = 0; i < studentsWithMarks.length; i++) {
         const student = studentsWithMarks[i];
         
-        // Get marks for this student
         const marksDoc = await firestoreModule.getDoc(
           firestoreModule.doc(firestoreDB, 'marks', `${student.id}_${term}`)
         );
         
         if (!marksDoc.exists()) {
-          continue; // Skip students without marks
+          continue;
         }
         
-        // Start new page for each student after the first
         if (i > 0) {
           doc.addPage();
         }
@@ -6449,7 +6935,6 @@
         const marks = marksDoc.data();
         const studentClassObj = currentClasses.find(c => c.id === student.classId);
         
-        // Calculate statistics
         let totalMarks = 0;
         let subjectCount = 0;
         const subjectScores = [];
@@ -6470,19 +6955,17 @@
         const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
         const aggregate = calculateAggregate(marks);
         const division = calculateDivision(average, aggregate);
+        const averageGrade = calculateGrade(average, currentSchool.level);
         const currentTerm = getCurrentTerm();
         const reportTitle = getReportTitle(currentTerm, term);
         
-        // Use shared function for consistent formatting
-        await generateReportCardContent(doc, student, studentClassObj, marks, subjectScores, totalMarks, average, aggregate, division, reportTitle);
+        await generateReportCardContent(doc, student, studentClassObj, marks, subjectScores, totalMarks, average, averageGrade, aggregate, division, reportTitle);
         
-        // Add page number
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
         doc.text(`Page ${i + 1} of ${studentsWithMarks.length}`, 105, 290, { align: 'center' });
       }
       
-      // Save the PDF
       const className = currentClasses.find(c => c.id === classId)?.name.replace(/\s+/g, '_') || 'Class';
       doc.save(`Report_Cards_${className}_${term}_${new Date().toISOString().slice(0, 10)}.pdf`);
       
@@ -6496,27 +6979,7 @@
     }
   }
 
-  // Reload data before export to prevent empty files
-  async function reloadDataForExport() {
-    try {
-      showLoadingOverlay('Loading data for export...');
-      
-      // Reload all necessary data
-      await Promise.all([
-        loadClasses(),
-        loadSubjects(),
-        loadAllStudents()
-      ]);
-      
-      console.log('Data reloaded successfully for export');
-      
-    } catch (error) {
-      console.error('Error reloading data for export:', error);
-      throw new Error('Failed to reload data. Please try again.');
-    }
-  }
-
-  // Export class analysis as Excel
+  // Export class analysis as Excel with enhanced columns
   async function exportClassAnalysis() {
     const classId = document.getElementById('reportClassSelect').value;
     const term = document.getElementById('reportTermSelect').value;
@@ -6532,7 +6995,6 @@
       // Reload data before export
       await reloadDataForExport();
       
-      // Get all students in the class
       const classStudents = currentStudents.filter(s => s.classId === classId);
       const classObj = currentClasses.find(c => c.id === classId);
       
@@ -6542,7 +7004,6 @@
         return;
       }
       
-      // Get marks data
       const marksQuery = firestoreModule.query(
         firestoreModule.collection(firestoreDB, 'marks'),
         firestoreModule.where('schoolId', '==', currentSchool.id),
@@ -6556,28 +7017,25 @@
         marksData.push({ id: doc.id, ...doc.data() });
       });
       
-      // Check if any marks exist
       if (marksData.length === 0) {
         hideLoadingOverlay();
         alert('No marks found for this class. Please enter marks first.');
         return;
       }
       
-      // Create workbook
       const wb = XLSX.utils.book_new();
       
-      // Sheet 1: Class Analysis
+      // ENHANCED HEADERS WITH AGGREGATE AND AVERAGE GRADE
       const classAnalysisData = [
         ['Class Analysis Report'],
         [`Class: ${classObj ? classObj.name : 'N/A'}`],
         [`Term: ${document.getElementById('reportTermSelect').options[document.getElementById('reportTermSelect').selectedIndex].text}`],
         [`Date: ${new Date().toLocaleDateString()}`],
         [''],
-        ['STUDENT PERFORMANCE RANKING'],
-        ['Rank', 'Student Name', ...currentSubjects.map(s => s.name), 'Total Marks', 'Average', 'Grade', 'Division']
+        ['ENHANCED STUDENT PERFORMANCE ANALYSIS'],
+        ['Rank', 'Student Name', ...currentSubjects.map(s => s.name), 'Total Marks', 'Average Score', 'Average Grade', 'Aggregate', 'Final Grade/Division']
       ];
       
-      // Calculate scores for each student
       const studentScores = [];
       
       classStudents.forEach(student => {
@@ -6586,6 +7044,7 @@
         
         let totalMarks = 0;
         let subjectCount = 0;
+        let totalPoints = 0;
         const scores = [];
         
         currentSubjects.forEach(subject => {
@@ -6594,22 +7053,27 @@
             totalMarks += score;
             subjectCount++;
             scores.push(score);
+            
+            const grade = calculateGrade(score, currentSchool.level);
+            const gradePoints = APP_CONFIG.gradePoints[currentSchool.level][grade] || 9;
+            totalPoints += gradePoints;
           } else {
             scores.push(0);
           }
         });
         
         const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
-        const aggregate = calculateAggregate(studentMarks);
+        const averageGrade = calculateGrade(average, currentSchool.level);
+        const aggregate = totalPoints;
         const division = calculateDivision(average, aggregate);
-        const grade = calculateGrade(average, currentSchool.level);
         
         studentScores.push({
           name: student.name,
           scores: scores,
           total: totalMarks,
           average: average,
-          grade: grade,
+          averageGrade: averageGrade,
+          aggregate: aggregate,
           division: division
         });
       });
@@ -6617,7 +7081,7 @@
       // Sort by average (descending)
       studentScores.sort((a, b) => b.average - a.average);
       
-      // Add sorted data
+      // Add sorted data with all enhanced columns
       studentScores.forEach((student, index) => {
         classAnalysisData.push([
           index + 1,
@@ -6625,42 +7089,60 @@
           ...student.scores,
           student.total,
           student.average,
-          student.grade,
+          student.averageGrade,
+          student.aggregate,
           student.division
         ]);
       });
       
-      // Create worksheets
       const classAnalysisWs = XLSX.utils.aoa_to_sheet(classAnalysisData);
       
-      // Set column widths
+      // Enhanced column widths to accommodate new columns
       const colWidths = [
         { wch: 8 },  // Rank
         { wch: 25 }, // Student Name
-        ...currentSubjects.map(() => ({ wch: 10 })), // Smaller width for subject scores
-        { wch: 12 }, // Total
-        { wch: 10 }, // Average
-        { wch: 8 },  // Grade
-        { wch: 12 }  // Division
+        ...currentSubjects.map(() => ({ wch: 10 })), // Subject scores
+        { wch: 12 }, // Total Marks
+        { wch: 15 }, // Average Score
+        { wch: 15 }, // Average Grade
+        { wch: 12 }, // Aggregate
+        { wch: 15 }  // Final Grade/Division
       ];
       
       classAnalysisWs['!cols'] = colWidths;
       
-      // Add worksheet to workbook
-      XLSX.utils.book_append_sheet(wb, classAnalysisWs, 'Class Analysis');
+      XLSX.utils.book_append_sheet(wb, classAnalysisWs, 'Enhanced Class Analysis');
       
-      // Save the file
       const className = classObj ? classObj.name.replace(/\s+/g, '_') : 'Class';
-      const fileName = `Class_Analysis_${className}_${term}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+      const fileName = `Enhanced_Class_Analysis_${className}_${term}_${new Date().toISOString().slice(0, 10)}.xlsx`;
       XLSX.writeFile(wb, fileName);
       
       hideLoadingOverlay();
-      alert(`Excel report "${fileName}" generated successfully!`);
+      alert(`Enhanced Excel report "${fileName}" generated successfully!`);
       
     } catch (error) {
       hideLoadingOverlay();
       console.error('Error generating Excel:', error);
       alert('Error generating Excel report. Please try again.');
+    }
+  }
+
+  // Reload data before export to prevent empty files
+  async function reloadDataForExport() {
+    try {
+      showLoadingOverlay('Loading data for export...');
+      
+      await Promise.all([
+        loadClasses(),
+        loadSubjects(),
+        loadAllStudents()
+      ]);
+      
+      console.log('Data reloaded successfully for export');
+      
+    } catch (error) {
+      console.error('Error reloading data for export:', error);
+      throw new Error('Failed to reload data. Please try again.');
     }
   }
 
@@ -6723,7 +7205,6 @@
   function calculateGradeDistribution(scores, level) {
     const distribution = {};
     
-    // Initialize grade counts
     const grades = level === 'primary' 
       ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
       : ['A', 'B', 'C', 'D', 'E', 'F'];
@@ -6732,7 +7213,6 @@
       distribution[grade] = 0;
     });
     
-    // Count grades
     scores.forEach(score => {
       const grade = calculateGrade(score, level);
       if (distribution[grade] !== undefined) {
@@ -6741,6 +7221,37 @@
     });
     
     return distribution;
+  }
+
+  // Get grade remarks
+  function getGradeRemarks(grade) {
+    if (currentSchool.level === 'primary') {
+      if (grade === 'D1' || grade === 'D2') return 'Distinction';
+      if (grade === 'C3' || grade === 'C4' || grade === 'C5') return 'Credit';
+      if (grade === 'C6') return 'Pass';
+      if (grade === 'P7' || grade === 'P8') return 'Pass with Support';
+      return 'Fail';
+    } else {
+      if (grade === 'A') return 'Excellent';
+      if (grade === 'B') return 'Very Good';
+      if (grade === 'C') return 'Good';
+      if (grade === 'D') return 'Satisfactory';
+      if (grade === 'E') return 'Pass';
+      return 'Fail';
+    }
+  }
+
+  // Get aggregate remarks
+  function getAggregateRemarks(aggregate, level) {
+    if (level === 'primary') {
+      if (aggregate <= 12) return 'Excellent';
+      if (aggregate <= 24) return 'Good';
+      if (aggregate <= 36) return 'Satisfactory';
+      return 'Needs Improvement';
+    } else {
+      // For secondary, we can base it on division
+      return 'See Division';
+    }
   }
 
   // Get current term
@@ -6789,18 +7300,15 @@
   function openSchoolPortal() {
     isSchoolPortalOpen = true;
     
-    // Update management section
     document.getElementById('managementSchoolName').textContent = currentSchool.name;
     document.getElementById('managementSchoolCode').textContent = currentSchool.code;
     
-    // Update school logo in management section
     if (currentSchool.logoUrl) {
       const managementLogo = document.getElementById('managementSchoolLogo');
       managementLogo.src = currentSchool.logoUrl;
       managementLogo.style.display = 'block';
     }
     
-    // Show exit buttons
     if (isMobileView) {
       containers.mobileBottomNav.style.display = 'flex';
       containers.mobileBottomNav.classList.add('active');
@@ -6809,22 +7317,17 @@
       containers.portalExitBtn.style.display = 'flex';
     }
     
-    // Show management section
     showContainer('schoolManagementSection');
     
-    // Update permissions
     updatePermissions();
     
-    // Load initial tab data
     loadClasses();
     
-    // Set first tab as active for mobile
     if (isMobileView) {
       document.querySelectorAll('.mobile-nav-item').forEach(item => item.classList.remove('active'));
       document.querySelector('.mobile-nav-item[data-tab="classes"]').classList.add('active');
     }
     
-    // Smooth scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -6832,12 +7335,10 @@
   function closeSchoolPortal() {
     isSchoolPortalOpen = false;
     
-    // Hide exit buttons
     containers.portalExitBtn.style.display = 'none';
     containers.mobileBottomNav.style.display = 'none';
     containers.mobileBottomNav.classList.remove('active');
     
-    // Show dashboard
     showContainer('dashboardSection');
   }
 
@@ -6845,7 +7346,6 @@
   function updatePermissions() {
     const isAdmin = currentUserData.role === 'admin';
     
-    // Show/hide add buttons
     const addButtons = ['addClassBtn', 'addSubjectBtn', 'addTeacherBtn', 'addStudentBtn'];
     addButtons.forEach(btnId => {
       const btn = document.getElementById(btnId);
@@ -6854,10 +7354,8 @@
       }
     });
     
-    // Show/hide student upload container
     document.getElementById('studentUploadContainer').style.display = isAdmin ? 'block' : 'none';
     
-    // Show/hide permission notes
     const permissionNotes = {
       classPermissionNote: !isAdmin,
       studentPermissionNote: !isAdmin,
@@ -6873,19 +7371,16 @@
       }
     });
     
-    // Update tabs visibility based on role
     const managementTabs = document.getElementById('managementTabs');
     if (isAdmin) {
       managementTabs.classList.remove('d-none');
       
-      // Update mobile bottom nav for admin
       if (isMobileView) {
         document.querySelectorAll('.mobile-nav-item').forEach(item => {
           item.style.display = 'flex';
         });
       }
     } else {
-      // Teachers only see marks and reports tabs on desktop
       const tabs = managementTabs.querySelectorAll('.tab');
       tabs.forEach(tab => {
         const tabId = tab.dataset.tab;
@@ -6896,7 +7391,6 @@
         }
       });
       
-      // Teachers on mobile only see marks and analytics tabs
       if (isMobileView) {
         document.querySelectorAll('.mobile-nav-item').forEach(item => {
           const tabId = item.dataset.tab;
@@ -6907,7 +7401,6 @@
           }
         });
         
-        // Update reports tab label for teachers
         document.getElementById('reportsTabLabel').textContent = 'Analytics';
         document.getElementById('desktopReportsLabel').textContent = 'Analytics';
       }
@@ -6919,7 +7412,8 @@
     alert(`Skore Point User Guide
 
 KEY IMPROVEMENTS:
-✓ Mobile Exit Button: "Close School Portal" button added to mobile bottom navigation
+✓ PWA Installation: Desktop button and mobile prompt for app installation
+✓ Enhanced Class Analysis: Added Aggregate, Average Score, and Average Grade columns
 ✓ Smooth Scrolling: Mobile tabs scroll up, desktop tabs scroll down smoothly
 ✓ Optimized Tables: Reduced font sizes and padding for better fit with more subjects
 ✓ Skore Point Icon: Uses "skore-icon.jpg" image for branding
@@ -6927,18 +7421,26 @@ KEY IMPROVEMENTS:
 ✓ Enhanced UI: Improved loading states, better mobile experience
 ✓ PWA Ready: Install as native app with offline functionality
 
-GETTING STARTED:
-1. Create a user account with profile picture
-2. Join existing school or register new one
-3. Access school portal to manage data
+PWA INSTALLATION:
+• Desktop: Look for the pulsing "Install App" button (bottom-right)
+• Mobile: Automatic prompt appears to install the app
+• Benefits: Works offline, faster loading, native app experience
 
-REPORT CARD FEATURES:
+REPORT CARD ENHANCEMENTS:
 • Professional design optimized for A4 printing
 • Skore Point logo with "SKORE POINT" text in top-left corner
 • "A product of SERUSOFT" displayed below school name
 • School logo prominently displayed in center
+• Added columns for Aggregate, Average Score, and Average Grade
 • Optimized for schools with many subjects (5+)
 • Export as PDF with all formatting preserved
+
+CLASS ANALYSIS ENHANCEMENTS:
+• Aggregate column showing total grade points
+• Average Score column showing overall performance
+• Average Grade column showing overall grade
+• Enhanced Excel export with all new columns
+• Better performance visualization
 
 MOBILE FEATURES:
 • Bottom navigation with "Close School Portal" button
@@ -6976,12 +7478,10 @@ Contact your school administrator or visit help section for assistance.`);
 
   // Utility functions
   function showContainer(containerId) {
-    // Hide all containers
     document.querySelectorAll('.container').forEach(container => {
       container.classList.remove('active');
     });
     
-    // Show the requested container
     const container = document.getElementById(containerId);
     if (container) {
       container.classList.add('active');
@@ -7023,7 +7523,6 @@ Contact your school administrator or visit help section for assistance.`);
   window.deleteClass = async function(classId) {
     if (confirm('Are you sure you want to delete this class? All students in this class will also be deleted.')) {
       try {
-        // Delete students in this class first
         const studentsQuery = firestoreModule.query(
           firestoreModule.collection(firestoreDB, 'students'),
           firestoreModule.where('classId', '==', classId)
@@ -7038,7 +7537,6 @@ Contact your school administrator or visit help section for assistance.`);
         
         await Promise.all(deletePromises);
         
-        // Delete the class
         await firestoreModule.deleteDoc(
           firestoreModule.doc(firestoreDB, 'classes', classId)
         );
@@ -7086,7 +7584,6 @@ Contact your school administrator or visit help section for assistance.`);
     
     if (confirm(`Are you sure you want to ${action} this teacher?`)) {
       try {
-        // Update teacher's role
         await firestoreModule.updateDoc(
           firestoreModule.doc(firestoreDB, 'users', teacherId),
           {
@@ -7094,7 +7591,6 @@ Contact your school administrator or visit help section for assistance.`);
           }
         );
         
-        // Update school's admin list
         if (newRole === 'admin') {
           await firestoreModule.updateDoc(
             firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
@@ -7127,7 +7623,6 @@ Contact your school administrator or visit help section for assistance.`);
   window.removeTeacher = async function(teacherId) {
     if (confirm('Are you sure you want to remove this teacher from the school?')) {
       try {
-        // Update teacher's school
         await firestoreModule.updateDoc(
           firestoreModule.doc(firestoreDB, 'users', teacherId),
           {
@@ -7136,7 +7631,6 @@ Contact your school administrator or visit help section for assistance.`);
           }
         );
         
-        // Remove from school's lists
         await firestoreModule.updateDoc(
           firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
           {
