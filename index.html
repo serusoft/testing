@@ -3024,7 +3024,7 @@
         </div>
         <div class="form-group">
           <label><i class="fas fa-key"></i> School Code</label>
-          <input type="text" id="joinSchoolCode" placeholder="6-digit school code" required>
+          <input type="text" id="joinSchoolCode" placeholder="6-digit school code" required maxlength="6">
         </div>
         <button type="submit" class="btn btn-primary btn-block">
           <i class="fas fa-sign-in-alt"></i> Join School
@@ -3879,7 +3879,7 @@
     containers.portalExitBtn.addEventListener('click', closeSchoolPortal);
     containers.mobilePortalExitBtn.addEventListener('click', closeSchoolPortal);
     
-    // PWA Install buttons - FIXED: Added proper event listeners
+    // PWA Install buttons
     document.getElementById('desktopInstallBtn')?.addEventListener('click', installPWA);
     document.getElementById('mobileInstallBtn')?.addEventListener('click', installPWA);
     document.getElementById('laterMobileBtn')?.addEventListener('click', () => {
@@ -3982,7 +3982,7 @@
     });
   }
 
-  // Setup mobile tabs with smooth scrolling - FIXED
+  // Setup mobile tabs with smooth scrolling
   function setupMobileTabs() {
     const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
     mobileNavItems.forEach(item => {
@@ -3990,21 +3990,20 @@
         e.preventDefault();
         const tabId = item.dataset.tab;
         
-        // First, switch the tab
-        switchTab(tabId);
-        
-        // Then scroll to top with smooth animation
-        setTimeout(() => {
-          const mainContainer = document.querySelector('.main-container');
-          if (mainContainer) {
-            mainContainer.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'start' 
-            });
-          } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        }, 50);
+        // Get the tab content element
+        const tabContent = document.getElementById(`${tabId}Tab`);
+        if (tabContent) {
+          // Smooth scroll to the tab content
+          tabContent.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start'
+          });
+          
+          // Switch the tab after a small delay
+          setTimeout(() => {
+            switchTab(tabId);
+          }, 100);
+        }
       });
     });
   }
@@ -4339,7 +4338,7 @@
     }
   }
 
-  // Handle join school
+  // Handle join school - FIXED VERSION
   async function handleJoinSchool(e) {
     e.preventDefault();
     
@@ -4353,7 +4352,13 @@
       return;
     }
     
+    if (schoolCode.length !== 6) {
+      showAlert('joinSchoolError', 'School code must be 6 characters', 'error');
+      return;
+    }
+    
     try {
+      showLoadingOverlay('Joining school...');
       console.log('Searching for school:', schoolName, 'code:', schoolCode);
       
       // Find school by name and code
@@ -4366,6 +4371,7 @@
       const querySnapshot = await firestoreModule.getDocs(schoolsQuery);
       
       if (querySnapshot.empty) {
+        hideLoadingOverlay();
         showAlert('joinSchoolError', 'School not found. Please check the name and code.', 'error');
         return;
       }
@@ -4399,12 +4405,15 @@
       // Load school data
       await loadSchoolData(schoolDoc.id);
       
+      hideLoadingOverlay();
+      
       // Hide form
       containers.joinSchoolForm.classList.remove('active');
       
       showAlert('registerSuccess', `Successfully joined ${currentSchool.name}!`, 'success');
       
     } catch (error) {
+      hideLoadingOverlay();
       console.error('Error joining school:', error);
       showAlert('joinSchoolError', 'Error joining school. Please try again.', 'error');
     }
@@ -7506,12 +7515,13 @@
 KEY IMPROVEMENTS:
 ✓ PWA Installation: Desktop button and mobile prompt for app installation
 ✓ Enhanced Class Analysis: Added Aggregate, Average Score, and Average Grade columns
-✓ Smooth Scrolling: Mobile tabs scroll up, desktop tabs scroll down smoothly
+✓ Smooth Scrolling: Mobile tabs scroll to tab content, desktop tabs scroll to top
 ✓ Optimized Tables: Reduced font sizes and padding for better fit with more subjects
 ✓ Skore Point Icon: Uses "skore-icon.jpg" image for branding
 ✓ Subject Assignment: Admin can assign multiple subjects to teachers
 ✓ Enhanced UI: Improved loading states, better mobile experience
 ✓ PWA Ready: Install as native app with offline functionality
+✓ FIXED: School joining now works correctly with 6-character codes
 
 PWA INSTALLATION:
 • Desktop: Look for the pulsing "Install App" button (bottom-right)
@@ -7742,4 +7752,3 @@ Contact your school administrator or visit help section for assistance.`);
 </script>
 </body>
 </html>
-
