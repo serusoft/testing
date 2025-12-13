@@ -117,7 +117,7 @@
       cursor: pointer;
       font-weight: 700;
       transition: var(--transition);
-      display: flex;
+      display: none;
       align-items: center;
       gap: 10px;
       z-index: 1001;
@@ -207,12 +207,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: rotate 3s linear infinite;
-    }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
 
     .mobile-install-icon i {
@@ -3319,6 +3313,7 @@
   let gradeChart = null;
   let deferredPrompt = null;
   let isAppInstalled = false;
+  let isAppInstalledCheckDone = false;
 
   // Firebase Configuration
   const firebaseConfig = {
@@ -3475,7 +3470,7 @@
 
   // Setup PWA Install Prompts
   function setupPWAInstallPrompts() {
-    // Check if app can be installed
+    // Listen for beforeinstallprompt event
     window.addEventListener('beforeinstallprompt', (e) => {
       console.log('beforeinstallprompt event fired');
       
@@ -3486,13 +3481,19 @@
       deferredPrompt = e;
       
       // Update UI to notify the user they can install the PWA
-      showInstallPrompts();
+      if (!isAppInstalled) {
+        showInstallPrompts();
+      }
+      
+      // Log for debugging
+      console.log('Deferred prompt set, can install:', !!deferredPrompt);
     });
     
     // Listen for app installation
     window.addEventListener('appinstalled', (evt) => {
       console.log('PWA was installed successfully!');
       isAppInstalled = true;
+      isAppInstalledCheckDone = true;
       
       // Hide install prompts
       hideInstallPrompts();
@@ -3500,39 +3501,105 @@
       // Show installed badge
       showPWAInstalledBadge();
       
+      // Store installation status
+      localStorage.setItem('pwaInstalled', 'true');
+      localStorage.setItem('pwaInstallDate', new Date().toISOString());
+      
       // Clear the deferredPrompt so it can be garbage collected
       deferredPrompt = null;
+      
+      console.log('App installed event handled');
     });
     
     // Check if running in standalone mode (installed)
+    checkStandaloneMode();
+  }
+
+  // Check standalone mode
+  function checkStandaloneMode() {
+    // Check if running in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches) {
       console.log('Running in standalone mode (installed)');
       isAppInstalled = true;
+      isAppInstalledCheckDone = true;
       showPWAInstalledBadge();
+      hideInstallPrompts();
     }
+    
+    // Check if launched from home screen
+    if (window.navigator.standalone === true) {
+      console.log('Launched from home screen');
+      isAppInstalled = true;
+      isAppInstalledCheckDone = true;
+      showPWAInstalledBadge();
+      hideInstallPrompts();
+    }
+  }
+
+  // Check if app is installed
+  function checkIfAppInstalled() {
+    if (isAppInstalledCheckDone) return;
+    
+    // Check localStorage first
+    if (localStorage.getItem('pwaInstalled') === 'true') {
+      isAppInstalled = true;
+      isAppInstalledCheckDone = true;
+      showPWAInstalledBadge();
+      hideInstallPrompts();
+      console.log('App installed status from localStorage: true');
+    }
+    
+    // Check display mode
+    checkStandaloneMode();
+    
+    // Check for service worker controlling the page
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+      console.log('Service worker controlling the page');
+    }
+    
+    isAppInstalledCheckDone = true;
   }
 
   // Show install prompts based on device
   function showInstallPrompts() {
+    console.log('Showing install prompts, isAppInstalled:', isAppInstalled);
+    
     if (isAppInstalled) {
       hideInstallPrompts();
       return;
     }
     
+    if (!deferredPrompt) {
+      console.log('No deferred prompt available');
+      return;
+    }
+    
+    // Check if prompt was recently dismissed
+    const lastDismissed = localStorage.getItem('pwaPromptDismissedDate');
+    if (lastDismissed) {
+      const lastDismissedDate = new Date(lastDismissed);
+      const now = new Date();
+      const hoursSinceDismissal = (now - lastDismissedDate) / (1000 * 60 * 60);
+      
+      // Don't show again if dismissed within last 24 hours
+      if (hoursSinceDismissal < 24) {
+        console.log('Prompt dismissed recently, not showing');
+        return;
+      }
+    }
+    
     if (isMobileView) {
-      // Show mobile prompt after a delay
+      // Show mobile prompt after a short delay
       setTimeout(() => {
-        if (!isAppInstalled && deferredPrompt) {
+        if (!isAppInstalled && deferredPrompt && !containers.mobileInstallPrompt.classList.contains('show')) {
           containers.mobileInstallPrompt.classList.add('show');
-          
-          // Store in localStorage that prompt was shown
-          localStorage.setItem('pwaPromptShown', 'true');
-          localStorage.setItem('pwaPromptDate', new Date().toISOString());
+          console.log('Mobile install prompt shown');
         }
-      }, 5000); // Show after 5 seconds
+      }, 3000); // Show after 3 seconds
     } else {
       // Show desktop button
       containers.desktopInstallBtn.style.display = 'flex';
+      console.log('Desktop install button shown');
     }
   }
 
@@ -3552,46 +3619,63 @@
     }, 5000);
   }
 
-  // Check if app is installed
-  function checkIfAppInstalled() {
-    // Check various indicators
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      isAppInstalled = true;
-      showPWAInstalledBadge();
-    }
-    
-    // Check localStorage
-    if (localStorage.getItem('pwaInstalled') === 'true') {
-      isAppInstalled = true;
-    }
-  }
-
   // Install PWA
   async function installPWA() {
+    console.log('Install PWA called, deferredPrompt:', !!deferredPrompt);
+    
     if (!deferredPrompt) {
-      alert('Your browser does not support PWA installation or the app is already installed.');
+      console.log('No deferred prompt available');
+      
+      // Check if already installed
+      checkIfAppInstalled();
+      if (isAppInstalled) {
+        alert('The Skore Point app is already installed on your device.');
+        return;
+      }
+      
+      alert('Your browser does not support PWA installation. Please try using Chrome, Edge, or Safari on iOS.');
       return;
     }
     
     try {
+      console.log('Showing install prompt...');
+      
       // Show the install prompt
       deferredPrompt.prompt();
       
       // Wait for the user to respond to the prompt
       const choiceResult = await deferredPrompt.userChoice;
+      console.log('User choice result:', choiceResult);
       
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the install prompt');
         isAppInstalled = true;
+        isAppInstalledCheckDone = true;
+        
+        // Store installation status
         localStorage.setItem('pwaInstalled', 'true');
+        localStorage.setItem('pwaInstallDate', new Date().toISOString());
+        
         hideInstallPrompts();
         showPWAInstalledBadge();
+        
+        // Clear dismissed prompt storage if it exists
+        localStorage.removeItem('pwaPromptDismissed');
+        localStorage.removeItem('pwaPromptDismissedDate');
       } else {
         console.log('User dismissed the install prompt');
         
         // Store dismissal in localStorage
         localStorage.setItem('pwaPromptDismissed', 'true');
         localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
+        
+        // Hide prompts for now
+        hideInstallPrompts();
+        
+        // Show message that they can install later
+        if (isMobileView) {
+          alert('You can install Skore Point later from your browser menu. Look for "Add to Home Screen" or "Install App".');
+        }
       }
       
       // Clear the deferredPrompt variable
@@ -3795,15 +3879,15 @@
     containers.portalExitBtn.addEventListener('click', closeSchoolPortal);
     containers.mobilePortalExitBtn.addEventListener('click', closeSchoolPortal);
     
-    // PWA Install buttons
-    containers.desktopInstallBtn.addEventListener('click', installPWA);
-    containers.mobileInstallBtn.addEventListener('click', installPWA);
-    containers.laterMobileBtn.addEventListener('click', () => {
+    // PWA Install buttons - FIXED: Added proper event listeners
+    document.getElementById('desktopInstallBtn')?.addEventListener('click', installPWA);
+    document.getElementById('mobileInstallBtn')?.addEventListener('click', installPWA);
+    document.getElementById('laterMobileBtn')?.addEventListener('click', () => {
       containers.mobileInstallPrompt.classList.remove('show');
       localStorage.setItem('pwaPromptDismissed', 'true');
       localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
     });
-    containers.closeMobilePrompt.addEventListener('click', () => {
+    document.getElementById('closeMobilePrompt')?.addEventListener('click', () => {
       containers.mobileInstallPrompt.classList.remove('show');
       localStorage.setItem('pwaPromptDismissed', 'true');
       localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
@@ -3898,7 +3982,7 @@
     });
   }
 
-  // Setup mobile tabs with smooth scrolling
+  // Setup mobile tabs with smooth scrolling - FIXED
   function setupMobileTabs() {
     const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
     mobileNavItems.forEach(item => {
@@ -3906,13 +3990,21 @@
         e.preventDefault();
         const tabId = item.dataset.tab;
         
-        // Smooth scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // First, switch the tab
+        switchTab(tabId);
         
-        // Wait for scroll to complete, then switch tab
+        // Then scroll to top with smooth animation
         setTimeout(() => {
-          switchTab(tabId);
-        }, 300);
+          const mainContainer = document.querySelector('.main-container');
+          if (mainContainer) {
+            mainContainer.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start' 
+            });
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 50);
       });
     });
   }
