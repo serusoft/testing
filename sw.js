@@ -1,5 +1,5 @@
 // Service Worker for Skore Point PWA
-const CACHE_NAME = 'skore-point-v4.0.0';
+const CACHE_NAME = 'skore-point-v4.1.0';
 const CACHE_ASSETS = [
   '/',
   '/index.html',
@@ -25,7 +25,9 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('[Service Worker] Caching app shell and assets');
-        return cache.addAll(CACHE_ASSETS);
+        return cache.addAll(CACHE_ASSETS).catch(error => {
+          console.log('[Service Worker] Some assets failed to cache:', error);
+        });
       })
       .then(() => {
         console.log('[Service Worker] Installation complete');
