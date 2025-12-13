@@ -3,7 +3,7 @@
    GitHub Pages Compatible
    ================================= */
 
-const CACHE_VERSION = 'v4.3.0';
+const CACHE_VERSION = 'v4.4.0';
 const CACHE_NAME = `skore-point-${CACHE_VERSION}`;
 
 /* App shell – RELATIVE paths only */
@@ -11,7 +11,12 @@ const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './skore-icon-512.png'
+  './skore-icon.jpg',
+  './my icons/skore-icon-96.png',
+  './my icons/skore-icon-144.png',
+  './my icons/skore-icon-192.png',
+  './my icons/skore-icon-512.png',
+  './my icons/skore-icon-512-maskable.png'
 ];
 
 /* External static libraries */
@@ -76,21 +81,27 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
   if (request.url.startsWith('chrome-extension://')) return;
 
-  if (request.url.includes('googleapis.com') || request.url.includes('firebaseio.com') || request.url.includes('firebasestorage')) {
+  // Firebase assets - network first
+  if (request.url.includes('googleapis.com') || 
+      request.url.includes('firebaseio.com') || 
+      request.url.includes('firebasestorage')) {
     event.respondWith(networkOnly(request));
     return;
   }
 
+  // HTML pages - network first
   if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  if (request.url.match(/\.(css|js|png|jpg|jpeg|svg|woff2?|ttf|eot)$/)) {
+  // Static assets - cache first
+  if (request.url.match(/\.(css|js|png|jpg|jpeg|svg|woff2?|ttf|eot|ico)$/)) {
     event.respondWith(cacheFirst(request));
     return;
   }
 
+  // Everything else - network first
   event.respondWith(networkFirst(request));
 });
 
@@ -149,8 +160,8 @@ self.addEventListener('push', event => {
   event.waitUntil(
     self.registration.showNotification('Skore Point', {
       body: data,
-      icon: './skore-icon-512.png',                // normal icon
-      badge: './skore-icon-512-maskable.png',      // maskable icon for badge
+      icon: './my icons/skore-icon-192.png',
+      badge: './my icons/skore-icon-96.png',
       vibrate: [100, 50, 100],
       data: { url: './' }
     })
@@ -166,7 +177,7 @@ self.addEventListener('notificationclick', event => {
     clients.matchAll({ type: 'window', includeUncontrolled: true })
       .then(clientList => {
         for (const client of clientList) {
-          if (client.url.includes('/testing/') && 'focus' in client) {
+          if (client.url.includes('/') && 'focus' in client) {
             return client.focus();
           }
         }
