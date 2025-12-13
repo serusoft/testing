@@ -1,9 +1,9 @@
-/* ================================
+/* =================================
    Skore Point – Enhanced Service Worker
    GitHub Pages Compatible
-   ================================ */
+   ================================= */
 
-const CACHE_VERSION = 'v4.2.0';
+const CACHE_VERSION = 'v4.3.0';
 const CACHE_NAME = `skore-point-${CACHE_VERSION}`;
 
 /* App shell – RELATIVE paths only */
@@ -11,10 +11,10 @@ const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './skore-icon.jpg'
+  './skore-icon-512.png'
 ];
 
-/* External static libraries (safe to cache) */
+/* External static libraries */
 const EXTERNAL_ASSETS = [
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
@@ -23,7 +23,7 @@ const EXTERNAL_ASSETS = [
   'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
-/* Firebase SDKs – network first (cached after load) */
+/* Firebase SDKs – network first */
 const FIREBASE_ASSETS = [
   'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js',
@@ -73,33 +73,24 @@ self.addEventListener('activate', event => {
    ================================ */
 self.addEventListener('fetch', event => {
   const { request } = event;
-
   if (request.method !== 'GET') return;
   if (request.url.startsWith('chrome-extension://')) return;
 
-  /* Firebase / Google APIs → ALWAYS NETWORK */
-  if (
-    request.url.includes('googleapis.com') ||
-    request.url.includes('firebaseio.com') ||
-    request.url.includes('firebasestorage')
-  ) {
+  if (request.url.includes('googleapis.com') || request.url.includes('firebaseio.com') || request.url.includes('firebasestorage')) {
     event.respondWith(networkOnly(request));
     return;
   }
 
-  /* HTML → Network first */
   if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  /* Static assets → Cache first */
   if (request.url.match(/\.(css|js|png|jpg|jpeg|svg|woff2?|ttf|eot)$/)) {
     event.respondWith(cacheFirst(request));
     return;
   }
 
-  /* Default */
   event.respondWith(networkFirst(request));
 });
 
@@ -158,8 +149,8 @@ self.addEventListener('push', event => {
   event.waitUntil(
     self.registration.showNotification('Skore Point', {
       body: data,
-      icon: './skore-icon.jpg',
-      badge: './skore-icon.jpg',
+      icon: './skore-icon-512.png',                // normal icon
+      badge: './skore-icon-512-maskable.png',      // maskable icon for badge
       vibrate: [100, 50, 100],
       data: { url: './' }
     })
@@ -171,7 +162,6 @@ self.addEventListener('push', event => {
    ================================ */
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true })
       .then(clientList => {
