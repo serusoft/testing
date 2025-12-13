@@ -10,7 +10,7 @@
   <meta name="description" content="Professional School Report Card Generator by SERUSOFT">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" href="skore-icon.jpg" type="image/jpeg">
   <link rel="apple-touch-icon" href="skore-icon.jpg">
   
@@ -3446,7 +3446,7 @@
     // Register service worker if supported
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').then(registration => {
+        navigator.serviceWorker.register('sw.js').then(registration => {
           console.log('ServiceWorker registration successful with scope:', registration.scope);
           
           // Check for updates
@@ -7742,3 +7742,4 @@ Contact your school administrator or visit help section for assistance.`);
 </script>
 </body>
 </html>
+
