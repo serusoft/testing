@@ -1,25 +1,25 @@
 /* =================================
    Skore Point – Service Worker
-   GitHub Pages Safe
+   GitHub Pages Ready
    ================================= */
 
-const CACHE_VERSION = 'v4.4.1';
+const CACHE_VERSION = 'v4.4.2';
 const CACHE_NAME = `skore-point-${CACHE_VERSION}`;
 
-/* App shell – RELATIVE paths ONLY */
+/* App shell – ABSOLUTE paths for GitHub Pages */
 const APP_SHELL = [
-  './',
-  './index.html',
-  './404.html',
-  './manifest.json',
-  './skore-icon.jpg',
-  './icons/skore-icon-96.png',
-  './icons/skore-icon-144.png',
-  './icons/skore-icon-192.png',
-  './icons/skore-icon-512.png',
-  './icons/skore-icon-512-maskable.png',
-  './screens/skore-dashboard-wide.png',
-  './screens/skore-dashboard-mobile.png'
+  '/testing/',
+  '/testing/index.html',
+  '/testing/404.html',
+  '/testing/manifest.json',
+  '/testing/skore-icon.jpg',
+  '/testing/icons/skore-icon-96.png',
+  '/testing/icons/skore-icon-144.png',
+  '/testing/icons/skore-icon-192.png',
+  '/testing/icons/skore-icon-512.png',
+  '/testing/icons/skore-icon-512-maskable.png',
+  '/testing/screens/skore-dashboard-wide.png',
+  '/testing/screens/skore-dashboard-mobile.png'
 ];
 
 /* External static libraries */
@@ -31,7 +31,7 @@ const EXTERNAL_ASSETS = [
   'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
-/* Firebase SDKs – network only */
+/* Firebase SDKs – always network */
 const FIREBASE_ASSETS = [
   'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js',
@@ -45,11 +45,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache =>
-        cache.addAll([
-          ...APP_SHELL,
-          ...EXTERNAL_ASSETS,
-          ...FIREBASE_ASSETS
-        ])
+        cache.addAll([...APP_SHELL, ...EXTERNAL_ASSETS, ...FIREBASE_ASSETS])
       )
       .then(() => self.skipWaiting())
   );
@@ -75,7 +71,7 @@ self.addEventListener('fetch', event => {
   const { request } = event;
   if (request.method !== 'GET') return;
 
-  // Firebase – always network
+  // Firebase / Google assets – always network
   if (request.url.includes('firebase') || request.url.includes('googleapis')) {
     event.respondWith(fetch(request));
     return;
@@ -106,7 +102,7 @@ async function networkFirst(request) {
     cache.put(request, response.clone());
     return response;
   } catch {
-    return caches.match(request) || caches.match('./');
+    return caches.match(request) || caches.match('/testing/');
   }
 }
 
@@ -129,9 +125,9 @@ self.addEventListener('push', event => {
   event.waitUntil(
     self.registration.showNotification('Skore Point', {
       body,
-      icon: './icons/skore-icon-192.png',
-      badge: './icons/skore-icon-96.png',
-      data: { url: './' }
+      icon: '/testing/icons/skore-icon-192.png',
+      badge: '/testing/icons/skore-icon-96.png',
+      data: { url: '/testing/' }
     })
   );
 });
@@ -142,6 +138,6 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
-    clients.openWindow('./')
+    clients.openWindow('/testing/')
   );
 });
