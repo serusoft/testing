@@ -1,22 +1,21 @@
 /* =================================
-   Skore Point – Enhanced Service Worker
-   GitHub Pages Compatible
+   Skore Point – Service Worker
+   GitHub Pages Safe
    ================================= */
 
-const CACHE_VERSION = 'v4.4.0';
+const CACHE_VERSION = 'v4.4.1';
 const CACHE_NAME = `skore-point-${CACHE_VERSION}`;
 
-/* App shell – RELATIVE paths only */
+/* App shell – RELATIVE paths ONLY */
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './skore-icon.jpg',
-  './my icons/skore-icon-96.png',
-  './my icons/skore-icon-144.png',
-  './my icons/skore-icon-192.png',
-  './my icons/skore-icon-512.png',
-  './my icons/skore-icon-512-maskable.png'
+  './icons/skore-icon-96.png',
+  './icons/skore-icon-144.png',
+  './icons/skore-icon-192.png',
+  './icons/skore-icon-512.png',
+  './icons/skore-icon-512-maskable.png'
 ];
 
 /* External static libraries */
@@ -28,7 +27,7 @@ const EXTERNAL_ASSETS = [
   'https://cdn.jsdelivr.net/npm/chart.js'
 ];
 
-/* Firebase SDKs – network first */
+/* Firebase SDKs – network only */
 const FIREBASE_ASSETS = [
   'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js',
   'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js',
@@ -39,17 +38,16 @@ const FIREBASE_ASSETS = [
    INSTALL
    ================================ */
 self.addEventListener('install', event => {
-  console.log('[SW] Installing…');
-
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll([
-        ...APP_SHELL,
-        ...EXTERNAL_ASSETS,
-        ...FIREBASE_ASSETS
-      ]))
+      .then(cache =>
+        cache.addAll([
+          ...APP_SHELL,
+          ...EXTERNAL_ASSETS,
+          ...FIREBASE_ASSETS
+        ])
+      )
       .then(() => self.skipWaiting())
-      .catch(err => console.warn('[SW] Install warning:', err))
   );
 });
 
@@ -57,61 +55,46 @@ self.addEventListener('install', event => {
    ACTIVATE
    ================================ */
 self.addEventListener('activate', event => {
-  console.log('[SW] Activating…');
-
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
-        keys.map(key => {
-          if (key !== CACHE_NAME) {
-            console.log('[SW] Removing old cache:', key);
-            return caches.delete(key);
-          }
-        })
+        keys.map(key => key !== CACHE_NAME && caches.delete(key))
       )
     ).then(() => self.clients.claim())
   );
 });
 
 /* ================================
-   FETCH STRATEGIES
+   FETCH
    ================================ */
 self.addEventListener('fetch', event => {
   const { request } = event;
   if (request.method !== 'GET') return;
-  if (request.url.startsWith('chrome-extension://')) return;
 
-  // Firebase assets - network first
-  if (request.url.includes('googleapis.com') || 
-      request.url.includes('firebaseio.com') || 
-      request.url.includes('firebasestorage')) {
-    event.respondWith(networkOnly(request));
+  // Firebase – always network
+  if (request.url.includes('firebase') || request.url.includes('googleapis')) {
+    event.respondWith(fetch(request));
     return;
   }
 
-  // HTML pages - network first
+  // HTML – network first
   if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(networkFirst(request));
     return;
   }
 
-  // Static assets - cache first
+  // Static assets – cache first
   if (request.url.match(/\.(css|js|png|jpg|jpeg|svg|woff2?|ttf|eot|ico)$/)) {
     event.respondWith(cacheFirst(request));
     return;
   }
 
-  // Everything else - network first
   event.respondWith(networkFirst(request));
 });
 
 /* ================================
-   STRATEGY FUNCTIONS
+   STRATEGIES
    ================================ */
-async function networkOnly(request) {
-  return fetch(request);
-}
-
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
@@ -119,8 +102,7 @@ async function networkFirst(request) {
     cache.put(request, response.clone());
     return response;
   } catch {
-    const cached = await caches.match(request);
-    return cached || offlineFallback();
+    return caches.match(request) || caches.match('./');
   }
 }
 
@@ -134,35 +116,17 @@ async function cacheFirst(request) {
   return response;
 }
 
-function offlineFallback() {
-  return caches.match('./').then(
-    res => res || new Response(
-      '<h2>You are offline</h2><p>Skore Point needs internet for live data.</p>',
-      { headers: { 'Content-Type': 'text/html' } }
-    )
-  );
-}
-
-/* ================================
-   MESSAGES
-   ================================ */
-self.addEventListener('message', event => {
-  if (event.data?.type === 'SKIP_WAITING') self.skipWaiting();
-  if (event.data?.type === 'CLEAR_CACHE') caches.delete(CACHE_NAME);
-});
-
 /* ================================
    PUSH NOTIFICATIONS
    ================================ */
 self.addEventListener('push', event => {
-  const data = event.data?.text() || 'New update from Skore Point';
+  const body = event.data?.text() || 'New update from Skore Point';
 
   event.waitUntil(
     self.registration.showNotification('Skore Point', {
-      body: data,
-      icon: './my icons/skore-icon-192.png',
-      badge: './my icons/skore-icon-96.png',
-      vibrate: [100, 50, 100],
+      body,
+      icon: './icons/skore-icon-192.png',
+      badge: './icons/skore-icon-96.png',
       data: { url: './' }
     })
   );
@@ -174,14 +138,6 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
   event.notification.close();
   event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true })
-      .then(clientList => {
-        for (const client of clientList) {
-          if (client.url.includes('/') && 'focus' in client) {
-            return client.focus();
-          }
-        }
-        return clients.openWindow('./');
-      })
+    clients.openWindow('./')
   );
 });
