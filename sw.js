@@ -10,12 +10,16 @@ const CACHE_NAME = `skore-point-${CACHE_VERSION}`;
 const APP_SHELL = [
   './',
   './index.html',
+  './404.html',
   './manifest.json',
+  './skore-icon.jpg',
   './icons/skore-icon-96.png',
   './icons/skore-icon-144.png',
   './icons/skore-icon-192.png',
   './icons/skore-icon-512.png',
-  './icons/skore-icon-512-maskable.png'
+  './icons/skore-icon-512-maskable.png',
+  './screens/skore-dashboard-wide.png',
+  './screens/skore-dashboard-mobile.png'
 ];
 
 /* External static libraries */
