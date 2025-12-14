@@ -2,103 +2,81 @@
   "name": "Skore Point",
   "short_name": "SkorePoint",
   "description": "Professional School Report Card Generator by SERUSOFT",
-  "start_url": "/",
+
+  "start_url": "/testing/",
+  "scope": "/testing/",
+
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#4361ee",
   "orientation": "portrait",
-  "scope": "/",
   "lang": "en",
   "dir": "ltr",
   "categories": ["education", "productivity", "utilities"],
+
   "icons": [
     {
-      "src": "my icons/skore-icon-96.png",
+      "src": "/testing/icons/skore-icon-96.png",
       "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "my icons/skore-icon-144.png",
+      "src": "/testing/icons/skore-icon-144.png",
       "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "my icons/skore-icon-192.png",
+      "src": "/testing/icons/skore-icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "my icons/skore-icon-512.png",
+      "src": "/testing/icons/skore-icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "type": "image/png"
     },
     {
-      "src": "my icons/skore-icon-512-maskable.png",
+      "src": "/testing/icons/skore-icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
+
   "screenshots": [
     {
-      "src": "screens/skore-dashboard-wide.png",
+      "src": "/testing/screens/skore-dashboard-wide.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "Skore Point Dashboard",
       "form_factor": "wide"
     },
     {
-      "src": "screens/skore-dashboard-mobile.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "label": "Skore Point Mobile View",
-      "form_factor": "narrow"
+      "src": "/testing/screens/skore-dashboard-mobile.png",
+      "sizes": "360x640",
+      "type": "image/png"
     }
   ],
+
   "shortcuts": [
     {
       "name": "Dashboard",
       "short_name": "Home",
-      "description": "Go to dashboard",
-      "url": "/?source=dashboard",
-      "icons": [
-        {
-          "src": "my icons/skore-icon-96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "url": "/testing/?source=dashboard",
+      "icons": [{ "src": "/testing/icons/skore-icon-96.png", "sizes": "96x96" }]
     },
     {
       "name": "Enter Marks",
       "short_name": "Marks",
-      "description": "Quick marks entry",
-      "url": "/?source=marks",
-      "icons": [
-        {
-          "src": "my icons/skore-icon-96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "url": "/testing/?source=marks",
+      "icons": [{ "src": "/testing/icons/skore-icon-96.png", "sizes": "96x96" }]
     },
     {
       "name": "Generate Reports",
       "short_name": "Reports",
-      "description": "Create report cards",
-      "url": "/?source=reports",
-      "icons": [
-        {
-          "src": "my icons/skore-icon-96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "url": "/testing/?source=reports",
+      "icons": [{ "src": "/testing/icons/skore-icon-96.png", "sizes": "96x96" }]
     }
   ],
+
   "prefer_related_applications": false
 }
