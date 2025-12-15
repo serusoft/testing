@@ -10,9 +10,10 @@
   <meta name="description" content="Professional School Report Card Generator by SERUSOFT">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="skore-icon.jpg" type="image/jpeg">
-  <link rel="apple-touch-icon" href="skore-icon.jpg">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="/testing/manifest.json">
+  <link rel="icon" href="/testing/skore-icon.jpg" type="image/jpeg">
+  <link rel="apple-touch-icon" href="/testing/skore-icon.jpg">
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -3507,7 +3508,7 @@
     // Register service worker if supported
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').then(registration => {
+        navigator.serviceWorker.register('/testing/sw.js').then(registration => {
           console.log('ServiceWorker registration successful with scope:', registration.scope);
           
           // Check for updates
@@ -4459,39 +4460,43 @@
       document.getElementById('joinSchoolLoading').classList.add('active');
       console.log('Searching for school:', schoolName, 'code:', schoolCode);
       
-      // Find school by name and code
+      // FIRST: Get all schools and find the matching one
       const schoolsQuery = firestoreModule.query(
-        firestoreModule.collection(firestoreDB, 'schools'),
-        firestoreModule.where('name', '==', schoolName),
-        firestoreModule.where('code', '==', schoolCode)
+        firestoreModule.collection(firestoreDB, 'schools')
       );
       
       const querySnapshot = await firestoreModule.getDocs(schoolsQuery);
+      let foundSchool = null;
       
-      if (querySnapshot.empty) {
+      querySnapshot.forEach(doc => {
+        const schoolData = doc.data();
+        if (schoolData.name === schoolName && schoolData.code === schoolCode) {
+          foundSchool = {
+            id: doc.id,
+            ...schoolData
+          };
+        }
+      });
+      
+      if (!foundSchool) {
         document.getElementById('joinSchoolLoading').classList.remove('active');
         showAlert('joinSchoolError', 'School not found. Please check the name and code.', 'error');
         return;
       }
       
-      const schoolDoc = querySnapshot.docs[0];
-      currentSchool = {
-        id: schoolDoc.id,
-        ...schoolDoc.data()
-      };
-      
+      currentSchool = foundSchool;
       console.log('School found:', currentSchool);
       
       // Update user document with school ID only (role comes from school's admin list)
       await firestoreModule.updateDoc(
         firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
         {
-          schoolId: schoolDoc.id
+          schoolId: foundSchool.id
         }
       );
       
       // Update current user data
-      currentUserData.schoolId = schoolDoc.id;
+      currentUserData.schoolId = foundSchool.id;
       
       // Check if user is admin of this school
       const isAdmin = currentSchool.admins && currentSchool.admins.includes(currentUser.uid);
@@ -4499,7 +4504,7 @@
       
       // Update school's teacher list
       await firestoreModule.updateDoc(
-        firestoreModule.doc(firestoreDB, 'schools', schoolDoc.id),
+        firestoreModule.doc(firestoreDB, 'schools', foundSchool.id),
         {
           teachers: firestoreModule.arrayUnion(currentUser.uid)
         }
@@ -4511,7 +4516,7 @@
       document.getElementById('manageSchoolCard').style.display = 'block';
       
       // Load school data
-      await loadSchoolData(schoolDoc.id);
+      await loadSchoolData(foundSchool.id);
       
       document.getElementById('joinSchoolLoading').classList.remove('active');
       
@@ -6359,7 +6364,7 @@
         <!-- Skore Point logo with text - 40% smaller than school logo -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <img src="skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
+            <img src="/testing/skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
@@ -6367,7 +6372,7 @@
         
         <!-- School logo in center -->
         <div class="school-logo-large">
-          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='skore-icon.jpg'">
+          <img src="${currentSchool.logoUrl || '/testing/skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='/testing/skore-icon.jpg'">
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
@@ -6522,14 +6527,14 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <img src="skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
+            <img src="/testing/skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
         </div>
         
         <div class="school-logo-large">
-          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='skore-icon.jpg'">
+          <img src="${currentSchool.logoUrl || '/testing/skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='/testing/skore-icon.jpg'">
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
@@ -6673,14 +6678,14 @@
         <!-- Skore Point logo with text -->
         <div class="skore-point-badge">
           <div class="skore-point-icon">
-            <img src="skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
+            <img src="/testing/skore-icon.jpg" alt="Skore Point" onerror="this.style.display='none'">
           </div>
           <div class="skore-point-text">SKORE POINT</div>
           <div class="serusoft-text">A product of SERUSOFT</div>
         </div>
         
         <div class="school-logo-large">
-          <img src="${currentSchool.logoUrl || 'skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='skore-icon.jpg'">
+          <img src="${currentSchool.logoUrl || '/testing/skore-icon.jpg'}" alt="${currentSchool.name}" onerror="this.src='/testing/skore-icon.jpg'">
         </div>
         
         <div class="school-name">${currentSchool.name}</div>
@@ -6891,7 +6896,7 @@
     
     // ========== SKORE POINT BRANDING (TOP LEFT) - 40% SMALLER ==========
     try {
-      const skoreIconBase64 = await loadImageAsBase64('skore-icon.jpg');
+      const skoreIconBase64 = await loadImageAsBase64('/testing/skore-icon.jpg');
       doc.addImage(skoreIconBase64, 'JPEG', 15, 15, 15, 15, 'skoreIcon', 'MEDIUM'); // 40% smaller
     } catch (e) {
       // Fallback to drawing if image fails to load
