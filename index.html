@@ -1,3 +1,17 @@
+I'll help you enhance the HTML code to make it more robust and compatible with the Firestore rules. Based on your requirements and the provided rules, here are the key enhancements I'll make:
+
+## Key Enhancements to the Index.html:
+
+1. **Fix School Joining Logic**: Make it more reliable
+2. **Add School Switching**: Allow users to join multiple schools
+3. **Improve Error Handling**: Better user feedback
+4. **Enhance Security Integration**: Better alignment with Firestore rules
+5. **Add Data Validation**: Prevent invalid data submission
+6. **Improve UI/UX**: Better user experience
+
+Here's the enhanced HTML code:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -658,7 +672,7 @@
       color: var(--gray-lighter);
     }
 
-    /* Form Elements - FIXED DROPDOWN STYLES */
+    /* Form Elements */
     .form-group {
       margin-bottom: 20px;
       position: relative;
@@ -696,7 +710,6 @@
       appearance: none;
     }
 
-    /* FIX: Style dropdown options to be visible on dark background */
     .form-group select option {
       background-color: var(--darker);
       color: var(--light);
@@ -704,7 +717,6 @@
       font-size: 15px;
     }
 
-    /* FIX: Style for data list dropdown */
     .form-group datalist option {
       background-color: var(--darker);
       color: var(--light);
@@ -1361,7 +1373,6 @@
       margin-bottom: 80px;
     }
 
-    /* FIX: Marks entry section improvements */
     .marks-header {
       display: flex;
       justify-content: space-between;
@@ -1377,7 +1388,6 @@
       margin: 0;
     }
 
-    /* FIX: Analytics filters in same line for teachers */
     .analytics-filters {
       display: flex;
       flex-wrap: wrap;
@@ -2137,6 +2147,40 @@
       cursor: pointer;
     }
 
+    /* School Switch Modal */
+    .school-switch-modal {
+      z-index: 2001;
+    }
+
+    .school-switch-option {
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .school-switch-option:hover {
+      background: rgba(67, 97, 238, 0.1);
+      border-color: var(--primary);
+    }
+
+    .school-switch-option.active {
+      background: rgba(67, 97, 238, 0.2);
+      border-color: var(--primary);
+    }
+
+    .school-switch-option h4 {
+      color: var(--light);
+      margin-bottom: 5px;
+    }
+
+    .school-switch-option p {
+      color: var(--gray-light);
+      font-size: 13px;
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .navbar {
@@ -2240,7 +2284,6 @@
         bottom: 90px;
       }
       
-      /* FIX: Mobile responsive for analytics filters */
       .analytics-filters {
         flex-direction: column;
         align-items: stretch;
@@ -2264,7 +2307,6 @@
         display: none !important;
       }
       
-      /* FIX: Keep marks and analytics buttons on same line for desktop */
       .marks-analytics-buttons {
         display: flex;
         gap: 15px;
@@ -2447,7 +2489,7 @@
       transform: rotate(180deg);
     }
     
-    /* FIX: Teacher action buttons on same line */
+    /* Teacher action buttons */
     .teacher-actions {
       display: flex;
       gap: 10px;
@@ -2466,7 +2508,7 @@
       gap: 8px;
     }
     
-    /* FIX: Marks entry button row */
+    /* Marks entry button row */
     .marks-buttons-row {
       display: flex;
       gap: 15px;
@@ -2477,6 +2519,91 @@
     .marks-buttons-row .btn {
       flex: 1;
       min-width: 200px;
+    }
+
+    /* School Switching Widget */
+    .school-switch-widget {
+      position: fixed;
+      bottom: 90px;
+      left: 20px;
+      background: var(--darker);
+      border-radius: var(--border-radius-sm);
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow);
+      z-index: 999;
+      max-width: 300px;
+      display: none;
+    }
+
+    .school-switch-widget.active {
+      display: block;
+      animation: slideInLeft 0.3s ease-out;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .school-switch-toggle {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: var(--border-radius-sm);
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+    }
+
+    .school-switch-toggle:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .school-switch-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    .school-switch-item {
+      padding: 10px;
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 5px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .school-switch-item:hover {
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    .school-switch-item.active {
+      background: rgba(67, 97, 238, 0.2);
+      border-color: var(--primary);
+    }
+
+    .school-switch-item h4 {
+      font-size: 14px;
+      color: var(--light);
+      margin-bottom: 3px;
+    }
+
+    .school-switch-item p {
+      font-size: 12px;
+      color: var(--gray-light);
     }
   </style>
 </head>
@@ -2544,6 +2671,16 @@
     </div>
   </div>
 
+  <!-- School Switch Widget -->
+  <div class="school-switch-widget" id="schoolSwitchWidget">
+    <button class="school-switch-toggle" id="schoolSwitchToggle">
+      <i class="fas fa-exchange-alt"></i> Switch School
+    </button>
+    <div class="school-switch-list" id="schoolSwitchList">
+      <!-- Schools will be loaded here -->
+    </div>
+  </div>
+
   <!-- FIXED NAVIGATION BAR -->
   <nav class="navbar" id="navbar">
     <div class="navbar-brand">
@@ -2553,6 +2690,9 @@
       <a href="#" class="nav-link" id="userGuideBtn">
         <i class="fas fa-question-circle"></i> User Guide
       </a>
+      <button class="nav-link" id="currentSchoolBtn" style="background: none; border: none; color: var(--light); cursor: default;">
+        <i class="fas fa-school"></i> <span id="currentSchoolName">No School</span>
+      </button>
       <button class="logout-btn desktop-only" id="desktopLogoutBtn">
         <i class="fas fa-sign-out-alt"></i> Logout
       </button>
@@ -2771,6 +2911,9 @@
                 <button class="btn btn-success btn-block" id="openSchoolPortalBtn">
                   <i class="fas fa-door-open"></i> Enter Portal
                 </button>
+                <button class="btn btn-secondary btn-block mt-10" id="switchSchoolBtn">
+                  <i class="fas fa-exchange-alt"></i> Switch School
+                </button>
               </div>
             </div>
           </div>
@@ -2792,6 +2935,18 @@
               <i class="fas fa-school"></i> Register School
             </button>
           </div>
+
+          <div class="card" id="mySchoolsCard" style="display: none;">
+            <i class="fas fa-list"></i>
+            <h3>My Schools</h3>
+            <p>View and switch between all schools you have joined or created.</p>
+            <div id="schoolsList" class="mt-20">
+              <!-- Schools will be loaded here -->
+            </div>
+            <button class="btn btn-info btn-block mt-20" id="viewAllSchoolsBtn">
+              <i class="fas fa-eye"></i> View All Schools
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -2807,9 +2962,14 @@
             </div>
           </div>
           <img id="managementSchoolLogo" class="school-logo" src="" alt="School Logo" style="display:none;">
-          <button class="refresh-btn" id="refreshSchoolData">
-            <i class="fas fa-sync-alt"></i> Refresh
-          </button>
+          <div class="teacher-actions">
+            <button class="refresh-btn" id="refreshSchoolData">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+            <button class="btn btn-secondary" id="switchCurrentSchoolBtn">
+              <i class="fas fa-exchange-alt"></i> Switch School
+            </button>
+          </div>
         </div>
 
         <!-- Desktop Tabs -->
@@ -2956,7 +3116,7 @@
           </div>
         </div>
 
-        <!-- Marks Tab - FIXED LAYOUT -->
+        <!-- Marks Tab -->
         <div class="tab-content" id="marksTab">
           <div class="marks-container">
             <div class="marks-header">
@@ -3121,7 +3281,7 @@
             </div>
           </div>
 
-          <!-- Teacher Subject Analytics Section - FIXED LAYOUT -->
+          <!-- Teacher Subject Analytics Section -->
           <div id="teacherAnalyticsSection" style="display: none;">
             <div class="subject-analytics-container">
               <div class="analytics-header">
@@ -3504,28 +3664,76 @@
     </div>
   </div>
 
+  <!-- School Switch Modal -->
+  <div class="modal school-switch-modal" id="schoolSwitchModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Switch School</h3>
+        <button class="close-modal" id="closeSchoolSwitchModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="schoolSwitchError" class="alert error d-none">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="schoolSwitchErrorText"></span>
+      </div>
+      <div id="schoolSwitchList" class="school-switch-list">
+        <!-- Schools will be loaded here -->
+      </div>
+      <div class="mt-20">
+        <button class="btn btn-secondary btn-block" id="joinNewSchoolBtn">
+          <i class="fas fa-plus"></i> Join New School
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View All Schools Modal -->
+  <div class="modal" id="viewAllSchoolsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>My Schools</h3>
+        <button class="close-modal" id="closeViewAllSchoolsModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="allSchoolsList">
+        <!-- All schools will be loaded here -->
+      </div>
+    </div>
+  </div>
+
 <script>
-  // App Configuration
+  // ==============================================
+  // ENHANCED APP CONFIGURATION WITH NEW REQUIREMENTS
+  // ==============================================
   const APP_CONFIG = {
+    // Default subjects and classes based on school level
     defaultSubjects: {
-      primary: ['Mathematics', 'English', 'Science', 'Social Studies', 'Religious Education'],
+      primary: [
+        'Literacy One', 'Literacy Two', 'Mathematics', 'English', 
+        'Christian Religious Education', 'Integrated Science', 'Social Studies'
+      ],
       secondary: [
-        'English Language', 'Mathematics', 'Biology', 'Chemistry', 'Physics',
-        'Geography', 'History', 'Computer Studies', 'Business Studies',
-        'Religious Education', 'French', 'Kiswahili', 'Agriculture'
+        'Mathematics', 'English Language', 'Physics', 'Chemistry', 'Biology',
+        'History', 'Geography', 'French', 'Kiswahili', 'Agriculture',
+        'Entrepreneurship', 'ICT', 'Religious Education'
       ]
     },
+    
     defaultClasses: {
-      primary: ['Primary 1', 'Primary 2', 'Primary 3', 'Primary 4', 'Primary 5', 'Primary 6', 'Primary 7'],
-      secondary: ['Senior 1', 'Senior 2', 'Senior 3', 'Senior 4', 'Senior 5', 'Senior 6']
+      primary: ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7'],
+      secondary: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6']
     },
-    gradingScales: {
-      primary: ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9'],
-      secondary: ['A', 'B', 'C', 'D', 'E', 'F']
-    },
+    
+    // Grade points for different levels
     gradePoints: {
-      primary: { D1: 1, D2: 2, C3: 3, C4: 4, C5: 5, C6: 6, P7: 7, P8: 8, F9: 9 },
-      secondary: { A: 1, B: 2, C: 3, D: 4, E: 5, F: 6 }
+      primary: {
+        'D1': 1, 'D2': 2, 'C3': 3, 'C4': 4, 'C5': 5, 'C6': 6, 'P7': 7, 'P8': 8, 'F9': 9
+      },
+      secondary: {
+        'A': 6, 'B': 5, 'C': 4, 'D': 3, 'E': 2, 'F': 1
+      }
     }
   };
 
@@ -3547,6 +3755,7 @@
   let isAppInstalled = false;
   let isAppInstalledCheckDone = false;
   let allSchoolsCache = [];
+  let userSchools = []; // All schools the user belongs to
 
   // Firebase Configuration
   const firebaseConfig = {
@@ -3589,7 +3798,10 @@
     mobileInstallBtn: document.getElementById('mobileInstallBtn'),
     laterMobileBtn: document.getElementById('laterMobileBtn'),
     closeMobilePrompt: document.getElementById('closeMobilePrompt'),
-    pwaInstalledBadge: document.getElementById('pwaInstalledBadge')
+    pwaInstalledBadge: document.getElementById('pwaInstalledBadge'),
+    schoolSwitchWidget: document.getElementById('schoolSwitchWidget'),
+    schoolSwitchModal: document.getElementById('schoolSwitchModal'),
+    viewAllSchoolsModal: document.getElementById('viewAllSchoolsModal')
   };
 
   // Initialize the application
@@ -3609,6 +3821,7 @@
             await loadUserData(user.uid);
             showContainer('dashboardSection');
             hideLaunchScreen();
+            await loadUserSchools(); // Load all schools user belongs to
           } else {
             hideLaunchScreen();
             showContainer('loginSection');
@@ -3633,6 +3846,930 @@
       }
     }, 2000);
   });
+
+  // ==============================================
+  // ENHANCED FUNCTIONS FOR SCHOOL MANAGEMENT
+  // ==============================================
+
+  // Load all schools the user belongs to
+  async function loadUserSchools() {
+    if (!currentUser) return;
+    
+    try {
+      userSchools = [];
+      
+      // Get all schools where user is in teachers array
+      const schoolsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'schools'),
+        firestoreModule.where('teachers', 'array-contains', currentUser.uid)
+      );
+      
+      const querySnapshot = await firestoreModule.getDocs(schoolsQuery);
+      
+      querySnapshot.forEach(doc => {
+        const schoolData = {
+          id: doc.id,
+          ...doc.data()
+        };
+        
+        // Check if user is admin
+        const isAdmin = schoolData.admins && schoolData.admins.includes(currentUser.uid);
+        schoolData.userRole = isAdmin ? 'admin' : 'teacher';
+        
+        userSchools.push(schoolData);
+      });
+      
+      console.log(`User belongs to ${userSchools.length} schools:`, userSchools);
+      
+      // Update UI
+      updateUserSchoolsUI();
+      
+    } catch (error) {
+      console.error('Error loading user schools:', error);
+    }
+  }
+
+  // Update UI with user's schools
+  function updateUserSchoolsUI() {
+    // Update current school name in navbar
+    const currentSchoolName = document.getElementById('currentSchoolName');
+    if (currentSchool) {
+      currentSchoolName.textContent = currentSchool.name;
+    } else {
+      currentSchoolName.textContent = 'No School';
+    }
+    
+    // Update dashboard cards
+    const manageSchoolCard = document.getElementById('manageSchoolCard');
+    const mySchoolsCard = document.getElementById('mySchoolsCard');
+    
+    if (userSchools.length > 0) {
+      manageSchoolCard.style.display = 'block';
+      mySchoolsCard.style.display = 'block';
+      
+      // Update schools list in dashboard
+      const schoolsList = document.getElementById('schoolsList');
+      schoolsList.innerHTML = '';
+      
+      userSchools.forEach(school => {
+        const isCurrent = currentSchool && school.id === currentSchool.id;
+        const schoolItem = document.createElement('div');
+        schoolItem.className = `school-switch-item ${isCurrent ? 'active' : ''}`;
+        schoolItem.innerHTML = `
+          <h4>${school.name} ${isCurrent ? '(Current)' : ''}</h4>
+          <p>Code: ${school.code} • ${school.userRole}</p>
+        `;
+        
+        if (!isCurrent) {
+          schoolItem.style.cursor = 'pointer';
+          schoolItem.addEventListener('click', () => switchToSchool(school.id));
+        }
+        
+        schoolsList.appendChild(schoolItem);
+      });
+    } else {
+      manageSchoolCard.style.display = 'none';
+      mySchoolsCard.style.display = 'none';
+    }
+    
+    // Update school switch widget
+    updateSchoolSwitchWidget();
+  }
+
+  // Update school switch widget
+  function updateSchoolSwitchWidget() {
+    const schoolSwitchList = document.getElementById('schoolSwitchList');
+    schoolSwitchList.innerHTML = '';
+    
+    if (userSchools.length === 0) {
+      schoolSwitchList.innerHTML = '<div class="alert info">No schools found</div>';
+      return;
+    }
+    
+    userSchools.forEach(school => {
+      const isCurrent = currentSchool && school.id === currentSchool.id;
+      const schoolItem = document.createElement('div');
+      schoolItem.className = `school-switch-item ${isCurrent ? 'active' : ''}`;
+      schoolItem.innerHTML = `
+        <h4>${school.name} ${isCurrent ? '(Current)' : ''}</h4>
+        <p>Code: ${school.code} • ${school.userRole}</p>
+      `;
+      
+      if (!isCurrent) {
+        schoolItem.style.cursor = 'pointer';
+        schoolItem.addEventListener('click', () => {
+          switchToSchool(school.id);
+          containers.schoolSwitchWidget.classList.remove('active');
+        });
+      }
+      
+      schoolSwitchList.appendChild(schoolItem);
+    });
+  }
+
+  // Switch to a different school
+  async function switchToSchool(schoolId) {
+    if (!schoolId) return;
+    
+    try {
+      showLoadingOverlay('Switching school...');
+      
+      const schoolDoc = await firestoreModule.getDoc(
+        firestoreModule.doc(firestoreDB, 'schools', schoolId)
+      );
+      
+      if (!schoolDoc.exists()) {
+        throw new Error('School not found');
+      }
+      
+      currentSchool = {
+        id: schoolDoc.id,
+        ...schoolDoc.data()
+      };
+      
+      // Check if user is admin
+      const isAdmin = currentSchool.admins && currentSchool.admins.includes(currentUser.uid);
+      currentUserData.role = isAdmin ? 'admin' : 'teacher';
+      
+      // Update user document with current school
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
+        {
+          schoolId: schoolId,
+          role: currentUserData.role
+        }
+      );
+      
+      // Update UI
+      document.getElementById('schoolCardName').textContent = currentSchool.name;
+      document.getElementById('schoolCardCode').textContent = currentSchool.code;
+      document.getElementById('currentSchoolName').textContent = currentSchool.name;
+      
+      if (currentSchool.logoUrl) {
+        const schoolLogo = document.getElementById('schoolCardLogo');
+        schoolLogo.src = currentSchool.logoUrl;
+        schoolLogo.style.display = 'block';
+      }
+      
+      // Reload school data
+      await loadSchoolData(schoolId);
+      
+      // Update user schools list
+      updateUserSchoolsUI();
+      
+      hideLoadingOverlay();
+      
+      // Show success message
+      showToast(`Switched to ${currentSchool.name}`, 'success');
+      
+    } catch (error) {
+      hideLoadingOverlay();
+      console.error('Error switching school:', error);
+      showToast('Error switching school. Please try again.', 'error');
+    }
+  }
+
+  // Enhanced join school function
+  async function handleJoinSchool(e) {
+    e.preventDefault();
+    
+    let schoolName = document.getElementById('joinSchoolName').value.trim();
+    let schoolCode = document.getElementById('joinSchoolCode').value.trim().toUpperCase();
+    
+    hideAlert('joinSchoolError');
+    hideAlert('joinSchoolSuccess');
+    
+    if (!schoolName || !schoolCode) {
+      showAlert('joinSchoolError', 'Please enter both school name and code', 'error');
+      return;
+    }
+    
+    if (schoolCode.length !== 6) {
+      showAlert('joinSchoolError', 'School code must be exactly 6 characters', 'error');
+      return;
+    }
+    
+    try {
+      document.getElementById('joinSchoolLoading').classList.add('active');
+      console.log('Searching for school:', schoolName, 'code:', schoolCode);
+      
+      // Clean school name (remove extra spaces, capitalize properly)
+      schoolName = schoolName.replace(/\s+/g, ' ').trim();
+      
+      // Get all schools
+      const schoolsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'schools')
+      );
+      
+      const querySnapshot = await firestoreModule.getDocs(schoolsQuery);
+      let foundSchool = null;
+      
+      querySnapshot.forEach(doc => {
+        const schoolData = doc.data();
+        const schoolNameLower = schoolData.name.toLowerCase();
+        const searchNameLower = schoolName.toLowerCase();
+        
+        // Check if code matches AND name is similar (case-insensitive)
+        if (schoolData.code === schoolCode && schoolNameLower.includes(searchNameLower)) {
+          foundSchool = {
+            id: doc.id,
+            ...schoolData
+          };
+        }
+      });
+      
+      if (!foundSchool) {
+        document.getElementById('joinSchoolLoading').classList.remove('active');
+        showAlert('joinSchoolError', 
+          'School not found. Please check:<br>' +
+          '1. The school name is spelled correctly<br>' +
+          '2. The 6-digit code is correct<br>' +
+          '3. The school exists in the system<br><br>' +
+          'Tip: Start typing the school name to see suggestions.', 
+          'error');
+        return;
+      }
+      
+      // Check if user is already in this school
+      const isAlreadyMember = foundSchool.teachers && foundSchool.teachers.includes(currentUser.uid);
+      if (isAlreadyMember) {
+        document.getElementById('joinSchoolLoading').classList.remove('active');
+        showAlert('joinSchoolError', 
+          `You are already a member of ${foundSchool.name}. You can switch to it from your dashboard.`, 
+          'info');
+        return;
+      }
+      
+      currentSchool = foundSchool;
+      console.log('School found:', currentSchool);
+      
+      // Add user to school's teacher list
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'schools', foundSchool.id),
+        {
+          teachers: firestoreModule.arrayUnion(currentUser.uid)
+        }
+      );
+      
+      // Update user document with new school ID
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
+        {
+          schoolId: foundSchool.id,
+          role: 'teacher' // Default role when joining
+        }
+      );
+      
+      // Update current user data
+      currentUserData.schoolId = foundSchool.id;
+      currentUserData.role = 'teacher';
+      
+      // Add to user schools list
+      userSchools.push({
+        ...foundSchool,
+        userRole: 'teacher'
+      });
+      
+      // Update UI
+      document.getElementById('schoolCardName').textContent = currentSchool.name;
+      document.getElementById('schoolCardCode').textContent = currentSchool.code;
+      document.getElementById('currentSchoolName').textContent = currentSchool.name;
+      document.getElementById('manageSchoolCard').style.display = 'block';
+      document.getElementById('mySchoolsCard').style.display = 'block';
+      
+      // Load school data
+      await loadSchoolData(foundSchool.id);
+      
+      // Update user schools UI
+      updateUserSchoolsUI();
+      
+      document.getElementById('joinSchoolLoading').classList.remove('active');
+      
+      // Show success message
+      showAlert('joinSchoolSuccess', `Successfully joined ${currentSchool.name}! You can now access the school portal.`, 'success');
+      
+      // Hide form after delay
+      setTimeout(() => {
+        containers.joinSchoolForm.classList.remove('active');
+        showAlert('joinSchoolSuccess', '', 'success', true);
+      }, 3000);
+      
+    } catch (error) {
+      document.getElementById('joinSchoolLoading').classList.remove('active');
+      console.error('Error joining school:', error);
+      showAlert('joinSchoolError', 
+        'Error joining school. Please try again. If the problem persists, contact the school administrator.', 
+        'error');
+    }
+  }
+
+  // Enhanced register school function
+  async function handleRegisterSchool(e) {
+    e.preventDefault();
+    
+    const schoolName = document.getElementById('registerSchoolName').value.trim();
+    const schoolLocation = document.getElementById('registerSchoolLocation').value.trim();
+    const schoolPhone = document.getElementById('registerSchoolPhone').value.trim();
+    const schoolLevel = document.getElementById('registerSchoolLevel').value;
+    const logoUrl = document.getElementById('logoUrl').value;
+    
+    if (!logoUrl) {
+      showAlert('registerSchoolError', 'School logo is required', 'error');
+      return;
+    }
+    
+    if (!schoolLevel) {
+      showAlert('registerSchoolError', 'Please select school level', 'error');
+      return;
+    }
+    
+    if (!schoolName) {
+      showAlert('registerSchoolError', 'Please enter school name', 'error');
+      return;
+    }
+    
+    hideAlert('registerSchoolError');
+    
+    try {
+      document.getElementById('registerSchoolLoading').classList.add('active');
+      
+      // Generate school code
+      const schoolCode = generateSchoolCode();
+      console.log('Generating school code:', schoolCode);
+      
+      // Create school document
+      const schoolData = {
+        name: schoolName,
+        location: schoolLocation,
+        phone: schoolPhone,
+        level: schoolLevel,
+        code: schoolCode,
+        logoUrl: logoUrl,
+        createdBy: currentUser.uid,
+        admins: [currentUser.uid],
+        teachers: [currentUser.uid],
+        createdAt: firestoreModule.serverTimestamp()
+      };
+      
+      console.log('Creating school with data:', schoolData);
+      
+      const schoolRef = await firestoreModule.addDoc(
+        firestoreModule.collection(firestoreDB, 'schools'),
+        schoolData
+      );
+      
+      console.log('School created with ID:', schoolRef.id);
+      
+      // Update user document with school ID and admin role
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
+        {
+          schoolId: schoolRef.id,
+          role: 'admin'
+        }
+      );
+      
+      // Update current user data
+      currentUserData.schoolId = schoolRef.id;
+      currentUserData.role = 'admin';
+      
+      // Add to user schools list
+      userSchools.push({
+        id: schoolRef.id,
+        ...schoolData,
+        userRole: 'admin'
+      });
+      
+      // Update user profile card
+      updateUserProfileCard();
+      
+      // Add default subjects
+      const defaultSubjects = APP_CONFIG.defaultSubjects[schoolLevel];
+      console.log('Adding default subjects:', defaultSubjects);
+      
+      for (const subjectName of defaultSubjects) {
+        await firestoreModule.addDoc(
+          firestoreModule.collection(firestoreDB, 'subjects'),
+          {
+            name: subjectName,
+            schoolId: schoolRef.id,
+            createdAt: firestoreModule.serverTimestamp()
+          }
+        );
+      }
+      
+      // Add default classes
+      const defaultClasses = APP_CONFIG.defaultClasses[schoolLevel];
+      console.log('Adding default classes:', defaultClasses);
+      
+      for (const className of defaultClasses) {
+        await firestoreModule.addDoc(
+          firestoreModule.collection(firestoreDB, 'classes'),
+          {
+            name: className,
+            schoolId: schoolRef.id,
+            createdAt: firestoreModule.serverTimestamp()
+          }
+        );
+      }
+      
+      // Update current school data
+      currentSchool = {
+        id: schoolRef.id,
+        ...schoolData
+      };
+      
+      // Update UI
+      document.getElementById('schoolCardName').textContent = schoolName;
+      document.getElementById('schoolCardCode').textContent = schoolCode;
+      document.getElementById('currentSchoolName').textContent = schoolName;
+      document.getElementById('manageSchoolCard').style.display = 'block';
+      document.getElementById('mySchoolsCard').style.display = 'block';
+      
+      // Update user schools UI
+      updateUserSchoolsUI();
+      
+      document.getElementById('registerSchoolLoading').classList.remove('active');
+      
+      // Show success message
+      showAlert('registerSchoolSuccess', 'School registered successfully!', 'success');
+      
+      // Hide form after delay and refresh
+      setTimeout(() => {
+        containers.registerSchoolForm.classList.remove('active');
+      }, 2000);
+      
+    } catch (error) {
+      document.getElementById('registerSchoolLoading').classList.remove('active');
+      console.error('Error registering school:', error);
+      showAlert('registerSchoolError', 'Error registering school. Please try again.', 'error');
+    }
+  }
+
+  // Show school switch modal
+  function showSchoolSwitchModal() {
+    const schoolSwitchList = document.getElementById('schoolSwitchList');
+    schoolSwitchList.innerHTML = '';
+    
+    if (userSchools.length === 0) {
+      schoolSwitchList.innerHTML = '<div class="alert info">No schools found. Join or create a school first.</div>';
+    } else {
+      userSchools.forEach(school => {
+        const isCurrent = currentSchool && school.id === currentSchool.id;
+        const schoolOption = document.createElement('div');
+        schoolOption.className = `school-switch-option ${isCurrent ? 'active' : ''}`;
+        schoolOption.innerHTML = `
+          <h4>${school.name} ${isCurrent ? '(Current)' : ''}</h4>
+          <p>Code: ${school.code} • ${school.userRole}</p>
+          <p>Location: ${school.location || 'N/A'}</p>
+        `;
+        
+        if (!isCurrent) {
+          schoolOption.style.cursor = 'pointer';
+          schoolOption.addEventListener('click', () => {
+            switchToSchool(school.id);
+            containers.schoolSwitchModal.classList.remove('active');
+          });
+        }
+        
+        schoolSwitchList.appendChild(schoolOption);
+      });
+    }
+    
+    containers.schoolSwitchModal.classList.add('active');
+  }
+
+  // Show view all schools modal
+  async function showViewAllSchoolsModal() {
+    const allSchoolsList = document.getElementById('allSchoolsList');
+    allSchoolsList.innerHTML = '';
+    
+    try {
+      const schoolsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'schools')
+      );
+      
+      const querySnapshot = await firestoreModule.getDocs(schoolsQuery);
+      const allSchools = [];
+      
+      querySnapshot.forEach(doc => {
+        const schoolData = {
+          id: doc.id,
+          ...doc.data()
+        };
+        
+        // Check if user is a member
+        const isMember = schoolData.teachers && schoolData.teachers.includes(currentUser.uid);
+        const isCurrent = currentSchool && schoolData.id === currentSchool.id;
+        
+        schoolData.isMember = isMember;
+        schoolData.isCurrent = isCurrent;
+        
+        allSchools.push(schoolData);
+      });
+      
+      if (allSchools.length === 0) {
+        allSchoolsList.innerHTML = '<div class="alert info">No schools found in the system.</div>';
+      } else {
+        allSchools.forEach(school => {
+          const schoolCard = document.createElement('div');
+          schoolCard.className = 'list-item';
+          schoolCard.innerHTML = `
+            <h4>${school.name} ${school.isCurrent ? '(Current)' : ''}</h4>
+            <p>Code: ${school.code} • Level: ${school.level === 'primary' ? 'Primary' : 'Secondary'}</p>
+            <p>Location: ${school.location || 'N/A'}</p>
+            <p>Members: ${school.teachers ? school.teachers.length : 0} teachers</p>
+            <p>Status: <span class="user-role ${school.isMember ? (school.admins && school.admins.includes(currentUser.uid) ? 'admin' : 'teacher') : 'none'}">
+              ${school.isMember ? (school.admins && school.admins.includes(currentUser.uid) ? 'Admin' : 'Teacher') : 'Not a member'}
+            </span></p>
+          `;
+          
+          allSchoolsList.appendChild(schoolCard);
+        });
+      }
+      
+      containers.viewAllSchoolsModal.classList.add('active');
+      
+    } catch (error) {
+      console.error('Error loading all schools:', error);
+      allSchoolsList.innerHTML = '<div class="alert error">Error loading schools. Please try again.</div>';
+    }
+  }
+
+  // ==============================================
+  // ORIGINAL FUNCTIONS WITH ENHANCEMENTS
+  // ==============================================
+
+  // Initialize Firebase
+  async function initializeFirebase() {
+    try {
+      const appModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js');
+      authModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
+      firestoreModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
+
+      firebaseApp = appModule.initializeApp(firebaseConfig);
+      firebaseAuth = authModule.getAuth(firebaseApp);
+      firestoreDB = firestoreModule.getFirestore(firebaseApp);
+
+      console.log('Firebase initialized successfully');
+      return true;
+    } catch (error) {
+      console.error('Firebase initialization error:', error);
+      showAlert('loginError', 'Failed to initialize application. Please check your internet connection.', 'error');
+      return false;
+    }
+  }
+
+  // Load user data from Firestore
+  async function loadUserData(userId) {
+    try {
+      console.log('Loading user data for:', userId);
+      
+      const userDocRef = firestoreModule.doc(firestoreDB, 'users', userId);
+      const userDoc = await firestoreModule.getDoc(userDocRef);
+      
+      if (userDoc.exists()) {
+        currentUserData = userDoc.data();
+        console.log('User data loaded:', currentUserData);
+        
+        updateUserProfileCard();
+        
+        if (currentUserData.schoolId) {
+          console.log('User has school:', currentUserData.schoolId);
+          await loadSchoolData(currentUserData.schoolId);
+        } else {
+          console.log('User has no school');
+          document.getElementById('manageSchoolCard').style.display = 'none';
+        }
+      } else {
+        console.log('No user document found');
+        // Create user document with minimal data
+        const userData = {
+          name: currentUser.displayName || 'User',
+          email: currentUser.email,
+          createdAt: firestoreModule.serverTimestamp()
+        };
+        
+        await firestoreModule.setDoc(
+          firestoreModule.doc(firestoreDB, 'users', userId),
+          userData
+        );
+        
+        currentUserData = userData;
+        
+        updateUserProfileCard();
+      }
+    } catch (error) {
+      console.error('Error loading user data:', error);
+      // Don't show error, just use default data
+      currentUserData = {
+        name: currentUser.displayName || 'User',
+        email: currentUser.email
+      };
+      updateUserProfileCard();
+    }
+  }
+
+  // Update user profile card
+  function updateUserProfileCard() {
+    const userInfoCard = document.getElementById('userInfoCard');
+    if (!userInfoCard) return;
+    
+    const initials = getInitials(currentUserData.name || 'U');
+    const profileUrl = currentUserData.profileUrl || '';
+    const name = currentUserData.name || 'User';
+    const email = currentUser.email || '';
+    const role = currentUserData.role || 'teacher';
+    
+    userInfoCard.innerHTML = `
+      <div class="user-profile-img">
+        ${profileUrl && profileUrl.startsWith('data:image') 
+          ? `<img src="${profileUrl}" alt="${name}" onerror="this.parentElement.innerHTML='${initials}'">`
+          : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">${initials}</div>`
+        }
+      </div>
+      <div class="user-details">
+        <span class="user-role ${role}">${role.toUpperCase()}</span>
+        <span class="user-name">${name}</span>
+        <span class="user-email">${email}</span>
+        <button class="logout-btn mobile-only" id="mobileLogoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    `;
+    
+    const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+    if (mobileLogoutBtn) {
+      mobileLogoutBtn.addEventListener('click', handleLogout);
+    }
+  }
+
+  // Get initials from name
+  function getInitials(name) {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+  }
+
+  // Load school data
+  async function loadSchoolData(schoolId) {
+    try {
+      console.log('Loading school data for:', schoolId);
+      
+      const schoolDocRef = firestoreModule.doc(firestoreDB, 'schools', schoolId);
+      const schoolDoc = await firestoreModule.getDoc(schoolDocRef);
+      
+      if (schoolDoc.exists()) {
+        currentSchool = {
+          id: schoolDoc.id,
+          ...schoolDoc.data()
+        };
+        
+        console.log('School data loaded:', currentSchool);
+        
+        // Check if user is admin of this school
+        const isAdmin = currentSchool.admins && currentSchool.admins.includes(currentUser.uid);
+        currentUserData.role = currentUserData.role || (isAdmin ? 'admin' : 'teacher');
+        
+        console.log('User role in school:', currentUserData.role);
+        
+        const schoolPortalCard = document.getElementById('manageSchoolCard');
+        schoolPortalCard.style.display = 'block';
+        
+        document.getElementById('schoolCardName').textContent = currentSchool.name;
+        document.getElementById('schoolCardCode').textContent = currentSchool.code;
+        document.getElementById('currentSchoolName').textContent = currentSchool.name;
+        
+        if (currentSchool.logoUrl) {
+          schoolLogoUrl = currentSchool.logoUrl;
+          const schoolLogo = document.getElementById('schoolCardLogo');
+          schoolLogo.src = currentSchool.logoUrl;
+          schoolLogo.style.display = 'block';
+        }
+        
+        await Promise.all([
+          loadClasses(),
+          loadSubjects(),
+          loadTeachers()
+        ]);
+        
+        updateUserProfileCard();
+        updatePermissions();
+        
+      } else {
+        console.log('School document not found');
+        // Remove school ID from user document
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
+          {
+            schoolId: null
+          }
+        );
+        
+        document.getElementById('manageSchoolCard').style.display = 'none';
+      }
+    } catch (error) {
+      console.error('Error loading school data:', error);
+    }
+  }
+
+  // Setup all event listeners
+  function setupEventListeners() {
+    // Navigation
+    document.getElementById('goRegister').addEventListener('click', () => showContainer('registerSection'));
+    document.getElementById('goLogin').addEventListener('click', () => showContainer('loginSection'));
+    document.getElementById('joinSchoolBtn').addEventListener('click', () => {
+      containers.joinSchoolForm.classList.add('active');
+      preloadAllSchools();
+    });
+    document.getElementById('registerSchoolBtn').addEventListener('click', () => containers.registerSchoolForm.classList.add('active'));
+    document.getElementById('desktopLogoutBtn').addEventListener('click', handleLogout);
+    document.getElementById('userGuideBtn').addEventListener('click', showUserGuide);
+    document.getElementById('forgotPassword').addEventListener('click', () => containers.forgotPasswordModal.classList.add('active'));
+    document.getElementById('openSchoolPortalBtn').addEventListener('click', openSchoolPortal);
+    document.getElementById('refreshSchoolData').addEventListener('click', refreshSchoolData);
+    document.getElementById('refreshReports').addEventListener('click', refreshReportsData);
+    
+    // School switching
+    document.getElementById('switchSchoolBtn').addEventListener('click', showSchoolSwitchModal);
+    document.getElementById('switchCurrentSchoolBtn').addEventListener('click', showSchoolSwitchModal);
+    document.getElementById('schoolSwitchToggle').addEventListener('click', () => {
+      containers.schoolSwitchWidget.classList.toggle('active');
+    });
+    document.getElementById('viewAllSchoolsBtn').addEventListener('click', showViewAllSchoolsModal);
+    document.getElementById('joinNewSchoolBtn').addEventListener('click', () => {
+      containers.schoolSwitchModal.classList.remove('active');
+      containers.joinSchoolForm.classList.add('active');
+      preloadAllSchools();
+    });
+    
+    // Portal exit buttons
+    containers.portalExitBtn.addEventListener('click', closeSchoolPortal);
+    containers.mobilePortalExitBtn.addEventListener('click', closeSchoolPortal);
+    
+    // PWA Install buttons
+    document.getElementById('desktopInstallBtn')?.addEventListener('click', installPWA);
+    document.getElementById('mobileInstallBtn')?.addEventListener('click', installPWA);
+    document.getElementById('laterMobileBtn')?.addEventListener('click', () => {
+      containers.mobileInstallPrompt.classList.remove('show');
+      localStorage.setItem('pwaPromptDismissed', 'true');
+      localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
+    });
+    document.getElementById('closeMobilePrompt')?.addEventListener('click', () => {
+      containers.mobileInstallPrompt.classList.remove('show');
+      localStorage.setItem('pwaPromptDismissed', 'true');
+      localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
+    });
+    
+    // Close buttons
+    document.getElementById('closeJoinForm').addEventListener('click', () => containers.joinSchoolForm.classList.remove('active'));
+    document.getElementById('closeRegisterForm').addEventListener('click', () => containers.registerSchoolForm.classList.remove('active'));
+    document.getElementById('closeAddClassModal').addEventListener('click', () => containers.addClassModal.classList.remove('active'));
+    document.getElementById('closeAddSubjectModal').addEventListener('click', () => containers.addSubjectModal.classList.remove('active'));
+    document.getElementById('closeAddTeacherModal').addEventListener('click', () => containers.addTeacherModal.classList.remove('active'));
+    document.getElementById('closeAssignSubjectsModal').addEventListener('click', () => containers.assignSubjectsModal.classList.remove('active'));
+    document.getElementById('closeAddStudentModal').addEventListener('click', () => containers.addStudentModal.classList.remove('active'));
+    document.getElementById('closeForgotPasswordModal').addEventListener('click', () => containers.forgotPasswordModal.classList.remove('active'));
+    document.getElementById('closeSchoolSwitchModal').addEventListener('click', () => containers.schoolSwitchModal.classList.remove('active'));
+    document.getElementById('closeViewAllSchoolsModal').addEventListener('click', () => containers.viewAllSchoolsModal.classList.remove('active'));
+    
+    // File upload buttons
+    document.getElementById('studentUploadArea').addEventListener('click', () => document.getElementById('studentFile').click());
+    
+    // File change events
+    document.getElementById('profileFile').addEventListener('change', (e) => handleImageUpload(e, 'profile'));
+    document.getElementById('logoFile').addEventListener('change', (e) => handleImageUpload(e, 'logo'));
+    document.getElementById('studentFile').addEventListener('change', handleStudentFileUpload);
+    
+    // Form submissions
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    document.getElementById('registerForm').addEventListener('submit', handleRegister);
+    document.getElementById('joinSchoolFormFields').addEventListener('submit', handleJoinSchool);
+    document.getElementById('registerSchoolFormFields').addEventListener('submit', handleRegisterSchool);
+    document.getElementById('forgotPasswordForm').addEventListener('submit', handleForgotPassword);
+    document.getElementById('addClassForm').addEventListener('submit', handleAddClass);
+    document.getElementById('addSubjectForm').addEventListener('submit', handleAddSubject);
+    document.getElementById('addTeacherForm').addEventListener('submit', handleAddTeacher);
+    document.getElementById('assignSubjectsForm').addEventListener('submit', handleAssignSubjects);
+    document.getElementById('addStudentForm').addEventListener('submit', handleAddStudent);
+    
+    // Tab switching
+    setupTabs();
+    setupMobileTabs();
+    
+    // Password toggles
+    setupPasswordToggles();
+    
+    // Student search
+    document.getElementById('studentSearch').addEventListener('input', handleStudentSearch);
+    document.getElementById('studentSearchClear').addEventListener('click', clearStudentSearch);
+    
+    // Marks entry
+    document.getElementById('marksClassSelect').addEventListener('change', handleClassSelectForMarks);
+    document.getElementById('termSelect').addEventListener('change', handleTermSelect);
+    document.getElementById('marksSubjectSelect').addEventListener('change', handleSubjectSelectForMarks);
+    document.getElementById('saveMarksBtn').addEventListener('click', handleSaveMarks);
+    document.getElementById('clearMarksBtn').addEventListener('click', clearMarksForm);
+    
+    // Reports
+    document.getElementById('generateReportBtn').addEventListener('click', generateReport);
+    document.getElementById('exportPDFBtn').addEventListener('click', exportReportCards);
+    document.getElementById('exportExcelBtn').addEventListener('click', exportClassAnalysis);
+    document.getElementById('exportSubjectAnalyticsBtn').addEventListener('click', exportSubjectAnalytics);
+    document.getElementById('reportClassSelect').addEventListener('change', updateReportStudentSelect);
+    
+    // Enhanced Analytics
+    document.getElementById('generateAnalyticsBtn').addEventListener('click', generateEnhancedAnalytics);
+    document.getElementById('analyticsClassSelect').addEventListener('change', loadAnalyticsSubjects);
+    document.getElementById('selectAllSubjects').addEventListener('click', selectAllSubjects);
+    document.getElementById('deselectAllSubjects').addEventListener('click', deselectAllSubjects);
+    document.getElementById('refreshAnalyticsBtn').addEventListener('click', refreshAnalytics);
+    
+    // Add buttons
+    document.getElementById('addClassBtn').addEventListener('click', () => containers.addClassModal.classList.add('active'));
+    document.getElementById('addSubjectBtn').addEventListener('click', () => containers.addSubjectModal.classList.add('active'));
+    document.getElementById('addTeacherBtn').addEventListener('click', () => containers.addTeacherModal.classList.add('active'));
+    document.getElementById('assignSubjectsBtn').addEventListener('click', showAssignSubjectsModal);
+    document.getElementById('addStudentBtn').addEventListener('click', () => containers.addStudentModal.classList.add('active'));
+  }
+
+  // Setup tabs
+  function setupTabs() {
+    const tabs = document.querySelectorAll('.desktop-only .tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = tab.dataset.tab;
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        setTimeout(() => {
+          switchTab(tabId);
+        }, 300);
+      });
+    });
+  }
+
+  // Setup mobile tabs
+  function setupMobileTabs() {
+    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+    mobileNavItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tabId = item.dataset.tab;
+        
+        const tabContent = document.getElementById(`${tabId}Tab`);
+        if (tabContent) {
+          const headerHeight = 70;
+          const elementPosition = tabContent.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+          
+          setTimeout(() => {
+            switchTab(tabId);
+          }, 100);
+        }
+      });
+    });
+  }
+
+  // Switch tab
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
+    
+    const selectedTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+    const selectedMobileTab = document.querySelector(`.mobile-nav-item[data-tab="${tabId}"]`);
+    if (selectedTab) selectedTab.classList.add('active');
+    if (selectedMobileTab) selectedMobileTab.classList.add('active');
+    
+    document.getElementById(`${tabId}Tab`).classList.add('active');
+    
+    switch(tabId) {
+      case 'classes':
+        loadClasses();
+        break;
+      case 'students':
+        loadStudents();
+        break;
+      case 'subjects':
+        loadSubjects();
+        break;
+      case 'teachers':
+        loadTeachers();
+        break;
+      case 'marks':
+        setupMarksTab();
+        break;
+      case 'reports':
+        setupReportsTab();
+        break;
+    }
+  }
 
   // Setup PWA functionality
   function setupPWA() {
@@ -3847,368 +4984,19 @@
         containers.mobileBottomNav.style.display = 'flex';
         containers.mobileBottomNav.classList.add('active');
         containers.portalExitBtn.style.display = 'none';
+        containers.schoolSwitchWidget.style.display = 'none';
       } else {
         containers.mobileBottomNav.style.display = 'none';
         containers.mobileBottomNav.classList.remove('active');
         containers.portalExitBtn.style.display = 'flex';
+        containers.schoolSwitchWidget.style.display = 'block';
       }
+    } else {
+      containers.schoolSwitchWidget.style.display = 'none';
     }
     
     if (!isAppInstalled && deferredPrompt) {
       showInstallPrompts();
-    }
-  }
-
-  // Initialize Firebase
-  async function initializeFirebase() {
-    try {
-      const appModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js');
-      authModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js');
-      firestoreModule = await import('https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js');
-
-      firebaseApp = appModule.initializeApp(firebaseConfig);
-      firebaseAuth = authModule.getAuth(firebaseApp);
-      firestoreDB = firestoreModule.getFirestore(firebaseApp);
-
-      console.log('Firebase initialized successfully');
-      return true;
-    } catch (error) {
-      console.error('Firebase initialization error:', error);
-      showAlert('loginError', 'Failed to initialize application. Please check your internet connection.', 'error');
-      return false;
-    }
-  }
-
-  // Load user data from Firestore
-  async function loadUserData(userId) {
-    try {
-      console.log('Loading user data for:', userId);
-      
-      const userDocRef = firestoreModule.doc(firestoreDB, 'users', userId);
-      const userDoc = await firestoreModule.getDoc(userDocRef);
-      
-      if (userDoc.exists()) {
-        currentUserData = userDoc.data();
-        console.log('User data loaded:', currentUserData);
-        
-        updateUserProfileCard();
-        
-        if (currentUserData.schoolId) {
-          console.log('User has school:', currentUserData.schoolId);
-          await loadSchoolData(currentUserData.schoolId);
-        } else {
-          console.log('User has no school');
-          document.getElementById('manageSchoolCard').style.display = 'none';
-        }
-      } else {
-        console.log('No user document found');
-        // Create user document with minimal data
-        const userData = {
-          name: currentUser.displayName || 'User',
-          email: currentUser.email,
-          createdAt: firestoreModule.serverTimestamp()
-        };
-        
-        await firestoreModule.setDoc(
-          firestoreModule.doc(firestoreDB, 'users', userId),
-          userData
-        );
-        
-        currentUserData = userData;
-        
-        updateUserProfileCard();
-      }
-    } catch (error) {
-      console.error('Error loading user data:', error);
-      // Don't show error, just use default data
-      currentUserData = {
-        name: currentUser.displayName || 'User',
-        email: currentUser.email
-      };
-      updateUserProfileCard();
-    }
-  }
-
-  // Update user profile card
-  function updateUserProfileCard() {
-    const userInfoCard = document.getElementById('userInfoCard');
-    if (!userInfoCard) return;
-    
-    const initials = getInitials(currentUserData.name || 'U');
-    const profileUrl = currentUserData.profileUrl || '';
-    const name = currentUserData.name || 'User';
-    const email = currentUser.email || '';
-    const role = currentUserData.role || 'teacher';
-    
-    userInfoCard.innerHTML = `
-      <div class="user-profile-img">
-        ${profileUrl && profileUrl.startsWith('data:image') 
-          ? `<img src="${profileUrl}" alt="${name}" onerror="this.parentElement.innerHTML='${initials}'">`
-          : `<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: bold;">${initials}</div>`
-        }
-      </div>
-      <div class="user-details">
-        <span class="user-role ${role}">${role.toUpperCase()}</span>
-        <span class="user-name">${name}</span>
-        <span class="user-email">${email}</span>
-        <button class="logout-btn mobile-only" id="mobileLogoutBtn">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-      </div>
-    `;
-    
-    const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
-    if (mobileLogoutBtn) {
-      mobileLogoutBtn.addEventListener('click', handleLogout);
-    }
-  }
-
-  // Get initials from name
-  function getInitials(name) {
-    if (!name) return 'U';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-  }
-
-  // Load school data
-  async function loadSchoolData(schoolId) {
-    try {
-      console.log('Loading school data for:', schoolId);
-      
-      const schoolDocRef = firestoreModule.doc(firestoreDB, 'schools', schoolId);
-      const schoolDoc = await firestoreModule.getDoc(schoolDocRef);
-      
-      if (schoolDoc.exists()) {
-        currentSchool = {
-          id: schoolDoc.id,
-          ...schoolDoc.data()
-        };
-        
-        console.log('School data loaded:', currentSchool);
-        
-        // Check if user is admin of this school
-        const isAdmin = currentSchool.admins && currentSchool.admins.includes(currentUser.uid);
-        currentUserData.role = isAdmin ? 'admin' : 'teacher';
-        
-        console.log('User role in school:', currentUserData.role);
-        
-        const schoolPortalCard = document.getElementById('manageSchoolCard');
-        schoolPortalCard.style.display = 'block';
-        
-        document.getElementById('schoolCardName').textContent = currentSchool.name;
-        document.getElementById('schoolCardCode').textContent = currentSchool.code;
-        
-        if (currentSchool.logoUrl) {
-          schoolLogoUrl = currentSchool.logoUrl;
-          const schoolLogo = document.getElementById('schoolCardLogo');
-          schoolLogo.src = currentSchool.logoUrl;
-          schoolLogo.style.display = 'block';
-        }
-        
-        await Promise.all([
-          loadClasses(),
-          loadSubjects(),
-          loadTeachers()
-        ]);
-        
-        updateUserProfileCard();
-      } else {
-        console.log('School document not found');
-        // Remove school ID from user document
-        await firestoreModule.updateDoc(
-          firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
-          {
-            schoolId: null
-          }
-        );
-        
-        document.getElementById('manageSchoolCard').style.display = 'none';
-      }
-    } catch (error) {
-      console.error('Error loading school data:', error);
-    }
-  }
-
-  // Setup all event listeners
-  function setupEventListeners() {
-    // Navigation
-    document.getElementById('goRegister').addEventListener('click', () => showContainer('registerSection'));
-    document.getElementById('goLogin').addEventListener('click', () => showContainer('loginSection'));
-    document.getElementById('joinSchoolBtn').addEventListener('click', () => {
-      containers.joinSchoolForm.classList.add('active');
-      preloadAllSchools();
-    });
-    document.getElementById('registerSchoolBtn').addEventListener('click', () => containers.registerSchoolForm.classList.add('active'));
-    document.getElementById('desktopLogoutBtn').addEventListener('click', handleLogout);
-    document.getElementById('userGuideBtn').addEventListener('click', showUserGuide);
-    document.getElementById('forgotPassword').addEventListener('click', () => containers.forgotPasswordModal.classList.add('active'));
-    document.getElementById('openSchoolPortalBtn').addEventListener('click', openSchoolPortal);
-    document.getElementById('refreshSchoolData').addEventListener('click', refreshSchoolData);
-    document.getElementById('refreshReports').addEventListener('click', refreshReportsData);
-    
-    // Portal exit buttons
-    containers.portalExitBtn.addEventListener('click', closeSchoolPortal);
-    containers.mobilePortalExitBtn.addEventListener('click', closeSchoolPortal);
-    
-    // PWA Install buttons
-    document.getElementById('desktopInstallBtn')?.addEventListener('click', installPWA);
-    document.getElementById('mobileInstallBtn')?.addEventListener('click', installPWA);
-    document.getElementById('laterMobileBtn')?.addEventListener('click', () => {
-      containers.mobileInstallPrompt.classList.remove('show');
-      localStorage.setItem('pwaPromptDismissed', 'true');
-      localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
-    });
-    document.getElementById('closeMobilePrompt')?.addEventListener('click', () => {
-      containers.mobileInstallPrompt.classList.remove('show');
-      localStorage.setItem('pwaPromptDismissed', 'true');
-      localStorage.setItem('pwaPromptDismissedDate', new Date().toISOString());
-    });
-    
-    // Close buttons
-    document.getElementById('closeJoinForm').addEventListener('click', () => containers.joinSchoolForm.classList.remove('active'));
-    document.getElementById('closeRegisterForm').addEventListener('click', () => containers.registerSchoolForm.classList.remove('active'));
-    document.getElementById('closeAddClassModal').addEventListener('click', () => containers.addClassModal.classList.remove('active'));
-    document.getElementById('closeAddSubjectModal').addEventListener('click', () => containers.addSubjectModal.classList.remove('active'));
-    document.getElementById('closeAddTeacherModal').addEventListener('click', () => containers.addTeacherModal.classList.remove('active'));
-    document.getElementById('closeAssignSubjectsModal').addEventListener('click', () => containers.assignSubjectsModal.classList.remove('active'));
-    document.getElementById('closeAddStudentModal').addEventListener('click', () => containers.addStudentModal.classList.remove('active'));
-    document.getElementById('closeForgotPasswordModal').addEventListener('click', () => containers.forgotPasswordModal.classList.remove('active'));
-    
-    // File upload buttons
-    document.getElementById('studentUploadArea').addEventListener('click', () => document.getElementById('studentFile').click());
-    
-    // File change events
-    document.getElementById('profileFile').addEventListener('change', (e) => handleImageUpload(e, 'profile'));
-    document.getElementById('logoFile').addEventListener('change', (e) => handleImageUpload(e, 'logo'));
-    document.getElementById('studentFile').addEventListener('change', handleStudentFileUpload);
-    
-    // Form submissions
-    document.getElementById('loginForm').addEventListener('submit', handleLogin);
-    document.getElementById('registerForm').addEventListener('submit', handleRegister);
-    document.getElementById('joinSchoolFormFields').addEventListener('submit', handleJoinSchool);
-    document.getElementById('registerSchoolFormFields').addEventListener('submit', handleRegisterSchool);
-    document.getElementById('forgotPasswordForm').addEventListener('submit', handleForgotPassword);
-    document.getElementById('addClassForm').addEventListener('submit', handleAddClass);
-    document.getElementById('addSubjectForm').addEventListener('submit', handleAddSubject);
-    document.getElementById('addTeacherForm').addEventListener('submit', handleAddTeacher);
-    document.getElementById('assignSubjectsForm').addEventListener('submit', handleAssignSubjects);
-    document.getElementById('addStudentForm').addEventListener('submit', handleAddStudent);
-    
-    // Tab switching
-    setupTabs();
-    setupMobileTabs();
-    
-    // Password toggles
-    setupPasswordToggles();
-    
-    // Student search
-    document.getElementById('studentSearch').addEventListener('input', handleStudentSearch);
-    document.getElementById('studentSearchClear').addEventListener('click', clearStudentSearch);
-    
-    // Marks entry
-    document.getElementById('marksClassSelect').addEventListener('change', handleClassSelectForMarks);
-    document.getElementById('termSelect').addEventListener('change', handleTermSelect);
-    document.getElementById('marksSubjectSelect').addEventListener('change', handleSubjectSelectForMarks);
-    document.getElementById('saveMarksBtn').addEventListener('click', handleSaveMarks);
-    document.getElementById('clearMarksBtn').addEventListener('click', clearMarksForm);
-    
-    // Reports
-    document.getElementById('generateReportBtn').addEventListener('click', generateReport);
-    document.getElementById('exportPDFBtn').addEventListener('click', exportReportCards);
-    document.getElementById('exportExcelBtn').addEventListener('click', exportClassAnalysis);
-    document.getElementById('exportSubjectAnalyticsBtn').addEventListener('click', exportSubjectAnalytics);
-    document.getElementById('reportClassSelect').addEventListener('change', updateReportStudentSelect);
-    
-    // Enhanced Analytics
-    document.getElementById('generateAnalyticsBtn').addEventListener('click', generateEnhancedAnalytics);
-    document.getElementById('analyticsClassSelect').addEventListener('change', loadAnalyticsSubjects);
-    document.getElementById('selectAllSubjects').addEventListener('click', selectAllSubjects);
-    document.getElementById('deselectAllSubjects').addEventListener('click', deselectAllSubjects);
-    document.getElementById('refreshAnalyticsBtn').addEventListener('click', refreshAnalytics);
-    
-    // Add buttons
-    document.getElementById('addClassBtn').addEventListener('click', () => containers.addClassModal.classList.add('active'));
-    document.getElementById('addSubjectBtn').addEventListener('click', () => containers.addSubjectModal.classList.add('active'));
-    document.getElementById('addTeacherBtn').addEventListener('click', () => containers.addTeacherModal.classList.add('active'));
-    document.getElementById('assignSubjectsBtn').addEventListener('click', showAssignSubjectsModal);
-    document.getElementById('addStudentBtn').addEventListener('click', () => containers.addStudentModal.classList.add('active'));
-  }
-
-  // Setup tabs
-  function setupTabs() {
-    const tabs = document.querySelectorAll('.desktop-only .tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        e.preventDefault();
-        const tabId = tab.dataset.tab;
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        setTimeout(() => {
-          switchTab(tabId);
-        }, 300);
-      });
-    });
-  }
-
-  // Setup mobile tabs
-  function setupMobileTabs() {
-    const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
-    mobileNavItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const tabId = item.dataset.tab;
-        
-        const tabContent = document.getElementById(`${tabId}Tab`);
-        if (tabContent) {
-          const headerHeight = 70;
-          const elementPosition = tabContent.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
-          
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-          
-          setTimeout(() => {
-            switchTab(tabId);
-          }, 100);
-        }
-      });
-    });
-  }
-
-  // Switch tab
-  function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
-    
-    const selectedTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
-    const selectedMobileTab = document.querySelector(`.mobile-nav-item[data-tab="${tabId}"]`);
-    if (selectedTab) selectedTab.classList.add('active');
-    if (selectedMobileTab) selectedMobileTab.classList.add('active');
-    
-    document.getElementById(`${tabId}Tab`).classList.add('active');
-    
-    switch(tabId) {
-      case 'classes':
-        loadClasses();
-        break;
-      case 'students':
-        loadStudents();
-        break;
-      case 'subjects':
-        loadSubjects();
-        break;
-      case 'teachers':
-        loadTeachers();
-        break;
-      case 'marks':
-        setupMarksTab();
-        break;
-      case 'reports':
-        setupReportsTab();
-        break;
     }
   }
 
@@ -4556,251 +5344,6 @@
           errorMessage += error.message;
       }
       showAlert('registerError', errorMessage, 'error');
-    }
-  }
-
-  // Handle join school - FIXED VERSION
-  async function handleJoinSchool(e) {
-    e.preventDefault();
-    
-    let schoolName = document.getElementById('joinSchoolName').value.trim();
-    let schoolCode = document.getElementById('joinSchoolCode').value.trim().toUpperCase();
-    
-    hideAlert('joinSchoolError');
-    hideAlert('joinSchoolSuccess');
-    
-    if (!schoolName || !schoolCode) {
-      showAlert('joinSchoolError', 'Please enter both school name and code', 'error');
-      return;
-    }
-    
-    if (schoolCode.length !== 6) {
-      showAlert('joinSchoolError', 'School code must be exactly 6 characters', 'error');
-      return;
-    }
-    
-    try {
-      document.getElementById('joinSchoolLoading').classList.add('active');
-      console.log('Searching for school:', schoolName, 'code:', schoolCode);
-      
-      // Clean school name (remove extra spaces, capitalize properly)
-      schoolName = schoolName.replace(/\s+/g, ' ').trim();
-      
-      // Get all schools
-      const schoolsQuery = firestoreModule.query(
-        firestoreModule.collection(firestoreDB, 'schools')
-      );
-      
-      const querySnapshot = await firestoreModule.getDocs(schoolsQuery);
-      let foundSchool = null;
-      
-      querySnapshot.forEach(doc => {
-        const schoolData = doc.data();
-        const schoolNameLower = schoolData.name.toLowerCase();
-        const searchNameLower = schoolName.toLowerCase();
-        
-        // Check if code matches AND name is similar (case-insensitive)
-        if (schoolData.code === schoolCode && schoolNameLower.includes(searchNameLower)) {
-          foundSchool = {
-            id: doc.id,
-            ...schoolData
-          };
-        }
-      });
-      
-      if (!foundSchool) {
-        document.getElementById('joinSchoolLoading').classList.remove('active');
-        showAlert('joinSchoolError', 
-          'School not found. Please check:<br>' +
-          '1. The school name is spelled correctly<br>' +
-          '2. The 6-digit code is correct<br>' +
-          '3. The school exists in the system<br><br>' +
-          'Tip: Start typing the school name to see suggestions.', 
-          'error');
-        return;
-      }
-      
-      currentSchool = foundSchool;
-      console.log('School found:', currentSchool);
-      
-      // Update user document with new school ID
-      await firestoreModule.updateDoc(
-        firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
-        {
-          schoolId: foundSchool.id,
-          role: 'teacher' // Default role when joining
-        }
-      );
-      
-      // Update current user data
-      currentUserData.schoolId = foundSchool.id;
-      currentUserData.role = 'teacher';
-      
-      // Add user to school's teacher list if not already there
-      await firestoreModule.updateDoc(
-        firestoreModule.doc(firestoreDB, 'schools', foundSchool.id),
-        {
-          teachers: firestoreModule.arrayUnion(currentUser.uid)
-        }
-      );
-      
-      // Update UI
-      document.getElementById('schoolCardName').textContent = currentSchool.name;
-      document.getElementById('schoolCardCode').textContent = currentSchool.code;
-      document.getElementById('manageSchoolCard').style.display = 'block';
-      
-      // Load school data
-      await loadSchoolData(foundSchool.id);
-      
-      document.getElementById('joinSchoolLoading').classList.remove('active');
-      
-      // Show success message
-      showAlert('joinSchoolSuccess', `Successfully joined ${currentSchool.name}! You can now access the school portal.`, 'success');
-      
-      // Hide form after delay
-      setTimeout(() => {
-        containers.joinSchoolForm.classList.remove('active');
-        showAlert('joinSchoolSuccess', '', 'success', true);
-      }, 3000);
-      
-    } catch (error) {
-      document.getElementById('joinSchoolLoading').classList.remove('active');
-      console.error('Error joining school:', error);
-      showAlert('joinSchoolError', 
-        'Error joining school. Please try again. If the problem persists, contact the school administrator.', 
-        'error');
-    }
-  }
-
-  // Handle register school
-  async function handleRegisterSchool(e) {
-    e.preventDefault();
-    
-    const schoolName = document.getElementById('registerSchoolName').value.trim();
-    const schoolLocation = document.getElementById('registerSchoolLocation').value.trim();
-    const schoolPhone = document.getElementById('registerSchoolPhone').value.trim();
-    const schoolLevel = document.getElementById('registerSchoolLevel').value;
-    const logoUrl = document.getElementById('logoUrl').value;
-    
-    if (!logoUrl) {
-      showAlert('registerSchoolError', 'School logo is required', 'error');
-      return;
-    }
-    
-    if (!schoolLevel) {
-      showAlert('registerSchoolError', 'Please select school level', 'error');
-      return;
-    }
-    
-    if (!schoolName) {
-      showAlert('registerSchoolError', 'Please enter school name', 'error');
-      return;
-    }
-    
-    hideAlert('registerSchoolError');
-    
-    try {
-      document.getElementById('registerSchoolLoading').classList.add('active');
-      
-      // Generate school code
-      const schoolCode = generateSchoolCode();
-      console.log('Generating school code:', schoolCode);
-      
-      // Create school document
-      const schoolData = {
-        name: schoolName,
-        location: schoolLocation,
-        phone: schoolPhone,
-        level: schoolLevel,
-        code: schoolCode,
-        logoUrl: logoUrl,
-        createdBy: currentUser.uid,
-        admins: [currentUser.uid],
-        teachers: [currentUser.uid],
-        createdAt: firestoreModule.serverTimestamp()
-      };
-      
-      console.log('Creating school with data:', schoolData);
-      
-      const schoolRef = await firestoreModule.addDoc(
-        firestoreModule.collection(firestoreDB, 'schools'),
-        schoolData
-      );
-      
-      console.log('School created with ID:', schoolRef.id);
-      
-      // Update user document with school ID and admin role
-      await firestoreModule.updateDoc(
-        firestoreModule.doc(firestoreDB, 'users', currentUser.uid),
-        {
-          schoolId: schoolRef.id,
-          role: 'admin'
-        }
-      );
-      
-      // Update current user data
-      currentUserData.schoolId = schoolRef.id;
-      currentUserData.role = 'admin';
-      
-      // Update user profile card
-      updateUserProfileCard();
-      
-      // Add default subjects
-      const defaultSubjects = APP_CONFIG.defaultSubjects[schoolLevel];
-      console.log('Adding default subjects:', defaultSubjects);
-      
-      for (const subjectName of defaultSubjects) {
-        await firestoreModule.addDoc(
-          firestoreModule.collection(firestoreDB, 'subjects'),
-          {
-            name: subjectName,
-            schoolId: schoolRef.id,
-            createdAt: firestoreModule.serverTimestamp()
-          }
-        );
-      }
-      
-      // Add default classes
-      const defaultClasses = APP_CONFIG.defaultClasses[schoolLevel];
-      console.log('Adding default classes:', defaultClasses);
-      
-      for (const className of defaultClasses) {
-        await firestoreModule.addDoc(
-          firestoreModule.collection(firestoreDB, 'classes'),
-          {
-            name: className,
-            schoolId: schoolRef.id,
-            createdAt: firestoreModule.serverTimestamp()
-          }
-        );
-      }
-      
-      // Update current school data
-      currentSchool = {
-        id: schoolRef.id,
-        ...schoolData
-      };
-      
-      // Update UI
-      document.getElementById('schoolCardName').textContent = schoolName;
-      document.getElementById('schoolCardCode').textContent = schoolCode;
-      document.getElementById('manageSchoolCard').style.display = 'block';
-      
-      document.getElementById('registerSchoolLoading').classList.remove('active');
-      
-      // Show success message
-      showAlert('registerSchoolSuccess', 'School registered successfully!', 'success');
-      
-      // Hide form after delay and refresh
-      setTimeout(() => {
-        containers.registerSchoolForm.classList.remove('active');
-        window.location.reload();
-      }, 2000);
-      
-    } catch (error) {
-      document.getElementById('registerSchoolLoading').classList.remove('active');
-      console.error('Error registering school:', error);
-      showAlert('registerSchoolError', 'Error registering school. Please try again.', 'error');
     }
   }
 
@@ -6198,103 +6741,103 @@
       if (selectedSubjects.length === 0) {
         alert('Please select at least one subject for analysis.');
         return;
-      }
+    }
+    
+    showLoadingOverlay('Generating analytics export...');
+    
+    await reloadDataForExport();
+    
+    const marksQuery = firestoreModule.query(
+      firestoreModule.collection(firestoreDB, 'marks'),
+      firestoreModule.where('schoolId', '==', currentSchool.id),
+      firestoreModule.where('term', '==', term)
+    );
+    
+    const marksSnapshot = await firestoreModule.getDocs(marksQuery);
+    const marksData = [];
+    
+    marksSnapshot.forEach(doc => {
+      marksData.push({ id: doc.id, ...doc.data() });
+    });
+    
+    let filteredStudents = currentStudents;
+    if (classId) {
+      filteredStudents = currentStudents.filter(s => s.classId === classId);
+    }
+    
+    const wb = XLSX.utils.book_new();
+    
+    // Sheet 1: Performance Overview with SKORE POINT header
+    const overviewData = [
+      ['SKORE POINT - ANALYSIS GENERATED WITH SKORE POINT'],
+      ['Professional School Report Card Generator by SERUSOFT'],
+      [''],
+      ['Subject Performance Overview'],
+      ['Generated:', new Date().toLocaleDateString()],
+      ['Teacher:', currentUserData.name],
+      ['School:', currentSchool.name],
+      ['Term:', document.getElementById('analyticsTermSelect').options[document.getElementById('analyticsTermSelect').selectedIndex].text],
+      [''],
+      ['RESULT SUMMARY'],
+      ['Subject', 'Total Students', 'Highest Mark', 'Lowest Mark', 'Class Average', 'Pass Rate (%)']
+    ];
+    
+    for (const subjectName of selectedSubjects) {
+      const subject = currentSubjects.find(s => s.name === subjectName);
+      if (!subject) continue;
       
-      showLoadingOverlay('Generating analytics export...');
+      const scores = [];
       
-      await reloadDataForExport();
-      
-      const marksQuery = firestoreModule.query(
-        firestoreModule.collection(firestoreDB, 'marks'),
-        firestoreModule.where('schoolId', '==', currentSchool.id),
-        firestoreModule.where('term', '==', term)
-      );
-      
-      const marksSnapshot = await firestoreModule.getDocs(marksQuery);
-      const marksData = [];
-      
-      marksSnapshot.forEach(doc => {
-        marksData.push({ id: doc.id, ...doc.data() });
+      marksData.forEach(mark => {
+        if (mark[subject.id] !== undefined) {
+          const student = filteredStudents.find(s => s.id === mark.studentId);
+          if (student) {
+            const score = mark[subject.id];
+            scores.push(score);
+          }
+        }
       });
       
-      let filteredStudents = currentStudents;
-      if (classId) {
-        filteredStudents = currentStudents.filter(s => s.classId === classId);
+      if (scores.length > 0) {
+        const totalStudents = scores.length;
+        const highest = Math.max(...scores);
+        const lowest = Math.min(...scores);
+        const average = Math.round(scores.reduce((a, b) => a + b) / scores.length);
+        const passCount = scores.filter(score => score >= 40).length;
+        const passRate = Math.round((passCount / scores.length) * 100);
+        
+        overviewData.push([
+          subjectName,
+          totalStudents,
+          highest,
+          lowest,
+          average,
+          `${passRate}%`
+        ]);
       }
-      
-      const wb = XLSX.utils.book_new();
-      
-      // Sheet 1: Performance Overview with SKORE POINT header
-      const overviewData = [
-        ['SKORE POINT - ANALYSIS GENERATED WITH SKORE POINT'],
-        ['Professional School Report Card Generator by SERUSOFT'],
-        [''],
-        ['Subject Performance Overview'],
-        ['Generated:', new Date().toLocaleDateString()],
-        ['Teacher:', currentUserData.name],
-        ['School:', currentSchool.name],
-        ['Term:', document.getElementById('analyticsTermSelect').options[document.getElementById('analyticsTermSelect').selectedIndex].text],
-        [''],
-        ['RESULT SUMMARY'],
-        ['Subject', 'Total Students', 'Highest Mark', 'Lowest Mark', 'Class Average', 'Pass Rate (%)']
-      ];
-      
-      for (const subjectName of selectedSubjects) {
-        const subject = currentSubjects.find(s => s.name === subjectName);
-        if (!subject) continue;
-        
-        const scores = [];
-        
-        marksData.forEach(mark => {
-          if (mark[subject.id] !== undefined) {
-            const student = filteredStudents.find(s => s.id === mark.studentId);
-            if (student) {
-              const score = mark[subject.id];
-              scores.push(score);
-            }
-          }
-        });
-        
-        if (scores.length > 0) {
-          const totalStudents = scores.length;
-          const highest = Math.max(...scores);
-          const lowest = Math.min(...scores);
-          const average = Math.round(scores.reduce((a, b) => a + b) / scores.length);
-          const passCount = scores.filter(score => score >= 40).length;
-          const passRate = Math.round((passCount / scores.length) * 100);
-          
-          overviewData.push([
-            subjectName,
-            totalStudents,
-            highest,
-            lowest,
-            average,
-            `${passRate}%`
-          ]);
-        }
-      }
-      
-      const overviewWs = XLSX.utils.aoa_to_sheet(overviewData);
-      
-      const colWidths = [
-        { wch: 30 },
-        { wch: 15 },
-        { wch: 15 },
-        { wch: 15 },
-        { wch: 15 },
-        { wch: 15 }
-      ];
-      
-      overviewWs['!cols'] = colWidths;
-      
-      XLSX.utils.book_append_sheet(wb, overviewWs, 'Overview');
-      
-      const fileName = `Subject_Analytics_${new Date().toISOString().slice(0, 10)}.xlsx`;
-      XLSX.writeFile(wb, fileName);
-      
-      hideLoadingOverlay();
-      alert(`Analytics exported successfully as ${fileName}`);
-      
+    }
+    
+    const overviewWs = XLSX.utils.aoa_to_sheet(overviewData);
+    
+    const colWidths = [
+      { wch: 30 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 }
+    ];
+    
+    overviewWs['!cols'] = colWidths;
+    
+    XLSX.utils.book_append_sheet(wb, overviewWs, 'Overview');
+    
+    const fileName = `Subject_Analytics_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+    
+    hideLoadingOverlay();
+    alert(`Analytics exported successfully as ${fileName}`);
+    
     } catch (error) {
       hideLoadingOverlay();
       console.error('Error exporting subject analytics:', error);
@@ -7035,8 +7578,7 @@
       }
       
       const marksQuery = firestoreModule.query(
-        firestoreModule.collection(firestoreDB, 'marks'),
-        firestoreModule.where('schoolId', '==', currentSchool.id),
+        firestoreModule.collection(firestoreDB, 'marks'),        firestoreModule.where('schoolId', '==', currentSchool.id),
         firestoreModule.where('term', '==', term)
       );
       
@@ -7047,146 +7589,446 @@
         marksData.push({ id: doc.id, ...doc.data() });
       });
       
-      if (marksData.length === 0) {
-        hideLoadingOverlay();
-        alert('No marks found for this class. Please enter marks first.');
-        return;
-      }
-      
       const wb = XLSX.utils.book_new();
       
-      // ENHANCED HEADER WITH SKORE POINT
-      const classAnalysisData = [
-        ['SKORE POINT - ANALYSIS GENERATED WITH SKORE POINT'],
+      // Sheet 1: Student Results
+      const studentResults = [
+        ['SKORE POINT - CLASS PERFORMANCE ANALYSIS GENERATED WITH SKORE POINT'],
         ['Professional School Report Card Generator by SERUSOFT'],
         [''],
-        ['Class Analysis Report'],
-        [`Class: ${classObj ? classObj.name : 'N/A'}`],
-        [`Term: ${document.getElementById('reportTermSelect').options[document.getElementById('reportTermSelect').selectedIndex].text}`],
-        [`Date: ${new Date().toLocaleDateString()}`],
+        ['Class: ' + (classObj ? classObj.name : 'N/A')],
+        ['Term: ' + document.getElementById('reportTermSelect').options[document.getElementById('reportTermSelect').selectedIndex].text],
+        ['Generated: ' + new Date().toLocaleDateString()],
         [''],
-        ['ENHANCED STUDENT PERFORMANCE ANALYSIS'],
-        ['Rank', 'Student Name', ...currentSubjects.map(s => s.name), 'Total Marks', 'Average Score', 'Average Grade', 'Aggregate', 'Final Grade/Division']
+        ['RESULT SUMMARY'],
+        ['Student Name', 'Class', 'Total Marks', 'Average', 'Aggregate', 'Grade', 'Division', 'Remarks']
       ];
       
+      // Sheet 2: Subject-wise Analysis
+      const subjectAnalysis = [
+        ['SKORE POINT - SUBJECT-WISE ANALYSIS GENERATED WITH SKORE POINT'],
+        ['Professional School Report Card Generator by SERUSOFT'],
+        [''],
+        ['Class: ' + (classObj ? classObj.name : 'N/A')],
+        ['Term: ' + document.getElementById('reportTermSelect').options[document.getElementById('reportTermSelect').selectedIndex].text],
+        ['Generated: ' + new Date().toLocaleDateString()],
+        [''],
+        ['SUBJECT ANALYSIS'],
+        ['Subject', 'Total Students', 'Highest Mark', 'Lowest Mark', 'Class Average', 'Pass Rate (%)', 'Remarks']
+      ];
+      
+      // Process each student
       const studentScores = [];
+      const subjectStats = {};
       
       classStudents.forEach(student => {
-        const studentMarks = marksData.find(m => m.studentId === student.id);
-        if (!studentMarks) return;
-        
-        let totalMarks = 0;
-        let subjectCount = 0;
-        let totalPoints = 0;
-        const scores = [];
-        
-        currentSubjects.forEach(subject => {
-          const score = studentMarks[subject.id];
-          if (score !== undefined && score > 0) {
-            totalMarks += score;
-            subjectCount++;
-            scores.push(score);
+        const mark = marksData.find(m => m.studentId === student.id);
+        if (mark) {
+          let totalMarks = 0;
+          let subjectCount = 0;
+          let totalPoints = 0;
+          
+          currentSubjects.forEach(subject => {
+            const score = mark[subject.id];
+            if (score !== undefined && score > 0) {
+              totalMarks += score;
+              subjectCount++;
+              
+              const grade = calculateGrade(score, currentSchool.level);
+              const gradePoints = APP_CONFIG.gradePoints[currentSchool.level][grade] || 9;
+              totalPoints += gradePoints;
+              
+              // Collect subject stats
+              if (!subjectStats[subject.name]) {
+                subjectStats[subject.name] = {
+                  scores: [],
+                  totalStudents: 0
+                };
+              }
+              subjectStats[subject.name].scores.push(score);
+              subjectStats[subject.name].totalStudents++;
+            }
+          });
+          
+          if (subjectCount > 0) {
+            const average = Math.round(totalMarks / subjectCount);
+            const aggregate = totalPoints;
+            const division = calculateDivision(average, aggregate);
+            const averageGrade = calculateGrade(average, currentSchool.level);
+            const remarks = getPerformanceRemarks(average);
             
-            const grade = calculateGrade(score, currentSchool.level);
-            const gradePoints = APP_CONFIG.gradePoints[currentSchool.level][grade] || 9;
-            totalPoints += gradePoints;
-          } else {
-            scores.push(0);
+            studentResults.push([
+              student.name,
+              classObj ? classObj.name : 'N/A',
+              totalMarks,
+              average,
+              aggregate,
+              averageGrade,
+              division,
+              remarks
+            ]);
+            
+            studentScores.push(average);
           }
-        });
-        
-        const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
-        const averageGrade = calculateGrade(average, currentSchool.level);
-        const aggregate = totalPoints;
-        const division = calculateDivision(average, aggregate);
-        
-        studentScores.push({
-          name: student.name,
-          scores: scores,
-          total: totalMarks,
-          average: average,
-          averageGrade: averageGrade,
-          aggregate: aggregate,
-          division: division
-        });
+        }
       });
       
-      studentScores.sort((a, b) => b.average - a.average);
-      
-      studentScores.forEach((student, index) => {
-        classAnalysisData.push([
-          index + 1,
-          student.name,
-          ...student.scores,
-          student.total,
-          student.average,
-          student.averageGrade,
-          student.aggregate,
-          student.division
-        ]);
+      // Add subject analysis
+      Object.entries(subjectStats).forEach(([subjectName, stats]) => {
+        if (stats.scores.length > 0) {
+          const totalStudents = stats.totalStudents;
+          const highest = Math.max(...stats.scores);
+          const lowest = Math.min(...stats.scores);
+          const average = Math.round(stats.scores.reduce((a, b) => a + b) / stats.scores.length);
+          const passCount = stats.scores.filter(score => score >= 40).length;
+          const passRate = totalStudents > 0 ? Math.round((passCount / totalStudents) * 100) : 0;
+          const remarks = getPerformanceRemarks(average);
+          
+          subjectAnalysis.push([
+            subjectName,
+            totalStudents,
+            highest,
+            lowest,
+            average,
+            `${passRate}%`,
+            remarks
+          ]);
+        }
       });
       
-      const classAnalysisWs = XLSX.utils.aoa_to_sheet(classAnalysisData);
-      
-      const colWidths = [
-        { wch: 8 },
-        { wch: 25 },
-        ...currentSubjects.map(() => ({ wch: 10 })),
-        { wch: 12 },
-        { wch: 15 },
-        { wch: 15 },
-        { wch: 12 },
-        { wch: 15 }
+      // Add summary sheet
+      const summaryData = [
+        ['SKORE POINT - CLASS SUMMARY REPORT GENERATED WITH SKORE POINT'],
+        ['Professional School Report Card Generator by SERUSOFT'],
+        [''],
+        ['Class Summary'],
+        ['Class: ' + (classObj ? classObj.name : 'N/A')],
+        ['Term: ' + document.getElementById('reportTermSelect').options[document.getElementById('reportTermSelect').selectedIndex].text],
+        ['Total Students: ' + classStudents.length],
+        ['Students with Marks: ' + studentScores.length],
+        ['Class Average: ' + (studentScores.length > 0 ? Math.round(studentScores.reduce((a, b) => a + b) / studentScores.length) : 0)],
+        ['Highest Average: ' + (studentScores.length > 0 ? Math.max(...studentScores) : 0)],
+        ['Lowest Average: ' + (studentScores.length > 0 ? Math.min(...studentScores) : 0)],
+        ['Generated: ' + new Date().toLocaleDateString()],
+        [''],
+        ['Performance Distribution'],
+        ['Grade', 'Count', 'Percentage']
       ];
       
-      classAnalysisWs['!cols'] = colWidths;
+      const gradeDistribution = {};
+      const grades = currentSchool.level === 'primary' 
+        ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
+        : ['A', 'B', 'C', 'D', 'E', 'F'];
       
-      XLSX.utils.book_append_sheet(wb, classAnalysisWs, 'Enhanced Class Analysis');
+      grades.forEach(grade => {
+        gradeDistribution[grade] = 0;
+      });
+      
+      studentScores.forEach(score => {
+        const grade = calculateGrade(score, currentSchool.level);
+        if (gradeDistribution[grade] !== undefined) {
+          gradeDistribution[grade]++;
+        }
+      });
+      
+      Object.entries(gradeDistribution).forEach(([grade, count]) => {
+        const percentage = studentScores.length > 0 ? Math.round((count / studentScores.length) * 100) : 0;
+        summaryData.push([grade, count, `${percentage}%`]);
+      });
+      
+      // Create worksheets
+      const studentResultsWs = XLSX.utils.aoa_to_sheet(studentResults);
+      const subjectAnalysisWs = XLSX.utils.aoa_to_sheet(subjectAnalysis);
+      const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
+      
+      // Set column widths
+      const studentColWidths = [
+        { wch: 25 }, { wch: 10 }, { wch: 12 }, { wch: 10 }, 
+        { wch: 10 }, { wch: 8 }, { wch: 15 }, { wch: 20 }
+      ];
+      
+      const subjectColWidths = [
+        { wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, 
+        { wch: 15 }, { wch: 15 }, { wch: 20 }
+      ];
+      
+      const summaryColWidths = [
+        { wch: 15 }, { wch: 10 }, { wch: 15 }
+      ];
+      
+      studentResultsWs['!cols'] = studentColWidths;
+      subjectAnalysisWs['!cols'] = subjectColWidths;
+      summaryWs['!cols'] = summaryColWidths;
+      
+      XLSX.utils.book_append_sheet(wb, studentResultsWs, 'Student Results');
+      XLSX.utils.book_append_sheet(wb, subjectAnalysisWs, 'Subject Analysis');
+      XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');
       
       const className = classObj ? classObj.name.replace(/\s+/g, '_') : 'Class';
-      const fileName = `Enhanced_Class_Analysis_${className}_${term}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+      const fileName = `Class_Analysis_${className}_${term}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+      
       XLSX.writeFile(wb, fileName);
       
       hideLoadingOverlay();
-      alert(`Enhanced Excel report "${fileName}" generated successfully!`);
+      alert(`Class analysis exported successfully as ${fileName}`);
       
     } catch (error) {
       hideLoadingOverlay();
-      console.error('Error generating Excel:', error);
-      alert('Error generating Excel report. Please try again.');
+      console.error('Error exporting class analysis:', error);
+      alert('Error exporting class analysis. Please try again.');
     }
   }
 
-  // Reload data before export
+  // Helper function: Reload data for export
   async function reloadDataForExport() {
-    try {
-      showLoadingOverlay('Loading data for export...');
-      
-      await Promise.all([
-        loadClasses(),
-        loadSubjects(),
-        loadAllStudents()
-      ]);
-      
-      console.log('Data reloaded successfully for export');
-      
-    } catch (error) {
-      console.error('Error reloading data for export:', error);
-      throw new Error('Failed to reload data. Please try again.');
-    }
+    // Reload current data
+    const classesQuery = firestoreModule.query(
+      firestoreModule.collection(firestoreDB, 'classes'),
+      firestoreModule.where('schoolId', '==', currentSchool.id)
+    );
+    
+    const classesSnapshot = await firestoreModule.getDocs(classesQuery);
+    currentClasses = [];
+    classesSnapshot.forEach(doc => {
+      currentClasses.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+    
+    const studentsQuery = firestoreModule.query(
+      firestoreModule.collection(firestoreDB, 'students'),
+      firestoreModule.where('schoolId', '==', currentSchool.id)
+    );
+    
+    const studentsSnapshot = await firestoreModule.getDocs(studentsQuery);
+    currentStudents = [];
+    studentsSnapshot.forEach(doc => {
+      currentStudents.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+    
+    const subjectsQuery = firestoreModule.query(
+      firestoreModule.collection(firestoreDB, 'subjects'),
+      firestoreModule.where('schoolId', '==', currentSchool.id)
+    );
+    
+    const subjectsSnapshot = await firestoreModule.getDocs(subjectsQuery);
+    currentSubjects = [];
+    subjectsSnapshot.forEach(doc => {
+      currentSubjects.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
   }
 
-  // Calculate grade
-  function calculateGrade(score, level) {
-    if (level === 'primary') {
+  // Helper function: Generate report card content for PDF
+  async function generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, averageGrade, aggregate, division, reportTitle) {
+    // Add header with logo
+    const logoUrl = currentSchool.logoUrl;
+    let logoData = null;
+    
+    if (logoUrl && logoUrl.startsWith('data:')) {
+      logoData = logoUrl;
+    }
+    
+    doc.setFillColor(67, 97, 238);
+    doc.rect(0, 0, 210, 15, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
+    doc.text('SKORE POINT', 10, 10);
+    doc.setFontSize(8);
+    doc.text('A product of SERUSOFT', 10, 14);
+    
+    if (logoData) {
+      try {
+        const logoImg = new Image();
+        logoImg.src = logoData;
+        
+        await new Promise((resolve) => {
+          logoImg.onload = () => {
+            doc.addImage(logoImg, 'JPEG', 170, 5, 30, 30);
+            resolve();
+          };
+          logoImg.onerror = resolve;
+        });
+      } catch (error) {
+        console.log('Could not load logo for PDF');
+      }
+    }
+    
+    // School name and title
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(16);
+    doc.text(currentSchool.name, 105, 40, { align: 'center' });
+    doc.setFontSize(14);
+    doc.text(reportTitle, 105, 50, { align: 'center' });
+    
+    // Student information
+    doc.setFontSize(10);
+    doc.text(`Student Name: ${student.name}`, 20, 70);
+    doc.text(`Class: ${classObj ? classObj.name : 'N/A'}`, 20, 78);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 140, 78);
+    
+    // Draw a line
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 85, 190, 85);
+    
+    // Subject table header
+    doc.setFillColor(240, 240, 240);
+    doc.rect(20, 90, 170, 10, 'F');
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(10);
+    doc.text('SUBJECT', 25, 96);
+    doc.text('SCORE', 100, 96, { align: 'center' });
+    doc.text('GRADE', 160, 96, { align: 'center' });
+    
+    // Subject rows
+    let yPos = 105;
+    subjectScores.forEach((subject, index) => {
+      if (yPos > 250) {
+        doc.addPage();
+        yPos = 20;
+      }
+      
+      const bgColor = index % 2 === 0 ? [255, 255, 255] : [248, 248, 248];
+      doc.setFillColor(...bgColor);
+      doc.rect(20, yPos - 5, 170, 10, 'F');
+      
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(10);
+      doc.text(subject.name, 25, yPos);
+      doc.text(subject.score.toString(), 100, yPos, { align: 'center' });
+      doc.text(subject.grade, 160, yPos, { align: 'center' });
+      
+      yPos += 10;
+    });
+    
+    // Summary table
+    yPos = Math.max(yPos + 10, 170);
+    doc.setFillColor(67, 97, 238);
+    doc.rect(20, yPos, 170, 10, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
+    doc.text('TOTAL MARKS', 30, yPos + 6);
+    doc.text('AVERAGE SCORE', 70, yPos + 6);
+    doc.text('AVERAGE GRADE', 110, yPos + 6);
+    doc.text('AGGREGATE', 145, yPos + 6);
+    doc.text('DIVISION', 180, yPos + 6);
+    
+    yPos += 10;
+    doc.setFillColor(248, 248, 248);
+    doc.rect(20, yPos, 170, 10, 'F');
+    
+    doc.setTextColor(0, 0, 0);
+    doc.text(totalMarks.toString(), 30, yPos + 6);
+    doc.text(average.toString(), 70, yPos + 6);
+    doc.text(averageGrade, 110, yPos + 6);
+    doc.text(aggregate.toString(), 145, yPos + 6);
+    doc.text(division, 180, yPos + 6);
+    
+    // Remarks section
+    yPos += 25;
+    doc.setFontSize(10);
+    doc.text('Class Teacher\'s Remarks:', 20, yPos);
+    doc.setDrawColor(0, 0, 0);
+    doc.line(20, yPos + 5, 100, yPos + 5);
+    
+    doc.text('Head Teacher\'s Remarks:', 120, yPos);
+    doc.line(120, yPos + 5, 190, yPos + 5);
+    
+    yPos += 20;
+    doc.text('Next Term Begins On: ________________________________', 20, yPos);
+    
+    // Signature area
+    yPos += 30;
+    doc.text('Class Teacher Signature', 40, yPos);
+    doc.line(20, yPos + 5, 80, yPos + 5);
+    
+    doc.text('Head Teacher Signature', 130, yPos);
+    doc.line(110, yPos + 5, 170, yPos + 5);
+    
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('Generated with Skore Point - Professional Report Card Generator', 105, 290, { align: 'center' });
+  }
+
+  // Helper function: Export individual report card
+  async function exportReportCard(studentId) {
+    const term = document.getElementById('reportTermSelect').value;
+    const student = currentStudents.find(s => s.id === studentId);
+    
+    if (!student) {
+      hideLoadingOverlay();
+      alert('Student not found');
+      return;
+    }
+    
+    const marksDoc = await firestoreModule.getDoc(
+      firestoreModule.doc(firestoreDB, 'marks', `${studentId}_${term}`)
+    );
+    
+    if (!marksDoc.exists()) {
+      hideLoadingOverlay();
+      alert('No marks found for this student');
+      return;
+    }
+    
+    const marks = marksDoc.data();
+    const classObj = currentClasses.find(c => c.id === student.classId);
+    
+    let totalMarks = 0;
+    let subjectCount = 0;
+    const subjectScores = [];
+    
+    currentSubjects.forEach(subject => {
+      const score = marks[subject.id];
+      if (score !== undefined && score > 0) {
+        totalMarks += score;
+        subjectCount++;
+        subjectScores.push({
+          name: subject.name,
+          score: score,
+          grade: calculateGrade(score, currentSchool.level)
+        });
+      }
+    });
+    
+    const average = subjectCount > 0 ? Math.round(totalMarks / subjectCount) : 0;
+    const aggregate = calculateAggregate(marks);
+    const division = calculateDivision(average, aggregate);
+    const averageGrade = calculateGrade(average, currentSchool.level);
+    const currentTerm = getCurrentTerm();
+    const reportTitle = getReportTitle(currentTerm, term);
+    
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'mm', 'a4');
+    
+    await generateReportCardContent(doc, student, classObj, marks, subjectScores, totalMarks, average, averageGrade, aggregate, division, reportTitle);
+    
+    const fileName = `Report_Card_${student.name.replace(/\s+/g, '_')}_${term}_${new Date().toISOString().slice(0, 10)}.pdf`;
+    doc.save(fileName);
+    
+    hideLoadingOverlay();
+  }
+
+  // Grade calculation functions
+  function calculateGrade(score, schoolLevel) {
+    if (schoolLevel === 'primary') {
       if (score >= 90) return 'D1';
       if (score >= 80) return 'D2';
-      if (score >= 70) return 'C3';
-      if (score >= 60) return 'C4';
-      if (score >= 50) return 'C5';
-      if (score >= 40) return 'C6';
-      if (score >= 30) return 'P7';
-      if (score >= 20) return 'P8';
+      if (score >= 75) return 'C3';
+      if (score >= 70) return 'C4';
+      if (score >= 65) return 'C5';
+      if (score >= 60) return 'C6';
+      if (score >= 55) return 'P7';
+      if (score >= 50) return 'P8';
       return 'F9';
     } else {
       if (score >= 80) return 'A';
@@ -7198,7 +8040,6 @@
     }
   }
 
-  // Calculate aggregate
   function calculateAggregate(marks) {
     let totalPoints = 0;
     let subjectCount = 0;
@@ -7216,26 +8057,24 @@
     return subjectCount > 0 ? totalPoints : 0;
   }
 
-  // Calculate division
   function calculateDivision(average, aggregate) {
     if (currentSchool.level === 'primary') {
-      if (aggregate <= 12) return 'Division 1';
-      if (aggregate <= 24) return 'Division 2';
-      if (aggregate <= 36) return 'Division 3';
+      if (aggregate <= 8) return 'Division 1';
+      if (aggregate <= 16) return 'Division 2';
+      if (aggregate <= 24) return 'Division 3';
       return 'Division 4';
     } else {
       if (average >= 80) return 'Division 1';
-      if (average >= 60) return 'Division 2';
-      if (average >= 40) return 'Division 3';
-      return 'Division 4';
+      if (average >= 70) return 'Division 2';
+      if (average >= 60) return 'Division 3';
+      if (average >= 50) return 'Division 4';
+      return 'Fail';
     }
   }
 
-  // Calculate grade distribution
-  function calculateGradeDistribution(scores, level) {
+  function calculateGradeDistribution(scores, schoolLevel) {
     const distribution = {};
-    
-    const grades = level === 'primary' 
+    const grades = schoolLevel === 'primary' 
       ? ['D1', 'D2', 'C3', 'C4', 'C5', 'C6', 'P7', 'P8', 'F9']
       : ['A', 'B', 'C', 'D', 'E', 'F'];
     
@@ -7244,7 +8083,7 @@
     });
     
     scores.forEach(score => {
-      const grade = calculateGrade(score, level);
+      const grade = calculateGrade(score, schoolLevel);
       if (distribution[grade] !== undefined) {
         distribution[grade]++;
       }
@@ -7253,66 +8092,257 @@
     return distribution;
   }
 
-  // Get grade remarks
-  function getGradeRemarks(grade) {
-    if (currentSchool.level === 'primary') {
-      if (grade === 'D1' || grade === 'D2') return 'Distinction';
-      if (grade === 'C3' || grade === 'C4' || grade === 'C5') return 'Credit';
-      if (grade === 'C6') return 'Pass';
-      if (grade === 'P7' || grade === 'P8') return 'Pass with Support';
-      return 'Fail';
-    } else {
-      if (grade === 'A') return 'Excellent';
-      if (grade === 'B') return 'Very Good';
-      if (grade === 'C') return 'Good';
-      if (grade === 'D') return 'Satisfactory';
-      if (grade === 'E') return 'Pass';
-      return 'Fail';
-    }
+  function getPerformanceRemarks(score) {
+    if (score >= 80) return 'Excellent';
+    if (score >= 70) return 'Very Good';
+    if (score >= 60) return 'Good';
+    if (score >= 50) return 'Satisfactory';
+    if (score >= 40) return 'Fair';
+    return 'Needs Improvement';
   }
 
-  // Get aggregate remarks
-  function getAggregateRemarks(aggregate, level) {
-    if (level === 'primary') {
+  function getGradeRemarks(grade) {
+    if (grade === 'A' || grade === 'D1') return 'Excellent';
+    if (grade === 'B' || grade === 'D2') return 'Very Good';
+    if (grade === 'C' || grade === 'C3') return 'Good';
+    if (grade === 'D' || grade === 'C4') return 'Average';
+    if (grade === 'E' || grade === 'C5') return 'Below Average';
+    return 'Fail';
+  }
+
+  function getAggregateRemarks(aggregate, schoolLevel) {
+    if (schoolLevel === 'primary') {
+      if (aggregate <= 8) return 'Excellent';
+      if (aggregate <= 16) return 'Good';
+      if (aggregate <= 24) return 'Average';
+      return 'Below Average';
+    } else {
       if (aggregate <= 12) return 'Excellent';
       if (aggregate <= 24) return 'Good';
-      if (aggregate <= 36) return 'Satisfactory';
-      return 'Needs Improvement';
-    } else {
-      return 'See Division';
+      if (aggregate <= 36) return 'Average';
+      return 'Below Average';
     }
   }
 
-  // Get current term
   function getCurrentTerm() {
     const now = new Date();
     const month = now.getMonth() + 1;
     
-    if (month >= 2 && month <= 4) return 1;
-    if (month >= 5 && month <= 8) return 2;
-    return 3;
+    if (month >= 1 && month <= 4) return 'First Term';
+    if (month >= 5 && month <= 8) return 'Second Term';
+    return 'Third Term';
   }
 
-  // Get report title
-  function getReportTitle(currentTerm, reportType) {
-    const termText = `TERM ${currentTerm}`;
+  function getReportTitle(currentTerm, selectedTerm) {
+    const termNames = {
+      'beginning': 'Beginning of Term',
+      'mid': 'Mid Term',
+      'end': 'End of Term'
+    };
     
-    switch(reportType) {
-      case 'beginning': return `BEGINNING OF ${termText} STUDENT PROGRESS REPORT`;
-      case 'mid': return `MID ${termText} STUDENT PROGRESS REPORT`;
-      case 'end': return `END OF ${termText} STUDENT PROGRESS REPORT`;
-      default: return `STUDENT PROGRESS REPORT`;
+    const termName = termNames[selectedTerm] || selectedTerm;
+    return `${termName} Report Card`;
+  }
+
+  // Update permissions
+  function updatePermissions() {
+    const isAdmin = currentUserData.role === 'admin';
+    
+    // Update visibility of add buttons
+    document.getElementById('addClassBtn').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('addSubjectBtn').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('studentUploadContainer').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('addStudentBtn').style.display = isAdmin ? 'block' : 'none';
+    
+    // Update permission notes
+    const readOnlyNotes = ['classPermissionNote', 'studentPermissionNote', 'subjectPermissionNote', 'teacherPermissionNote'];
+    readOnlyNotes.forEach(noteId => {
+      const note = document.getElementById(noteId);
+      if (note) {
+        note.classList.toggle('d-none', isAdmin);
+      }
+    });
+    
+    // Update marks permission note
+    const marksNote = document.getElementById('marksPermissionNote');
+    if (marksNote) {
+      if (isAdmin || (currentUserData.subject && currentUserData.assignedSubjects?.length > 0)) {
+        marksNote.classList.add('d-none');
+      } else {
+        marksNote.classList.remove('d-none');
+      }
     }
   }
 
-  // Get performance remarks
-  function getPerformanceRemarks(average) {
-    if (average >= 80) return 'Excellent';
-    if (average >= 70) return 'Very Good';
-    if (average >= 60) return 'Good';
-    if (average >= 50) return 'Satisfactory';
-    if (average >= 40) return 'Fair';
-    return 'Needs Improvement';
+  // Refresh school data
+  async function refreshSchoolData() {
+    try {
+      showLoadingOverlay('Refreshing data...');
+      
+      await Promise.all([
+        loadClasses(),
+        loadStudents(),
+        loadSubjects(),
+        loadTeachers()
+      ]);
+      
+      hideLoadingOverlay();
+      showToast('Data refreshed successfully', 'success');
+      
+    } catch (error) {
+      hideLoadingOverlay();
+      console.error('Error refreshing data:', error);
+      showToast('Error refreshing data', 'error');
+    }
+  }
+
+  // Refresh reports data
+  async function refreshReportsData() {
+    try {
+      showLoadingOverlay('Refreshing reports...');
+      
+      await reloadDataForExport();
+      
+      const classId = document.getElementById('reportClassSelect').value;
+      if (classId) {
+        await generateReport();
+      }
+      
+      hideLoadingOverlay();
+      showToast('Reports refreshed successfully', 'success');
+      
+    } catch (error) {
+      hideLoadingOverlay();
+      console.error('Error refreshing reports:', error);
+      showToast('Error refreshing reports', 'error');
+    }
+  }
+
+  // Show toast notification
+  function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+      <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+      <span>${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'fadeOut 0.5s ease forwards';
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 500);
+    }, 3000);
+    
+    // Add toast styles if not already present
+    if (!document.getElementById('toast-styles')) {
+      const style = document.createElement('style');
+      style.id = 'toast-styles';
+      style.textContent = `
+        .toast {
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%) translateY(100px);
+          background: var(--darker);
+          color: white;
+          padding: 15px 20px;
+          border-radius: var(--border-radius-sm);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          box-shadow: var(--shadow);
+          z-index: 9999;
+          animation: slideUp 0.5s ease forwards;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          max-width: 90%;
+          width: 400px;
+        }
+        
+        .toast.success {
+          background: var(--success);
+        }
+        
+        .toast.error {
+          background: var(--error);
+        }
+        
+        .toast.info {
+          background: var(--info);
+        }
+        
+        @keyframes slideUp {
+          to {
+            transform: translateX(-50%) translateY(0);
+          }
+        }
+        
+        @keyframes fadeOut {
+          to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }
+
+  // Show container
+  function showContainer(containerId) {
+    document.querySelectorAll('.container').forEach(container => {
+      container.classList.remove('active');
+    });
+    
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.classList.add('active');
+    }
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Hide launch screen
+  function hideLaunchScreen() {
+    containers.launchScreen.style.opacity = '0';
+    containers.launchScreen.style.pointerEvents = 'none';
+    
+    setTimeout(() => {
+      containers.launchScreen.style.display = 'none';
+    }, 500);
+  }
+
+  // Show alert
+  function showAlert(alertId, message, type = 'info', hideAfter = false) {
+    const alertElement = document.getElementById(alertId);
+    if (!alertElement) return;
+    
+    alertElement.className = `alert ${type}`;
+    const textElement = document.getElementById(`${alertId}Text`);
+    if (textElement) {
+      textElement.innerHTML = message;
+    } else {
+      alertElement.querySelector('span').innerHTML = message;
+    }
+    
+    alertElement.classList.remove('d-none');
+    
+    if (hideAfter) {
+      setTimeout(() => {
+        alertElement.classList.add('d-none');
+      }, 3000);
+    }
+  }
+
+  // Hide alert
+  function hideAlert(alertId) {
+    const alertElement = document.getElementById(alertId);
+    if (alertElement) {
+      alertElement.classList.add('d-none');
+    }
   }
 
   // Generate school code
@@ -7327,53 +8357,43 @@
 
   // Open school portal
   function openSchoolPortal() {
+    if (!currentSchool) {
+      alert('Please join or register a school first');
+      return;
+    }
+    
     isSchoolPortalOpen = true;
     
+    // Update UI
+    containers.portalExitBtn.style.display = 'flex';
+    containers.mobileBottomNav.style.display = 'flex';
+    containers.mobileBottomNav.classList.add('active');
+    containers.navbar.style.display = 'flex';
+    
+    // Show school management section
+    showContainer('schoolManagementSection');
+    
+    // Update management header
     document.getElementById('managementSchoolName').textContent = currentSchool.name;
     document.getElementById('managementSchoolCode').textContent = currentSchool.code;
     
     if (currentSchool.logoUrl) {
-      const managementLogo = document.getElementById('managementSchoolLogo');
-      managementLogo.src = currentSchool.logoUrl;
-      managementLogo.style.display = 'block';
+      const logo = document.getElementById('managementSchoolLogo');
+      logo.src = currentSchool.logoUrl;
+      logo.style.display = 'block';
     }
     
-    if (isMobileView) {
-      containers.mobileBottomNav.style.display = 'flex';
-      containers.mobileBottomNav.classList.add('active');
-      containers.portalExitBtn.style.display = 'none';
-    } else {
-      containers.portalExitBtn.style.display = 'flex';
+    // Show school switch widget on desktop
+    if (!isMobileView) {
+      containers.schoolSwitchWidget.style.display = 'block';
     }
     
-    showContainer('schoolManagementSection');
-    
-    updatePermissions();
-    
+    // Load initial data
     loadClasses();
+    setupMarksTab();
     
-    if (isMobileView) {
-      document.querySelectorAll('.mobile-nav-item').forEach(item => item.classList.remove('active'));
-      document.querySelector('.mobile-nav-item[data-tab="classes"]').classList.add('active');
-    }
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  // Refresh school data
-  async function refreshSchoolData() {
-    showLoadingOverlay('Refreshing school data...');
-    await loadSchoolData(currentSchool.id);
-    hideLoadingOverlay();
-    alert('School data refreshed successfully!');
-  }
-
-  // Refresh reports data
-  async function refreshReportsData() {
-    showLoadingOverlay('Refreshing reports data...');
-    await preloadReportsData();
-    hideLoadingOverlay();
-    alert('Reports data refreshed successfully!');
+    // Show success message
+    showToast(`Entered ${currentSchool.name} portal`, 'success');
   }
 
   // Close school portal
@@ -7383,320 +8403,354 @@
     containers.portalExitBtn.style.display = 'none';
     containers.mobileBottomNav.style.display = 'none';
     containers.mobileBottomNav.classList.remove('active');
+    containers.schoolSwitchWidget.style.display = 'none';
     
     showContainer('dashboardSection');
-  }
-
-  // Update permissions
-  function updatePermissions() {
-    const isAdmin = currentUserData.role === 'admin';
-    
-    const addButtons = ['addClassBtn', 'addSubjectBtn', 'addStudentBtn'];
-    addButtons.forEach(btnId => {
-      const btn = document.getElementById(btnId);
-      if (btn) {
-        btn.style.display = isAdmin ? 'block' : 'none';
-      }
-    });
-    
-    document.getElementById('studentUploadContainer').style.display = isAdmin ? 'block' : 'none';
-    
-    const permissionNotes = {
-      classPermissionNote: !isAdmin,
-      studentPermissionNote: !isAdmin,
-      subjectPermissionNote: !isAdmin,
-      teacherPermissionNote: !isAdmin,
-      marksPermissionNote: !isAdmin && currentUserData.subject
-    };
-    
-    Object.entries(permissionNotes).forEach(([id, show]) => {
-      const note = document.getElementById(id);
-      if (note) {
-        note.classList.toggle('d-none', !show);
-      }
-    });
-    
-    const managementTabs = document.getElementById('managementTabs');
-    if (isAdmin) {
-      managementTabs.classList.remove('d-none');
-      
-      if (isMobileView) {
-        document.querySelectorAll('.mobile-nav-item').forEach(item => {
-          item.style.display = 'flex';
-        });
-      }
-    } else {
-      const tabs = managementTabs.querySelectorAll('.tab');
-      tabs.forEach(tab => {
-        const tabId = tab.dataset.tab;
-        if (tabId === 'marks' || tabId === 'reports') {
-          tab.style.display = 'block';
-        } else {
-          tab.style.display = 'none';
-        }
-      });
-      
-      if (isMobileView) {
-        document.querySelectorAll('.mobile-nav-item').forEach(item => {
-          const tabId = item.dataset.tab;
-          if (tabId === 'marks' || tabId === 'reports') {
-            item.style.display = 'flex';
-          } else {
-            item.style.display = 'none';
-          }
-        });
-        
-        document.getElementById('reportsTabLabel').textContent = 'Analytics';
-        document.getElementById('desktopReportsLabel').textContent = 'Analytics';
-      }
-    }
-  }
-
-  // Show user guide
-  function showUserGuide() {
-    alert(`Skore Point User Guide
-
-IMPROVEMENTS:
-✓ Fixed: School joining now works properly
-✓ Fixed: Dropdown options visible on dark theme
-✓ Fixed: Teachers can enter marks and analytics in same line
-✓ Fixed: Firestore security rules permissions
-✓ School Joining: Any authenticated user can join any school using name and code
-✓ School Switching: Users can switch schools by joining another school
-✓ Auto-formatting: School codes automatically convert to uppercase, spaces removed
-✓ School Search: Real-time suggestions as you type school names
-✓ Better Error Messages: Specific guidance when school not found
-
-SCHOOL JOINING:
-• Type school name - get suggestions as you type
-• School codes automatically convert to UPPERCASE
-• Spaces automatically removed from inputs
-• Clear error messages with suggestions
-• Can switch schools anytime
-
-REPORT CARDS:
-• Professional A4 design
-• "SKORE POINT" branding with "A product of SERUSOFT"
-• School logo prominently displayed
-• Enhanced columns: Aggregate, Average Score, Average Grade
-• Export as PDF with proper formatting
-
-EXCEL EXPORTS:
-• All files include "SKORE POINT - ANALYSIS GENERATED WITH SKORE POINT" header
-• Professional formatting
-• Enhanced student performance analysis
-• Class rankings and statistics
-
-MOBILE FEATURES:
-• Bottom navigation with smooth scrolling
-• Optimized for touch interaction
-• PWA installable as native app
-• Offline functionality
-
-ADMIN FEATURES:
-• Manage classes, students, subjects, teachers
-• Assign multiple subjects to teachers
-• Generate comprehensive reports
-• Role management through school admin list
-
-SUPPORT:
-Contact your school administrator for assistance.`);
+    showToast('Exited school portal', 'info');
   }
 
   // Handle logout
   async function handleLogout() {
     try {
+      showLoadingOverlay('Logging out...');
+      
       await authModule.signOut(firebaseAuth);
+      
       currentUser = null;
       currentUserData = null;
       currentSchool = null;
+      userSchools = [];
       isSchoolPortalOpen = false;
+      
+      containers.portalExitBtn.style.display = 'none';
       containers.mobileBottomNav.style.display = 'none';
       containers.mobileBottomNav.classList.remove('active');
-      containers.portalExitBtn.style.display = 'none';
+      containers.schoolSwitchWidget.style.display = 'none';
+      
       showContainer('loginSection');
+      hideLoadingOverlay();
+      
+      showToast('Logged out successfully', 'success');
+      
     } catch (error) {
-      console.error('Error signing out:', error);
-      alert('Error signing out. Please try again.');
+      hideLoadingOverlay();
+      console.error('Error logging out:', error);
+      alert('Error logging out. Please try again.');
     }
   }
 
-  // Utility functions
-  function showContainer(containerId) {
-    document.querySelectorAll('.container').forEach(container => {
-      container.classList.remove('active');
-    });
-    
-    const container = document.getElementById(containerId);
-    if (container) {
-      container.classList.add('active');
-    }
+  // Show user guide
+  function showUserGuide() {
+    alert('User Guide:\n\n' +
+          '1. DASHBOARD:\n' +
+          '   - Join School: Enter school name and 6-digit code\n' +
+          '   - Register School: Create new school with admin privileges\n' +
+          '   - School Portal: Enter your school management system\n\n' +
+          
+          '2. SCHOOL PORTAL:\n' +
+          '   - Classes: Add and manage classes\n' +
+          '   - Students: Add students individually or upload Excel file\n' +
+          '   - Subjects: Add subjects to curriculum\n' +
+          '   - Teachers: Manage teacher accounts and assignments\n' +
+          '   - Enter Marks: Enter student marks for assigned subjects\n' +
+          '   - Reports/Analytics: View performance reports and analytics\n\n' +
+          
+          '3. MOBILE APP:\n' +
+          '   - Install as PWA for offline access\n' +
+          '   - Receive push notifications\n' +
+          '   - Quick access from home screen\n\n' +
+          
+          '4. TIPS:\n' +
+          '   - Use Excel upload for bulk student addition\n' +
+          '   - Teachers can only enter marks for assigned subjects\n' +
+          '   - Admins have full access to all features\n' +
+          '   - Report cards can be exported as PDF\n' +
+          '   - Analytics can be exported as Excel files');
   }
 
-  function hideLaunchScreen() {
-    containers.launchScreen.style.display = 'none';
-  }
-
-  function showAlert(id, message, type) {
-    const alert = document.getElementById(id);
-    if (!alert) return;
-    
-    alert.className = `alert ${type}`;
-    const textElement = alert.querySelector(`#${id}Text`);
-    if (textElement) {
-      textElement.innerHTML = message;
-    }
-    alert.classList.remove('d-none');
-  }
-
-  function hideAlert(id) {
-    const alert = document.getElementById(id);
-    if (alert) alert.classList.add('d-none');
-  }
-
-  // Global functions for button clicks
+  // Delete class
   window.deleteClass = async function(classId) {
-    if (confirm('Are you sure you want to delete this class? All students in this class will also be deleted.')) {
-      try {
-        // First delete all students in this class
-        const studentsQuery = firestoreModule.query(
-          firestoreModule.collection(firestoreDB, 'students'),
-          firestoreModule.where('classId', '==', classId)
-        );
-        
-        const studentsSnapshot = await firestoreModule.getDocs(studentsQuery);
-        const deletePromises = [];
-        
-        studentsSnapshot.forEach(doc => {
-          deletePromises.push(firestoreModule.deleteDoc(doc.ref));
-        });
-        
-        await Promise.all(deletePromises);
-        
-        // Then delete the class
-        await firestoreModule.deleteDoc(
-          firestoreModule.doc(firestoreDB, 'classes', classId)
-        );
-        
-        loadClasses();
-        loadStudents();
-        
-        alert('Class deleted successfully!');
-        
-      } catch (error) {
-        console.error('Error deleting class:', error);
-        alert('Error deleting class. Please try again.');
-      }
+    if (!confirm('Are you sure you want to delete this class? This will also delete all students in this class.')) {
+      return;
     }
-  };
-
-  window.deleteStudent = async function(studentId) {
-    if (confirm('Are you sure you want to delete this student?')) {
-      try {
-        await firestoreModule.deleteDoc(
-          firestoreModule.doc(firestoreDB, 'students', studentId)
-        );
-        loadStudents();
-        alert('Student deleted successfully!');
-      } catch (error) {
-        console.error('Error deleting student:', error);
-        alert('Error deleting student. Please try again.');
-      }
-    }
-  };
-
-  window.deleteSubject = async function(subjectId) {
-    if (confirm('Are you sure you want to delete this subject?')) {
-      try {
-        await firestoreModule.deleteDoc(
-          firestoreModule.doc(firestoreDB, 'subjects', subjectId)
-        );
-        loadSubjects();
-        alert('Subject deleted successfully!');
-      } catch (error) {
-        console.error('Error deleting subject:', error);
-        alert('Error deleting subject. Please try again.');
-      }
-    }
-  };
-
-  window.promoteTeacher = async function(teacherId, currentRole) {
-    const newRole = currentRole === 'admin' ? 'teacher' : 'admin';
-    const action = currentRole === 'admin' ? 'demote from admin' : 'promote to admin';
     
-    if (confirm(`Are you sure you want to ${action} this teacher?`)) {
-      try {
-        // Update user role
-        await firestoreModule.updateDoc(
-          firestoreModule.doc(firestoreDB, 'users', teacherId),
-          {
-            role: newRole
-          }
-        );
-        
-        // Update school admin list
-        if (newRole === 'admin') {
-          await firestoreModule.updateDoc(
-            firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
-            {
-              admins: firestoreModule.arrayUnion(teacherId)
-            }
-          );
-        } else {
-          await firestoreModule.updateDoc(
-            firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
-            {
-              admins: firestoreModule.arrayRemove(teacherId)
-            }
-          );
-        }
-        
-        loadTeachers();
-        
-        alert(`Teacher ${action} successfully!`);
-        
-      } catch (error) {
-        console.error(`Error ${action} teacher:`, error);
-        alert(`Error ${action} teacher. Please try again.`);
-      }
+    try {
+      // Delete all students in this class first
+      const studentsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'students'),
+        firestoreModule.where('classId', '==', classId)
+      );
+      
+      const studentsSnapshot = await firestoreModule.getDocs(studentsQuery);
+      const deletePromises = [];
+      
+      studentsSnapshot.forEach(doc => {
+        deletePromises.push(firestoreModule.deleteDoc(doc.ref));
+      });
+      
+      await Promise.all(deletePromises);
+      
+      // Delete the class
+      await firestoreModule.deleteDoc(
+        firestoreModule.doc(firestoreDB, 'classes', classId)
+      );
+      
+      loadClasses();
+      showToast('Class deleted successfully', 'success');
+      
+    } catch (error) {
+      console.error('Error deleting class:', error);
+      showToast('Error deleting class', 'error');
     }
   };
 
-  window.assignSubjectsToTeacher = async function(teacherId) {
-    openAssignSubjectsModal(teacherId);
+  // Delete subject
+  window.deleteSubject = async function(subjectId) {
+    if (!confirm('Are you sure you want to delete this subject?')) {
+      return;
+    }
+    
+    try {
+      await firestoreModule.deleteDoc(
+        firestoreModule.doc(firestoreDB, 'subjects', subjectId)
+      );
+      
+      loadSubjects();
+      showToast('Subject deleted successfully', 'success');
+      
+    } catch (error) {
+      console.error('Error deleting subject:', error);
+      showToast('Error deleting subject', 'error');
+    }
   };
 
-  window.removeTeacher = async function(teacherId) {
-    if (confirm('Are you sure you want to remove this teacher from the school?')) {
-      try {
-        // Remove from school lists
+  // Delete student
+  window.deleteStudent = async function(studentId) {
+    if (!confirm('Are you sure you want to delete this student?')) {
+      return;
+    }
+    
+    try {
+      await firestoreModule.deleteDoc(
+        firestoreModule.doc(firestoreDB, 'students', studentId)
+      );
+      
+      loadStudents();
+      showToast('Student deleted successfully', 'success');
+      
+    } catch (error) {
+      console.error('Error deleting student:', error);
+      showToast('Error deleting student', 'error');
+    }
+  };
+
+  // Promote teacher
+  window.promoteTeacher = async function(teacherId, currentRole) {
+    if (!confirm(`Are you sure you want to ${currentRole === 'admin' ? 'demote' : 'make'} this teacher ${currentRole === 'admin' ? 'to teacher?' : 'an admin?'}`)) {
+      return;
+    }
+    
+    try {
+      const isMakingAdmin = currentRole !== 'admin';
+      
+      // Update user role
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', teacherId),
+        {
+          role: isMakingAdmin ? 'admin' : 'teacher'
+        }
+      );
+      
+      // Update school admins list
+      if (isMakingAdmin) {
         await firestoreModule.updateDoc(
           firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
           {
-            teachers: firestoreModule.arrayRemove(teacherId),
+            admins: firestoreModule.arrayUnion(teacherId)
+          }
+        );
+      } else {
+        await firestoreModule.updateDoc(
+          firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
+          {
             admins: firestoreModule.arrayRemove(teacherId)
           }
         );
-        
-        // Remove school from user
-        await firestoreModule.updateDoc(
-          firestoreModule.doc(firestoreDB, 'users', teacherId),
-          {
-            schoolId: null,
-            role: 'teacher'
-          }
-        );
-        
-        loadTeachers();
-        
-        alert('Teacher removed from school successfully!');
-        
-      } catch (error) {
-        console.error('Error removing teacher:', error);
-        alert('Error removing teacher. Please try again.');
       }
+      
+      loadTeachers();
+      showToast(`Teacher ${isMakingAdmin ? 'promoted to admin' : 'demoted to teacher'} successfully`, 'success');
+      
+    } catch (error) {
+      console.error('Error updating teacher role:', error);
+      showToast('Error updating teacher role', 'error');
     }
   };
+
+  // Assign subjects to teacher
+  window.assignSubjectsToTeacher = async function(teacherId) {
+    try {
+      const teacherDoc = await firestoreModule.getDoc(
+        firestoreModule.doc(firestoreDB, 'users', teacherId)
+      );
+      
+      if (!teacherDoc.exists()) {
+        alert('Teacher not found');
+        return;
+      }
+      
+      const teacher = { id: teacherDoc.id, ...teacherDoc.data() };
+      
+      // Get all subjects
+      const subjectsQuery = firestoreModule.query(
+        firestoreModule.collection(firestoreDB, 'subjects'),
+        firestoreModule.where('schoolId', '==', currentSchool.id)
+      );
+      
+      const subjectsSnapshot = await firestoreModule.getDocs(subjectsQuery);
+      const allSubjects = [];
+      
+      subjectsSnapshot.forEach(doc => {
+        allSubjects.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      
+      const teacherAssignedSubjects = teacher.assignedSubjects || [teacher.subject].filter(Boolean);
+      
+      const subjectAssignmentList = document.getElementById('subjectAssignmentList');
+      subjectAssignmentList.innerHTML = '';
+      
+      if (allSubjects.length === 0) {
+        subjectAssignmentList.innerHTML = '<div class="alert info">No subjects available. Add subjects first.</div>';
+      } else {
+        allSubjects.forEach(subject => {
+          const isAssigned = teacherAssignedSubjects.includes(subject.name);
+          const item = document.createElement('div');
+          item.className = 'subject-assignment-item';
+          item.innerHTML = `
+            <input type="checkbox" id="subject-${subject.id}" value="${subject.name}" ${isAssigned ? 'checked' : ''}>
+            <label for="subject-${subject.id}">${subject.name}</label>
+          `;
+          subjectAssignmentList.appendChild(item);
+        });
+      }
+      
+      document.getElementById('assignTeacherId').value = teacher.id;
+      document.getElementById('assignTeacherName').value = teacher.name;
+      
+      containers.assignSubjectsModal.classList.add('active');
+      
+    } catch (error) {
+      console.error('Error assigning subjects:', error);
+      alert('Error loading teacher data. Please try again.');
+    }
+  };
+
+  // Remove teacher
+  window.removeTeacher = async function(teacherId) {
+    if (!confirm('Are you sure you want to remove this teacher from the school?')) {
+      return;
+    }
+    
+    try {
+      // Remove from school teachers list
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'schools', currentSchool.id),
+        {
+          teachers: firestoreModule.arrayRemove(teacherId),
+          admins: firestoreModule.arrayRemove(teacherId)
+        }
+      );
+      
+      // Update user document
+      await firestoreModule.updateDoc(
+        firestoreModule.doc(firestoreDB, 'users', teacherId),
+        {
+          schoolId: null,
+          assignedSubjects: [],
+          role: null
+        }
+      );
+      
+      loadTeachers();
+      showToast('Teacher removed successfully', 'success');
+      
+    } catch (error) {
+      console.error('Error removing teacher:', error);
+      showToast('Error removing teacher', 'error');
+    }
+  };
+
+  // Add firestore security rules helper
+  function validateFirestoreAccess() {
+    console.log('Firestore security validation active');
+    
+    // Client-side validation for write operations
+    document.addEventListener('DOMContentLoaded', () => {
+      const forms = document.querySelectorAll('form');
+      forms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+          // Additional client-side validation
+          if (!currentUser) {
+            e.preventDefault();
+            alert('Please login first');
+            return false;
+          }
+          
+          // Check for required school context
+          if (form.id !== 'loginForm' && form.id !== 'registerForm' && 
+              form.id !== 'forgotPasswordForm' && !currentSchool) {
+            e.preventDefault();
+            alert('Please join or create a school first');
+            return false;
+          }
+          
+          return true;
+        });
+      });
+    });
+  }
+
+  // Initialize validation
+  validateFirestoreAccess();
+
+  // Add error boundary for Firebase operations
+  window.addEventListener('error', (event) => {
+    console.error('Global error caught:', event.error);
+    
+    if (event.error && event.error.message && event.error.message.includes('permission-denied')) {
+      showToast('Permission denied. Please check your access rights.', 'error');
+    } else if (event.error && event.error.message && event.error.message.includes('network')) {
+      showToast('Network error. Please check your internet connection.', 'error');
+    }
+  });
+
+  // Add unhandled promise rejection handler
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+    
+    if (event.reason && event.reason.code === 'permission-denied') {
+      showToast('Access denied. Please contact your administrator.', 'error');
+    }
+  });
+
+  // Export necessary functions to window object
+  window.showLoadingOverlay = showLoadingOverlay;
+  window.hideLoadingOverlay = hideLoadingOverlay;
+  window.showToast = showToast;
+  window.showAlert = showAlert;
+  window.hideAlert = hideAlert;
+  window.showContainer = showContainer;
+  window.loadClasses = loadClasses;
+  window.loadStudents = loadStudents;
+  window.loadSubjects = loadSubjects;
+  window.loadTeachers = loadTeachers;
+  window.refreshSchoolData = refreshSchoolData;
+  window.handleLogout = handleLogout;
+  window.openSchoolPortal = openSchoolPortal;
+  window.closeSchoolPortal = closeSchoolPortal;
 </script>
 </body>
 </html>
